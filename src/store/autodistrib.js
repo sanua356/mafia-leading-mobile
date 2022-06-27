@@ -59,12 +59,16 @@ function createStore() {
         },
         loadCardsManual: (cardsObj) => {
             let cardsArray = [];
+            const cardsDB = Object.assign(
+                {},
+                cards,
+                JSON.parse(localStorage.getItem("customRoles"))
+            );
             Object.keys(cardsObj).forEach((cardName) => {
                 for (let i = 0; i < cardsObj[cardName]; i++) {
-                    cardsArray.push(cards[cardName]);
+                    cardsArray.push(cardsDB[cardName]);
                 }
             });
-            console.log(cardsArray);
             update((prev) => {
                 return { ...prev, cards: cardsArray };
             });

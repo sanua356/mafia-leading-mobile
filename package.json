@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@emotion/css": "^11.9.0",
+    "cyrillic-to-translit-js": "^3.2.1",
     "sirv-cli": "^2.0.0",
     "svelte-router-spa": "^6.0.3"
   }

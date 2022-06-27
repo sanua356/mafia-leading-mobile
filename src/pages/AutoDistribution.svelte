@@ -5,6 +5,7 @@
     import Button from "../components/Button.svelte";
     import Input from "../components/Input.svelte";
     import Modal from "../components/Modal.svelte";
+    import ModalContainer from "../components/ModalContainer.svelte";
     import { store } from "../store/autodistrib.js";
     import { manualStore } from "../store/manualdistrib";
     import DistributionPreview from "./DistributionPreview.svelte";
@@ -37,8 +38,8 @@
 
 {#if $store.playersCount <= 0 || modalFlag}
     <Modal>
-        <div class="modalArea">
-            <div class="playersCountArea buttons">
+        <ModalContainer customStyle="padding: 5px 30px 25px 30px;">
+            <div class="modalArea buttons">
                 <label for="playersCount">Количество игроков</label>
                 <Input
                     id="playersCount"
@@ -56,10 +57,10 @@
                     color="secondary">Назад</Button
                 >
             </div>
-            <span class="error {errorFlag && 'show'}">
+            <span class="modalError {errorFlag && 'modalShow'}">
                 Недопустимое число игроков. Введите корректное число.
             </span>
-        </div>
+        </ModalContainer>
     </Modal>
 {/if}
 
@@ -70,36 +71,3 @@
         color="secondary">Изменить раздачу</Button
     >
 </DistributionPreview>
-
-<style>
-    .modalArea {
-        color: #eeeef5;
-        width: 80%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto;
-        padding: 5px 30px 25px 30px;
-        background-color: #27263b;
-        border-radius: 10px;
-    }
-    .playersCountArea {
-        width: 100%;
-    }
-    .playersCountArea label {
-        display: block;
-        font-size: 1.3rem;
-        margin-bottom: 10px;
-    }
-    .error {
-        display: none;
-        margin-top: 15px;
-        color: rgb(201 19 19);
-        font-size: 1.2rem;
-    }
-    .show {
-        display: block !important;
-        text-align: center;
-    }
-</style>

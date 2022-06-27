@@ -21,7 +21,7 @@
             <h1>Ваша колода</h1>
             <hr />
         </div>
-        <div style="flex: 1 1 auto;">
+        <div class="table">
             <Table>
                 <thead>
                     <th align="left">Название карты</th>
@@ -33,8 +33,10 @@
             </Table>
         </div>
 
-        <div class="buttons" style="width: 80%;">
+        <div class="buttons customButtons">
             <slot />
+        </div>
+        <div class="buttons">
             <Button clickEvent={onDistributionCards} style="font-size: 1rem;"
                 >Раздать</Button
             >
@@ -46,3 +48,15 @@
         </div>
     </Container>
 </Layout>
+
+<style>
+    .table {
+        flex: 1 1 auto;
+    }
+    .buttons {
+        width: 80%;
+    }
+    .customButtons {
+        justify-content: center !important;
+    }
+</style>

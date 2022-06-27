@@ -5,6 +5,7 @@ import AutoDistributionPage from "../pages/AutoDistribution.svelte";
 import ManualDistributionPage from "../pages/ManualDistribution.svelte";
 import ShowDistributionPage from "../pages/ShowDistribution.svelte";
 import PreviewDistiributionPage from "../pages/DistributionPreview.svelte";
+import HistoryDistributionPage from "../pages/HistoryDistribution.svelte";
 
 export const routes = [
     {
@@ -35,5 +36,9 @@ export const routes = [
     {
         name: "preview-distribution",
         component: PreviewDistiributionPage,
+    },
+    {
+        name: "history",
+        component: HistoryDistributionPage,
     },
 ];

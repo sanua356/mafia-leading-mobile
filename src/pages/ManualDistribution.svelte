@@ -7,11 +7,42 @@
     import { cards } from "../constants/cards.js";
     import { manualStore } from "../store/manualdistrib.js";
     import { store } from "../store/autodistrib.js";
+    import Modal from "../components/Modal.svelte";
+    import ModalContainer from "../components/ModalContainer.svelte";
+    import Input from "../components/Input.svelte";
+    import { onMount } from "svelte";
+
+    let modalCustomRoleFlag = false; //Флаг модалки добавления своей роли
+    let errorFlag = false;
+
+    onMount(() => {
+        manualStore.clearCustomRoleField();
+    });
 
     function onDistributionComplieted() {
-        store.loadCardsManual($manualStore.cards);
-        store.calculateCardsCount();
-        navigateTo("preview-distribution");
+        const cardsList = Object.values($manualStore.cards);
+        for (let i = 0; i < cardsList.length; i++) {
+            if (cardsList[i] !== 0) {
+                store.loadCardsManual($manualStore.cards);
+                store.calculateCardsCount();
+                navigateTo("preview-distribution");
+                break;
+            }
+        }
+    }
+
+    function onCreateCustomRole() {
+        errorFlag = false;
+        if ($manualStore.newRoleName.length > 0) {
+            if (!manualStore.createCustomRole()) {
+                errorFlag = true;
+            } else {
+                manualStore.reinit();
+                modalCustomRoleFlag = false;
+            }
+        } else {
+            errorFlag = true;
+        }
     }
 </script>
 
@@ -27,12 +58,15 @@
                     <th align="left">Название карты</th>
                     <th align="right">Количество</th>
                 </thead>
-                {#each Object.entries(cards) as [cardName, role]}
+                {#each Object.entries(Object.assign({}, cards, JSON.parse(localStorage.getItem("customRoles")))) as [cardName, role]}
                     <tr>
                         <td>{role}</td>
                         <td align="right" class="cardCounterColumn">
                             <button
-                                class="changeCardCountBtn"
+                                class="changeCardCountBtn 
+                                {$manualStore.cards[cardName] >= 100
+                                    ? 'disabledBtn'
+                                    : ''}"
                                 on:click={() =>
                                     manualStore.incrementCardCount(cardName)}
                                 >+</button
@@ -43,16 +77,18 @@
                                 max="100"
                                 name={cardName}
                                 value={$manualStore.cards[cardName]}
-                                class="cardCountInput {$manualStore.cards[
-                                    cardName
-                                ] !== 0
+                                class="cardCountInput 
+                                {$manualStore.cards[cardName] !== 0
                                     ? 'activeCard'
                                     : ''}"
                                 on:input={(e) =>
                                     manualStore.onCardCountChanged(cardName, e)}
                             />
                             <button
-                                class="changeCardCountBtn"
+                                class="changeCardCountBtn 
+                                {$manualStore.cards[cardName] <= 0
+                                    ? 'disabledBtn'
+                                    : ''}"
                                 on:click={() =>
                                     manualStore.decrementCardCount(cardName)}
                                 >-</button
@@ -62,6 +98,13 @@
                 {/each}
             </Table>
         </div>
+        <span
+            class="addCustomRole"
+            class:active={modalCustomRoleFlag}
+            on:click={() => (modalCustomRoleFlag = !modalCustomRoleFlag)}
+        >
+            Добавить свою роль
+        </span>
         <h2 class="cardCounterIndicator">
             Количество игроков: {Object.values($manualStore.cards).reduce(
                 (partialSum, a) => partialSum + a,
@@ -77,6 +120,34 @@
     </Container>
 </Layout>
 
+{#if modalCustomRoleFlag}
+    <Modal>
+        <ModalContainer customStyle="padding: 5px 30px 25px 30px;">
+            <div class="modalArea buttons">
+                <label for="roleName">Название новой роли</label>
+                <Input
+                    id="roleName"
+                    type="text"
+                    value={$manualStore.newRoleName}
+                    onChange={manualStore.onChangeNameCustomRole}
+                    style="margin-bottom: 15px;"
+                />
+                <Button clickEvent={onCreateCustomRole} style="font-size: 1rem;"
+                    >Сохранить</Button
+                >
+                <Button
+                    clickEvent={() => (modalCustomRoleFlag = false)}
+                    style="font-size: 1rem;"
+                    color="secondary">Назад</Button
+                >
+            </div>
+            <span class="modalError {errorFlag && 'modalShow'}">
+                Недопустимое название роли. Введите корректное название.
+            </span>
+        </ModalContainer>
+    </Modal>
+{/if}
+
 <style>
     .roles {
         flex: 1 1 auto;
@@ -85,6 +156,10 @@
     }
     .buttons {
         width: 90%;
+    }
+    .disabledBtn {
+        pointer-events: none;
+        opacity: 0.6 !important;
     }
     .cardCountInput {
         width: 3rem;
@@ -99,6 +174,7 @@
         color: #eeeef5;
     }
     .changeCardCountBtn {
+        cursor: pointer;
         font-size: 1.5rem;
         color: #eeeef5;
         background-color: #3f3d5e;
@@ -114,5 +190,19 @@
     .cardCounterIndicator {
         margin: 20px 0;
         text-align: center;
+    }
+    .addCustomRole {
+        font-size: 1.3rem;
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 20px 0;
+        margin: 20px 0;
+        border: 2px dashed gray;
+        opacity: 0.6;
+        transition: 0.3s ease-in-out all;
+    }
+    .addCustomRole.active {
+        opacity: 1;
     }
 </style>

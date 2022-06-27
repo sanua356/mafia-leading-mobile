@@ -1,3 +1,6 @@
+<script>
+</script>
+
 <div class="modal">
     <slot />
 </div>

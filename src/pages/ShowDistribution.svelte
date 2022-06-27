@@ -2,6 +2,7 @@
     import { mainStore } from "../store/showdistrib.js";
     import Layout from "../components/Layout.svelte";
     import { navigateTo } from "svelte-router-spa";
+    import { onMount } from "svelte";
 
     //Статус показа карты (рубашка - false, название карты - true)
     let cardViewFlag = false;
@@ -20,11 +21,11 @@
                 activeCard = $mainStore.cardsHiddened[0];
                 mainStore.deleteOpenedCard();
                 mainStore.pushToHistoryDistribution(activeCard);
+                mainStore.saveDistributionInLocalStorage();
             }
             cardViewFlag = !cardViewFlag;
         } else {
             if (closeDistributionFlag === true) {
-                console.log($mainStore.cardsOpened);
                 navigateTo("/");
             }
             activeCard = "Раздача окончена. Нажмите ещё раз для выхода в меню.";
@@ -32,6 +33,10 @@
             closeDistributionFlag = true;
         }
     }
+
+    onMount(() => {
+        mainStore.saveDistributionDate();
+    });
 </script>
 
 <Layout>
