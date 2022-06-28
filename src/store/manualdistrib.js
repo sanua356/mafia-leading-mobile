@@ -78,6 +78,7 @@ function createStore() {
             }
         },
         loadCardsFromAutoDistribution: (autoCards) => {
+            manualStore.reinit();
             let prevStore = get(manualStore).cards;
             const entries = Object.entries(cards);
             const autoCardsEntries = Object.entries(autoCards);

@@ -2449,7 +2449,7 @@ var app = (function () {
     function createStore$3() {
         const { update, subscribe } = writable({
             menuViewFlag: false,
-            deathZoneSwipe: 5,
+            deathZoneSwipe: 8,
         });
 
         return {
@@ -4220,7 +4220,7 @@ var app = (function () {
 
     function createStore$2() {
         const { subscribe, update } = writable({
-            playersCount: 1,
+            playersCount: 6,
             cards: [],
             cardsCount: {},
         });
@@ -5197,6 +5197,7 @@ var app = (function () {
                 }
             },
             loadCardsFromAutoDistribution: (autoCards) => {
+                manualStore.reinit();
                 let prevStore = get_store_value(manualStore).cards;
                 const entries = Object.entries(cards);
                 const autoCardsEntries = Object.entries(autoCards);

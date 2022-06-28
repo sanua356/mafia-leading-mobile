@@ -3,7 +3,7 @@ import { cards } from "./../constants/cards";
 
 function createStore() {
     const { subscribe, update } = writable({
-        playersCount: 1,
+        playersCount: 6,
         cards: [],
         cardsCount: {},
     });

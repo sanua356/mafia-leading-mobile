@@ -3,7 +3,7 @@ import { writable, get } from "svelte/store";
 function createStore() {
     const { update, subscribe } = writable({
         menuViewFlag: false,
-        deathZoneSwipe: 5,
+        deathZoneSwipe: 8,
     });
 
     return {
