@@ -2,13 +2,24 @@
     import { navigateTo } from "svelte-router-spa";
     import Layout from "../components/Layout.svelte";
     import Button from "../components/Button.svelte";
+    import { swipeMenuStore } from "../store/swipemenu.js";
 </script>
 
 <Layout>
     <div class="info">
         <h1>Мафия</h1>
         <span>Приложение для ведущего в карточной игре - мафия</span>
-        <Button clickEvent={() => navigateTo("home")}>Начнём!</Button>
+        <Button
+            style={"margin-bottom: 20px;"}
+            clickEvent={() => navigateTo("home")}>Начнём!</Button
+        >
+        <Button
+            clickEvent={() => {
+                swipeMenuStore.changeViewFlag(!$swipeMenuStore.menuViewFlag);
+            }}
+            color="secondary"
+            >Настройки
+        </Button>
     </div>
 </Layout>
 

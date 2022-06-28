@@ -1,7 +1,11 @@
 <script>
+    import { onMount } from "svelte";
+    import { blur } from "svelte/transition";
+    export let style = "",
+        clickEvent = () => {};
 </script>
 
-<div class="modal">
+<div class="modal" {style} on:click={clickEvent} transition:blur|local>
     <slot />
 </div>
 

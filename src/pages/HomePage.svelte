@@ -13,6 +13,7 @@
             >Автоматическая
         </Button>
         <Button
+            style={"margin-bottom: 20px;"}
             clickEvent={() => navigateTo("manual-distribution")}
             color="secondary"
             >Ручная

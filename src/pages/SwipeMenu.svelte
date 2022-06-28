@@ -1,0 +1,90 @@
+<script>
+    import { onDestroy, onMount } from "svelte";
+
+    import { navigateTo, routeIsActive } from "svelte-router-spa";
+    import Modal from "../components/Modal.svelte";
+    import { swipeMenuStore } from "../store/swipemenu.js";
+
+    onMount(() => {
+        let startX = null,
+            deathZone =
+                window.screen.width * ($swipeMenuStore.deathZoneSwipe / 100);
+        document.addEventListener("touchstart", function (e) {
+            startX = e.touches[0].clientX;
+        });
+        document.addEventListener("touchmove", function (e) {
+            let movedX = e.touches[0].clientX;
+            if (movedX - startX > deathZone) {
+                swipeMenuStore.changeViewFlag(true);
+            }
+            if (movedX - startX < deathZone) {
+                swipeMenuStore.changeViewFlag(false);
+            }
+        });
+    });
+    onDestroy(() => {
+        document.removeEventListener("touchstart");
+        document.removeEventListener("touchmove");
+    });
+</script>
+
+{#if $swipeMenuStore.menuViewFlag === true}
+    <Modal
+        style={"z-index: 9999;"}
+        clickEvent={() => swipeMenuStore.changeViewFlag(false)}
+    >
+        <div class="swipeMenu" on:click={(e) => e.stopPropagation()}>
+            <h1>Меню</h1>
+            <nav>
+                <ul on:click={() => swipeMenuStore.changeViewFlag(false)}>
+                    <li on:click={() => navigateTo("/")}>Главная</li>
+                    <li on:click={() => navigateTo("home")}>Раздать карты</li>
+                    <li on:click={() => navigateTo("history")}>История игр</li>
+                    <li on:click={() => navigateTo("settings")}>Настройки</li>
+                    <li
+                        class={!routeIsActive("show-distribution")
+                            ? "disabled"
+                            : ""}
+                    >
+                        Вернуть прошлую карту в ротацию <span
+                            >Доступно только во время выдачи карт игрокам</span
+                        >
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </Modal>
+{/if}
+
+<style>
+    .swipeMenu {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 60%;
+        min-height: 100vh;
+        background-color: #27263b;
+        color: #eeeef5;
+    }
+    .swipeMenu {
+        padding: 30px 20px;
+    }
+    .swipeMenu ul {
+        margin-top: 40px;
+    }
+    .swipeMenu li {
+        list-style-type: none;
+        margin-bottom: 20px;
+        font-size: 1.1rem;
+    }
+    .swipeMenu li > span {
+        margin-top: 5px;
+        display: block;
+        font-size: 0.8rem;
+        color: gray;
+    }
+    .disabled {
+        opacity: 0.5;
+        pointer-events: none;
+    }
+</style>
