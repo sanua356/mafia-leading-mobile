@@ -4,6 +4,7 @@
     import { navigateTo, routeIsActive } from "svelte-router-spa";
     import Modal from "../components/Modal.svelte";
     import { swipeMenuStore } from "../store/swipemenu.js";
+    import { mainStore } from "../store/showdistrib.js";
 
     onMount(() => {
         let startX = null,
@@ -42,11 +43,16 @@
                     <li on:click={() => navigateTo("history")}>История игр</li>
                     <li on:click={() => navigateTo("settings")}>Настройки</li>
                     <li
-                        class={!routeIsActive("show-distribution")
+                        on:click={mainStore.returnOpenedCardInRotation}
+                        class={!routeIsActive("show-distribution") ||
+                        $mainStore.cardsOpened.length === 0
                             ? "disabled"
                             : ""}
                     >
                         Вернуть прошлую карту в ротацию <span
+                            class={routeIsActive("show-distribution")
+                                ? "hiddened"
+                                : ""}
                             >Доступно только во время выдачи карт игрокам</span
                         >
                     </li>
@@ -86,5 +92,8 @@
     .disabled {
         opacity: 0.5;
         pointer-events: none;
+    }
+    .hiddened {
+        display: none !important;
     }
 </style>
