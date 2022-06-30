@@ -29,6 +29,14 @@ function createStore() {
                 };
             });
         },
+        onChangeDeathZoneSwipe: (value) => {
+            update((prev) => {
+                return {
+                    ...prev,
+                    deathZoneSwipe: value,
+                };
+            });
+        },
         //Добавить кастом значение "мёртвой зоны" для свайпов
         changeDeathZoneSwipe: (value) => {
             if (localStorage.getItem("settings") !== null) {
