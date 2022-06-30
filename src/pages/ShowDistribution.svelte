@@ -36,6 +36,7 @@
 
     onMount(() => {
         mainStore.saveDistributionDate();
+        console.log($mainStore.cardsHiddened);
     });
 </script>
 
@@ -53,9 +54,6 @@
         <span class="cardsCounter"
             >Осталось карт: {$mainStore.cardsHiddened.length}</span
         >
-        <!-- <button on:click={mainStore.returnOpenedCardInRotation}
-            >Вернуть карту в ротацию</button
-        > -->
     </div>
 </Layout>
 

@@ -49,13 +49,17 @@ function createStore() {
         },
         returnOpenedCardInRotation: () => {
             const hiddened = get(mainStore).cardsHiddened;
-            const opened = get(mainStore).cardsOpened;
+            let opened = get(mainStore).cardsOpened;
+            const returnedCard = opened[opened.length - 1];
+            opened.pop();
             update((prev) => {
                 return {
                     ...prev,
-                    cardsHiddened: [opened[opened.length - 1], ...hiddened],
+                    cardsOpened: opened,
+                    cardsHiddened: [returnedCard, ...hiddened],
                 };
             });
+            mainStore.saveDistributionInLocalStorage();
         },
         saveDistributionDate: () => {
             let d = new Date();

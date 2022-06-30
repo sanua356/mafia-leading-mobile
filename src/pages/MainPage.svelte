@@ -18,7 +18,7 @@
                 swipeMenuStore.changeViewFlag(!$swipeMenuStore.menuViewFlag);
             }}
             color="secondary"
-            >Настройки
+            >Меню
         </Button>
     </div>
 </Layout>

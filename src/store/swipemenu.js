@@ -7,7 +7,7 @@ function loadDeathZoneInLocalStorage() {
             return settings.deathZone;
         }
     }
-    return 8;
+    return 25;
 }
 
 function createStore() {
