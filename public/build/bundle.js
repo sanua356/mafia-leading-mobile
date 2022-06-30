@@ -2648,7 +2648,7 @@ var app = (function () {
     	modal = new Modal({
     			props: {
     				style: "z-index: 9999;",
-    				clickEvent: /*func*/ ctx[7],
+    				clickEvent: /*func*/ ctx[9],
     				$$slots: { default: [create_default_slot$8] },
     				$$scope: { ctx }
     			},
@@ -2666,7 +2666,7 @@ var app = (function () {
     		p: function update(ctx, dirty) {
     			const modal_changes = {};
 
-    			if (dirty & /*$$scope, $mainStore*/ 258) {
+    			if (dirty & /*$$scope, $mainStore*/ 1026) {
     				modal_changes.$$scope = { dirty, ctx };
     			}
 
@@ -2713,10 +2713,14 @@ var app = (function () {
     	let li3;
     	let t9;
     	let li4;
-    	let t10;
-    	let span;
     	let t11;
-    	let li4_class_value;
+    	let li5;
+    	let t13;
+    	let li6;
+    	let t14;
+    	let span;
+    	let t15;
+    	let li6_class_value;
     	let mounted;
     	let dispose;
 
@@ -2741,9 +2745,15 @@ var app = (function () {
     			li3.textContent = "Настройки";
     			t9 = space();
     			li4 = element("li");
-    			t10 = text("Вернуть прошлую карту в ротацию ");
+    			li4.textContent = "Помощь";
+    			t11 = space();
+    			li5 = element("li");
+    			li5.textContent = "Правила игры";
+    			t13 = space();
+    			li6 = element("li");
+    			t14 = text("Вернуть прошлую карту в ротацию ");
     			span = element("span");
-    			t11 = text("Доступно только во время выдачи карт игрокам");
+    			t15 = text("Доступно только во время выдачи карт игрокам");
     			add_location(h1, file$e, 37, 12, 1342);
     			attr_dev(li0, "class", "svelte-1qu7vxi");
     			add_location(li0, file$e, 40, 20, 1472);
@@ -2753,14 +2763,18 @@ var app = (function () {
     			add_location(li2, file$e, 42, 20, 1623);
     			attr_dev(li3, "class", "svelte-1qu7vxi");
     			add_location(li3, file$e, 43, 20, 1704);
+    			attr_dev(li4, "class", "svelte-1qu7vxi");
+    			add_location(li4, file$e, 44, 20, 1784);
+    			attr_dev(li5, "class", "svelte-1qu7vxi");
+    			add_location(li5, file$e, 45, 20, 1857);
     			attr_dev(span, "class", "" + (null_to_empty(routeIsActive("show-distribution") ? "hiddened" : "") + " svelte-1qu7vxi"));
-    			add_location(span, file$e, 51, 56, 2150);
+    			add_location(span, file$e, 53, 56, 2303);
 
-    			attr_dev(li4, "class", li4_class_value = "" + (null_to_empty(!routeIsActive("show-distribution") || /*$mainStore*/ ctx[1].cardsOpened.length === 0
+    			attr_dev(li6, "class", li6_class_value = "" + (null_to_empty(!routeIsActive("show-distribution") || /*$mainStore*/ ctx[1].cardsOpened.length === 0
     			? "disabled"
     			: "") + " svelte-1qu7vxi"));
 
-    			add_location(li4, file$e, 44, 20, 1784);
+    			add_location(li6, file$e, 46, 20, 1937);
     			attr_dev(ul, "class", "svelte-1qu7vxi");
     			add_location(ul, file$e, 39, 16, 1392);
     			add_location(nav, file$e, 38, 12, 1369);
@@ -2782,9 +2796,13 @@ var app = (function () {
     			append_dev(ul, li3);
     			append_dev(ul, t9);
     			append_dev(ul, li4);
-    			append_dev(li4, t10);
-    			append_dev(li4, span);
-    			append_dev(span, t11);
+    			append_dev(ul, t11);
+    			append_dev(ul, li5);
+    			append_dev(ul, t13);
+    			append_dev(ul, li6);
+    			append_dev(li6, t14);
+    			append_dev(li6, span);
+    			append_dev(span, t15);
 
     			if (!mounted) {
     				dispose = [
@@ -2792,19 +2810,21 @@ var app = (function () {
     					listen_dev(li1, "click", /*click_handler_1*/ ctx[3], false, false, false),
     					listen_dev(li2, "click", /*click_handler_2*/ ctx[4], false, false, false),
     					listen_dev(li3, "click", /*click_handler_3*/ ctx[5], false, false, false),
-    					listen_dev(li4, "click", mainStore.returnOpenedCardInRotation, false, false, false),
-    					listen_dev(ul, "click", /*click_handler_4*/ ctx[6], false, false, false),
-    					listen_dev(div, "click", click_handler_5, false, false, false)
+    					listen_dev(li4, "click", /*click_handler_4*/ ctx[6], false, false, false),
+    					listen_dev(li5, "click", /*click_handler_5*/ ctx[7], false, false, false),
+    					listen_dev(li6, "click", mainStore.returnOpenedCardInRotation, false, false, false),
+    					listen_dev(ul, "click", /*click_handler_6*/ ctx[8], false, false, false),
+    					listen_dev(div, "click", click_handler_7, false, false, false)
     				];
 
     				mounted = true;
     			}
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*$mainStore*/ 2 && li4_class_value !== (li4_class_value = "" + (null_to_empty(!routeIsActive("show-distribution") || /*$mainStore*/ ctx[1].cardsOpened.length === 0
+    			if (dirty & /*$mainStore*/ 2 && li6_class_value !== (li6_class_value = "" + (null_to_empty(!routeIsActive("show-distribution") || /*$mainStore*/ ctx[1].cardsOpened.length === 0
     			? "disabled"
     			: "") + " svelte-1qu7vxi"))) {
-    				attr_dev(li4, "class", li4_class_value);
+    				attr_dev(li6, "class", li6_class_value);
     			}
     		},
     		d: function destroy(detaching) {
@@ -2893,7 +2913,7 @@ var app = (function () {
     	return block;
     }
 
-    const click_handler_5 = e => e.stopPropagation();
+    const click_handler_7 = e => e.stopPropagation();
 
     function instance$f($$self, $$props, $$invalidate) {
     	let $swipeMenuStore;
@@ -2941,7 +2961,9 @@ var app = (function () {
     	const click_handler_1 = () => navigateTo("home");
     	const click_handler_2 = () => navigateTo("history");
     	const click_handler_3 = () => navigateTo("settings");
-    	const click_handler_4 = () => swipeMenuStore.changeViewFlag(false);
+    	const click_handler_4 = () => navigateTo("help");
+    	const click_handler_5 = () => navigateTo("rules");
+    	const click_handler_6 = () => swipeMenuStore.changeViewFlag(false);
     	const func = () => swipeMenuStore.changeViewFlag(false);
 
     	$$self.$capture_state = () => ({
@@ -2964,6 +2986,8 @@ var app = (function () {
     		click_handler_2,
     		click_handler_3,
     		click_handler_4,
+    		click_handler_5,
+    		click_handler_6,
     		func
     	];
     }
@@ -3823,7 +3847,7 @@ var app = (function () {
     /* src\pages\404.svelte generated by Svelte v3.48.0 */
     const file$9 = "src\\pages\\404.svelte";
 
-    // (13:4) <Button clickEvent={navigateTo("/")}>
+    // (13:4) <Button clickEvent={() => navigateTo("/")}>
     function create_default_slot_1$4(ctx) {
     	let t;
 
@@ -3843,14 +3867,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_1$4.name,
     		type: "slot",
-    		source: "(13:4) <Button clickEvent={navigateTo(\\\"/\\\")}>",
+    		source: "(13:4) <Button clickEvent={() => navigateTo(\\\"/\\\")}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (7:0) <Layout>
+    // (7:0) <Layout customStyles="flex-direction: column; text-align: center;">
     function create_default_slot$5(ctx) {
     	let h1;
     	let t1;
@@ -3861,7 +3885,7 @@ var app = (function () {
 
     	button = new Button({
     			props: {
-    				clickEvent: navigateTo("/"),
+    				clickEvent: /*func*/ ctx[0],
     				$$slots: { default: [create_default_slot_1$4] },
     				$$scope: { ctx }
     			},
@@ -3877,8 +3901,10 @@ var app = (function () {
     			p.textContent = "Вы попали на страницу, функции для которой ещё в разработке. Пожалуйста\r\n        вернитесь на главную.";
     			t3 = space();
     			create_component(button.$$.fragment);
-    			add_location(h1, file$9, 7, 4, 200);
-    			add_location(p, file$9, 8, 4, 218);
+    			attr_dev(h1, "class", "svelte-9eqlt6");
+    			add_location(h1, file$9, 7, 4, 259);
+    			attr_dev(p, "class", "svelte-9eqlt6");
+    			add_location(p, file$9, 8, 4, 277);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, h1, anchor);
@@ -3891,7 +3917,7 @@ var app = (function () {
     		p: function update(ctx, dirty) {
     			const button_changes = {};
 
-    			if (dirty & /*$$scope*/ 1) {
+    			if (dirty & /*$$scope*/ 2) {
     				button_changes.$$scope = { dirty, ctx };
     			}
 
@@ -3919,7 +3945,7 @@ var app = (function () {
     		block,
     		id: create_default_slot$5.name,
     		type: "slot",
-    		source: "(7:0) <Layout>",
+    		source: "(7:0) <Layout customStyles=\\\"flex-direction: column; text-align: center;\\\">",
     		ctx
     	});
 
@@ -3932,6 +3958,7 @@ var app = (function () {
 
     	layout = new Layout({
     			props: {
+    				customStyles: "flex-direction: column; text-align: center;",
     				$$slots: { default: [create_default_slot$5] },
     				$$scope: { ctx }
     			},
@@ -3952,7 +3979,7 @@ var app = (function () {
     		p: function update(ctx, [dirty]) {
     			const layout_changes = {};
 
-    			if (dirty & /*$$scope*/ 1) {
+    			if (dirty & /*$$scope*/ 2) {
     				layout_changes.$$scope = { dirty, ctx };
     			}
 
@@ -3992,8 +4019,9 @@ var app = (function () {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<_404> was created with unknown prop '${key}'`);
     	});
 
+    	const func = () => navigateTo("/");
     	$$self.$capture_state = () => ({ navigateTo, Button, Layout });
-    	return [];
+    	return [func];
     }
 
     class _404 extends SvelteComponentDev {

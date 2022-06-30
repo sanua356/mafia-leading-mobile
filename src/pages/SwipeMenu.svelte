@@ -42,6 +42,8 @@
                     <li on:click={() => navigateTo("home")}>Раздать карты</li>
                     <li on:click={() => navigateTo("history")}>История игр</li>
                     <li on:click={() => navigateTo("settings")}>Настройки</li>
+                    <li on:click={() => navigateTo("help")}>Помощь</li>
+                    <li on:click={() => navigateTo("rules")}>Правила игры</li>
                     <li
                         on:click={mainStore.returnOpenedCardInRotation}
                         class={!routeIsActive("show-distribution") ||
