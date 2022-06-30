@@ -2,8 +2,10 @@ import { writable, get } from "svelte/store";
 import { cards } from "./../constants/cards";
 import CyrillicToTranslit from "cyrillic-to-translit-js";
 
+//Подгрузка библиотеки транслитерации (для добавления кастом ролей)
 const cyrillicToTranslit = new CyrillicToTranslit();
 
+//Инициализация store с дефолными и пользовательскими картами
 function initStore() {
     let initialStore = {};
     Object.keys(cards).forEach((card) => {
@@ -28,6 +30,7 @@ function createStore() {
     return {
         subscribe,
         update,
+        //Переинициализация списка карт в store (нужно, когда пользователь добавил новую роль для обновления state)
         reinit: () => {
             update((prev) => {
                 return {
@@ -36,6 +39,7 @@ function createStore() {
                 };
             });
         },
+        //onChange на Inputы, где пользователь выбирает количество карт конкретной роли
         onCardCountChanged: (cardName, event) => {
             let prevStore = get(manualStore).cards;
 
@@ -55,6 +59,7 @@ function createStore() {
                 };
             });
         },
+        //Добавляет единичку к Input с картой роли. Например количество мафий: 2(1 была + 1 добавится сейчас)
         incrementCardCount: (cardName) => {
             let prevStore = get(manualStore).cards;
             prevStore[cardName] = Number(prevStore[cardName]) + 1;
@@ -65,6 +70,7 @@ function createStore() {
                 };
             });
         },
+        //Удаляет единичку к Input с картой роли. Например количество мафий: 2(1 была - 1 удалится сейчас)
         decrementCardCount: (cardName) => {
             let prevStore = get(manualStore).cards;
             if (prevStore[cardName] > 0) {
@@ -77,6 +83,7 @@ function createStore() {
                 });
             }
         },
+        //Загрузка карт из ручного режима, если пользователь захотел изменить пак автонабора
         loadCardsFromAutoDistribution: (autoCards) => {
             manualStore.reinit();
             let prevStore = get(manualStore).cards;
@@ -99,6 +106,7 @@ function createStore() {
                 };
             });
         },
+        //Очистка поля "имени" при добавлении кастом роли на модалке
         clearCustomRoleField: () => {
             update((prev) => {
                 return {
@@ -107,6 +115,7 @@ function createStore() {
                 };
             });
         },
+        //onChange на Input ввода имени при добавлении кастом роли на модалке
         onChangeNameCustomRole: (e) => {
             if (String(e.target.value).trim().length > 0) {
                 update((prev) => {
@@ -117,6 +126,7 @@ function createStore() {
                 });
             }
         },
+        //Добавление кастом роли в хранилище
         createCustomRole: () => {
             const newRoleName = get(manualStore).newRoleName;
             let storageRoleName = cyrillicToTranslit

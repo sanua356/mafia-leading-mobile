@@ -40,6 +40,7 @@ function createStore() {
                 return { ...prev, cards };
             });
         },
+        //Подсчёт количества карт каждого наминала в JSON например: {"mafia": 2}
         calculateCardsCount: () => {
             const cards = get(store).cards;
             const cardsCount = {};
@@ -57,6 +58,7 @@ function createStore() {
                 };
             });
         },
+        //
         loadCardsManual: (cardsObj) => {
             let cardsArray = [];
             const cardsDB = Object.assign(
@@ -73,6 +75,7 @@ function createStore() {
                 return { ...prev, cards: cardsArray };
             });
         },
+        //onChange на Input количества игроков автораздатчика
         onChangePlayersCount(e) {
             update((prev) => {
                 return {
@@ -81,6 +84,7 @@ function createStore() {
                 };
             });
         },
+        //Обнуление store
         reset: () => {
             update((prev) => {
                 return { ...prev, cards: [] };

@@ -1,5 +1,6 @@
 import { writable, get } from "svelte/store";
 
+//Загрузка кастом значения "мёртвой зоны" для свайпов (если значение есть в хранилище, иначе дефолтное = 25)
 function loadDeathZoneInLocalStorage() {
     if (localStorage.getItem("settings") !== null) {
         const settings = JSON.parse(localStorage.getItem("settings"));
@@ -19,6 +20,7 @@ function createStore() {
     return {
         subscribe,
         update,
+        //Изменить состояние флага показа меню на экране
         changeViewFlag: (value) => {
             update((prev) => {
                 return {
@@ -27,6 +29,7 @@ function createStore() {
                 };
             });
         },
+        //Добавить кастом значение "мёртвой зоны" для свайпов
         changeDeathZoneSwipe: (value) => {
             if (localStorage.getItem("settings") !== null) {
                 let settings = localStorage.getItem("settings");

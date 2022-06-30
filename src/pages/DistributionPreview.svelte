@@ -8,7 +8,7 @@
     import { mainStore } from "../store/showdistrib.js";
 
     function onDistributionCards() {
-        mainStore.loadCards($store.cards);
+        mainStore.shuffleCards($store.cards);
         navigateTo("show-distribution");
     }
 

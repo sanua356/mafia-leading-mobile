@@ -2473,6 +2473,7 @@ var app = (function () {
     	}
     }
 
+    //Загрузка кастом значения "мёртвой зоны" для свайпов (если значение есть в хранилище, иначе дефолтное = 25)
     function loadDeathZoneInLocalStorage() {
         if (localStorage.getItem("settings") !== null) {
             const settings = JSON.parse(localStorage.getItem("settings"));
@@ -2492,6 +2493,7 @@ var app = (function () {
         return {
             subscribe,
             update,
+            //Изменить состояние флага показа меню на экране
             changeViewFlag: (value) => {
                 update((prev) => {
                     return {
@@ -2500,6 +2502,7 @@ var app = (function () {
                     };
                 });
             },
+            //Добавить кастом значение "мёртвой зоны" для свайпов
             changeDeathZoneSwipe: (value) => {
                 if (localStorage.getItem("settings") !== null) {
                     let settings = localStorage.getItem("settings");
@@ -2533,8 +2536,8 @@ var app = (function () {
         return {
             subscribe,
             update,
-            loadCards: (cards) => {
-                //Перемешивание массива карт
+            //Перемешивание карт для выдачи
+            shuffleCards: (cards) => {
                 let currentIndex = cards.length,
                     randomIndex;
                 while (currentIndex != 0) {
@@ -2560,6 +2563,8 @@ var app = (function () {
                     };
                 });
             },
+
+            //Удалить из массива скрытых карт ту, которую сейчас при выдаче видит игрок
             deleteOpenedCard: (card) => {
                 const cards = get_store_value(mainStore).cardsHiddened;
                 cards.shift();
@@ -2570,6 +2575,7 @@ var app = (function () {
                     };
                 });
             },
+            //Вернуть карту в ротацию для показа (если игрок не успел посмотреть на свою роль)
             returnOpenedCardInRotation: () => {
                 const hiddened = get_store_value(mainStore).cardsHiddened;
                 let opened = get_store_value(mainStore).cardsOpened;
@@ -2584,6 +2590,7 @@ var app = (function () {
                 });
                 mainStore.saveDistributionInLocalStorage();
             },
+            //Сохранить дату проведения раздачи (нужно для корректной работы "истории раздач")
             saveDistributionDate: () => {
                 let d = new Date();
                 let seconds = Math.round(d.getTime() / 1000);
@@ -2594,6 +2601,7 @@ var app = (function () {
                     };
                 });
             },
+            //Сохранение текущей раздачи в хранилище
             saveDistributionInLocalStorage: () => {
                 let history = [];
                 const store = get_store_value(mainStore);
@@ -4438,6 +4446,7 @@ var app = (function () {
                     return { ...prev, cards };
                 });
             },
+            //Подсчёт количества карт каждого наминала в JSON например: {"mafia": 2}
             calculateCardsCount: () => {
                 const cards = get_store_value(store).cards;
                 const cardsCount = {};
@@ -4455,6 +4464,7 @@ var app = (function () {
                     };
                 });
             },
+            //
             loadCardsManual: (cardsObj) => {
                 let cardsArray = [];
                 const cardsDB = Object.assign(
@@ -4471,6 +4481,7 @@ var app = (function () {
                     return { ...prev, cards: cardsArray };
                 });
             },
+            //onChange на Input количества игроков автораздатчика
             onChangePlayersCount(e) {
                 update((prev) => {
                     return {
@@ -4479,6 +4490,7 @@ var app = (function () {
                     };
                 });
             },
+            //Обнуление store
             reset: () => {
                 update((prev) => {
                     return { ...prev, cards: [] };
@@ -5302,8 +5314,10 @@ var app = (function () {
       };
     };
 
+    //Подгрузка библиотеки транслитерации (для добавления кастом ролей)
     const cyrillicToTranslit = new CyrillicToTranslit();
 
+    //Инициализация store с дефолными и пользовательскими картами
     function initStore() {
         let initialStore = {};
         Object.keys(cards).forEach((card) => {
@@ -5328,6 +5342,7 @@ var app = (function () {
         return {
             subscribe,
             update,
+            //Переинициализация списка карт в store (нужно, когда пользователь добавил новую роль для обновления state)
             reinit: () => {
                 update((prev) => {
                     return {
@@ -5336,6 +5351,7 @@ var app = (function () {
                     };
                 });
             },
+            //onChange на Inputы, где пользователь выбирает количество карт конкретной роли
             onCardCountChanged: (cardName, event) => {
                 let prevStore = get_store_value(manualStore).cards;
 
@@ -5355,6 +5371,7 @@ var app = (function () {
                     };
                 });
             },
+            //Добавляет единичку к Input с картой роли. Например количество мафий: 2(1 была + 1 добавится сейчас)
             incrementCardCount: (cardName) => {
                 let prevStore = get_store_value(manualStore).cards;
                 prevStore[cardName] = Number(prevStore[cardName]) + 1;
@@ -5365,6 +5382,7 @@ var app = (function () {
                     };
                 });
             },
+            //Удаляет единичку к Input с картой роли. Например количество мафий: 2(1 была - 1 удалится сейчас)
             decrementCardCount: (cardName) => {
                 let prevStore = get_store_value(manualStore).cards;
                 if (prevStore[cardName] > 0) {
@@ -5377,6 +5395,7 @@ var app = (function () {
                     });
                 }
             },
+            //Загрузка карт из ручного режима, если пользователь захотел изменить пак автонабора
             loadCardsFromAutoDistribution: (autoCards) => {
                 manualStore.reinit();
                 let prevStore = get_store_value(manualStore).cards;
@@ -5399,6 +5418,7 @@ var app = (function () {
                     };
                 });
             },
+            //Очистка поля "имени" при добавлении кастом роли на модалке
             clearCustomRoleField: () => {
                 update((prev) => {
                     return {
@@ -5407,6 +5427,7 @@ var app = (function () {
                     };
                 });
             },
+            //onChange на Input ввода имени при добавлении кастом роли на модалке
             onChangeNameCustomRole: (e) => {
                 if (String(e.target.value).trim().length > 0) {
                     update((prev) => {
@@ -5417,6 +5438,7 @@ var app = (function () {
                     });
                 }
             },
+            //Добавление кастом роли в хранилище
             createCustomRole: () => {
                 const newRoleName = get_store_value(manualStore).newRoleName;
                 let storageRoleName = cyrillicToTranslit
@@ -5682,10 +5704,10 @@ var app = (function () {
     			t0 = text(t0_value);
     			td1 = element("td");
     			t1 = text(t1_value);
-    			add_location(td0, file$4, 30, 24, 1044);
+    			add_location(td0, file$4, 30, 24, 1047);
     			attr_dev(td1, "align", "right");
-    			add_location(td1, file$4, 30, 38, 1058);
-    			add_location(tr, file$4, 30, 20, 1040);
+    			add_location(td1, file$4, 30, 38, 1061);
+    			add_location(tr, file$4, 30, 20, 1043);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, tr, anchor);
@@ -5746,10 +5768,10 @@ var app = (function () {
 
     			each_1_anchor = empty();
     			attr_dev(th0, "align", "left");
-    			add_location(th0, file$4, 26, 20, 826);
+    			add_location(th0, file$4, 26, 20, 829);
     			attr_dev(th1, "align", "right");
-    			add_location(th1, file$4, 27, 20, 884);
-    			add_location(thead, file$4, 25, 16, 797);
+    			add_location(th1, file$4, 27, 20, 887);
+    			add_location(thead, file$4, 25, 16, 800);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, thead, anchor);
@@ -5930,15 +5952,15 @@ var app = (function () {
     			create_component(button0.$$.fragment);
     			t5 = space();
     			create_component(button1.$$.fragment);
-    			add_location(h1, file$4, 20, 12, 673);
-    			add_location(hr, file$4, 21, 12, 707);
-    			add_location(div0, file$4, 19, 8, 654);
+    			add_location(h1, file$4, 20, 12, 676);
+    			add_location(hr, file$4, 21, 12, 710);
+    			add_location(div0, file$4, 19, 8, 657);
     			attr_dev(div1, "class", "table svelte-1ah5qxi");
-    			add_location(div1, file$4, 23, 8, 739);
+    			add_location(div1, file$4, 23, 8, 742);
     			attr_dev(div2, "class", "buttons customButtons svelte-1ah5qxi");
-    			add_location(div2, file$4, 35, 8, 1168);
+    			add_location(div2, file$4, 35, 8, 1171);
     			attr_dev(div3, "class", "buttons svelte-1ah5qxi");
-    			add_location(div3, file$4, 38, 8, 1251);
+    			add_location(div3, file$4, 38, 8, 1254);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div0, anchor);
@@ -6163,7 +6185,7 @@ var app = (function () {
     	validate_slots('DistributionPreview', slots, ['default']);
 
     	function onDistributionCards() {
-    		mainStore.loadCards($store.cards);
+    		mainStore.shuffleCards($store.cards);
     		navigateTo("show-distribution");
     	}
 
@@ -7862,11 +7884,9 @@ var app = (function () {
     }
 
     /* src\pages\ShowDistribution.svelte generated by Svelte v3.48.0 */
-
-    const { console: console_1 } = globals;
     const file$1 = "src\\pages\\ShowDistribution.svelte";
 
-    // (43:0) <Layout>
+    // (42:0) <Layout>
     function create_default_slot$1(ctx) {
     	let div3;
     	let h1;
@@ -7906,22 +7926,23 @@ var app = (function () {
     			span1 = element("span");
     			t5 = text("Осталось карт: ");
     			t6 = text(t6_value);
-    			attr_dev(h1, "class", "svelte-1ddq6x6");
-    			add_location(h1, file$1, 44, 8, 1477);
+    			attr_dev(h1, "class", "svelte-k4nks2");
+    			add_location(h1, file$1, 43, 8, 1429);
     			if (!src_url_equal(img.src, img_src_value = "assets/logo2.png")) attr_dev(img, "src", img_src_value);
     			attr_dev(img, "alt", "Логотип");
-    			add_location(img, file$1, 47, 16, 1677);
-    			attr_dev(div0, "class", div0_class_value = "cardFront" + (/*cardViewFlag*/ ctx[0] ? ' cardFrontHiddened' : '') + " svelte-1ddq6x6");
-    			add_location(div0, file$1, 46, 12, 1594);
-    			add_location(span0, file$1, 50, 16, 1834);
-    			attr_dev(div1, "class", div1_class_value = "cardBack" + (/*cardViewFlag*/ ctx[0] ? ' cardBackOpened' : '') + " svelte-1ddq6x6");
-    			add_location(div1, file$1, 49, 12, 1755);
-    			attr_dev(div2, "class", "card svelte-1ddq6x6");
-    			add_location(div2, file$1, 45, 8, 1538);
-    			attr_dev(span1, "class", "cardsCounter svelte-1ddq6x6");
-    			add_location(span1, file$1, 53, 8, 1905);
-    			attr_dev(div3, "class", "cardsArea svelte-1ddq6x6");
-    			add_location(div3, file$1, 43, 4, 1444);
+    			attr_dev(img, "class", "svelte-k4nks2");
+    			add_location(img, file$1, 46, 16, 1629);
+    			attr_dev(div0, "class", div0_class_value = "cardFront" + (/*cardViewFlag*/ ctx[0] ? ' cardFrontHiddened' : '') + " svelte-k4nks2");
+    			add_location(div0, file$1, 45, 12, 1546);
+    			add_location(span0, file$1, 49, 16, 1786);
+    			attr_dev(div1, "class", div1_class_value = "cardBack" + (/*cardViewFlag*/ ctx[0] ? ' cardBackOpened' : '') + " svelte-k4nks2");
+    			add_location(div1, file$1, 48, 12, 1707);
+    			attr_dev(div2, "class", "card svelte-k4nks2");
+    			add_location(div2, file$1, 44, 8, 1490);
+    			attr_dev(span1, "class", "cardsCounter svelte-k4nks2");
+    			add_location(span1, file$1, 52, 8, 1857);
+    			attr_dev(div3, "class", "cardsArea svelte-k4nks2");
+    			add_location(div3, file$1, 42, 4, 1396);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div3, anchor);
@@ -7945,13 +7966,13 @@ var app = (function () {
     			}
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*cardViewFlag*/ 1 && div0_class_value !== (div0_class_value = "cardFront" + (/*cardViewFlag*/ ctx[0] ? ' cardFrontHiddened' : '') + " svelte-1ddq6x6")) {
+    			if (dirty & /*cardViewFlag*/ 1 && div0_class_value !== (div0_class_value = "cardFront" + (/*cardViewFlag*/ ctx[0] ? ' cardFrontHiddened' : '') + " svelte-k4nks2")) {
     				attr_dev(div0, "class", div0_class_value);
     			}
 
     			if (dirty & /*activeCard*/ 2) set_data_dev(t3, /*activeCard*/ ctx[1]);
 
-    			if (dirty & /*cardViewFlag*/ 1 && div1_class_value !== (div1_class_value = "cardBack" + (/*cardViewFlag*/ ctx[0] ? ' cardBackOpened' : '') + " svelte-1ddq6x6")) {
+    			if (dirty & /*cardViewFlag*/ 1 && div1_class_value !== (div1_class_value = "cardBack" + (/*cardViewFlag*/ ctx[0] ? ' cardBackOpened' : '') + " svelte-k4nks2")) {
     				attr_dev(div1, "class", div1_class_value);
     			}
 
@@ -7968,7 +7989,7 @@ var app = (function () {
     		block,
     		id: create_default_slot$1.name,
     		type: "slot",
-    		source: "(43:0) <Layout>",
+    		source: "(42:0) <Layout>",
     		ctx
     	});
 
@@ -8072,13 +8093,12 @@ var app = (function () {
 
     	onMount(() => {
     		mainStore.saveDistributionDate();
-    		console.log($mainStore.cardsHiddened);
     	});
 
     	const writable_props = [];
 
     	Object.keys($$props).forEach(key => {
-    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1.warn(`<ShowDistribution> was created with unknown prop '${key}'`);
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<ShowDistribution> was created with unknown prop '${key}'`);
     	});
 
     	$$self.$capture_state = () => ({
@@ -8126,23 +8146,25 @@ var app = (function () {
     function get_each_context(ctx, list, i) {
     	const child_ctx = ctx.slice();
     	child_ctx[9] = list[i];
+    	child_ctx[11] = i;
     	return child_ctx;
     }
 
     function get_each_context_1(ctx, list, i) {
     	const child_ctx = ctx.slice();
     	child_ctx[9] = list[i];
+    	child_ctx[11] = i;
     	return child_ctx;
     }
 
     function get_each_context_2(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[14] = list[i];
-    	child_ctx[16] = i;
+    	child_ctx[13] = list[i];
+    	child_ctx[11] = i;
     	return child_ctx;
     }
 
-    // (89:8) {:else}
+    // (96:8) {:else}
     function create_else_block_2(ctx) {
     	let div;
     	let img;
@@ -8174,11 +8196,11 @@ var app = (function () {
     			if (!src_url_equal(img.src, img_src_value = "assets/nogames.png")) attr_dev(img, "src", img_src_value);
     			attr_dev(img, "alt", "Грусный смайлик :(");
     			attr_dev(img, "class", "svelte-bzsnmq");
-    			add_location(img, file, 90, 16, 3341);
+    			add_location(img, file, 97, 16, 3751);
     			attr_dev(span, "class", "svelte-bzsnmq");
-    			add_location(span, file, 91, 16, 3416);
+    			add_location(span, file, 98, 16, 3826);
     			attr_dev(div, "class", "noGamesArea svelte-bzsnmq");
-    			add_location(div, file, 89, 12, 3298);
+    			add_location(div, file, 96, 12, 3708);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -8192,7 +8214,7 @@ var app = (function () {
     		p: function update(ctx, dirty) {
     			const button_changes = {};
 
-    			if (dirty & /*$$scope*/ 131072) {
+    			if (dirty & /*$$scope*/ 32768) {
     				button_changes.$$scope = { dirty, ctx };
     			}
 
@@ -8217,14 +8239,14 @@ var app = (function () {
     		block,
     		id: create_else_block_2.name,
     		type: "else",
-    		source: "(89:8) {:else}",
+    		source: "(96:8) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (57:8) {#if history.length > 0}
+    // (64:8) {#if history.length > 0}
     function create_if_block_3(ctx) {
     	let table;
     	let current;
@@ -8248,7 +8270,7 @@ var app = (function () {
     		p: function update(ctx, dirty) {
     			const table_changes = {};
 
-    			if (dirty & /*$$scope, history*/ 131073) {
+    			if (dirty & /*$$scope, history*/ 32769) {
     				table_changes.$$scope = { dirty, ctx };
     			}
 
@@ -8272,14 +8294,14 @@ var app = (function () {
     		block,
     		id: create_if_block_3.name,
     		type: "if",
-    		source: "(57:8) {#if history.length > 0}",
+    		source: "(64:8) {#if history.length > 0}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (93:16) <Button clickEvent={() => navigateTo("home")}                      >
+    // (100:16) <Button clickEvent={() => navigateTo("home")}                      >
     function create_default_slot_5(ctx) {
     	let t;
 
@@ -8299,27 +8321,27 @@ var app = (function () {
     		block,
     		id: create_default_slot_5.name,
     		type: "slot",
-    		source: "(93:16) <Button clickEvent={() => navigateTo(\\\"home\\\")}                      >",
+    		source: "(100:16) <Button clickEvent={() => navigateTo(\\\"home\\\")}                      >",
     		ctx
     	});
 
     	return block;
     }
 
-    // (64:16) {#each history as game, idx}
+    // (71:16) {#each history as game, idx}
     function create_each_block_2(ctx) {
     	let tr;
     	let td0;
     	let span0;
-    	let t0_value = createCurrentDate(/*game*/ ctx[14].dateID) + "";
+    	let t0_value = createCurrentDate(/*game*/ ctx[13].dateID) + "";
     	let t0;
     	let t1;
     	let span1;
-    	let t2_value = createCurrentTime(/*game*/ ctx[14].dateID) + "";
+    	let t2_value = createCurrentTime(/*game*/ ctx[13].dateID) + "";
     	let t2;
     	let t3;
     	let td1;
-    	let t4_value = /*game*/ ctx[14].cardsOpened.length + /*game*/ ctx[14].cardsHiddened.length + "";
+    	let t4_value = /*game*/ ctx[13].cardsOpened.length + /*game*/ ctx[13].cardsHiddened.length + "";
     	let t4;
     	let t5;
     	let td2;
@@ -8333,11 +8355,11 @@ var app = (function () {
     	let dispose;
 
     	function click_handler() {
-    		return /*click_handler*/ ctx[5](/*idx*/ ctx[16]);
+    		return /*click_handler*/ ctx[5](/*idx*/ ctx[11]);
     	}
 
     	function click_handler_1() {
-    		return /*click_handler_1*/ ctx[6](/*idx*/ ctx[16]);
+    		return /*click_handler_1*/ ctx[6](/*idx*/ ctx[11]);
     	}
 
     	const block = {
@@ -8360,21 +8382,21 @@ var app = (function () {
     			button1 = element("button");
     			button1.textContent = "Удалить";
     			t9 = space();
-    			add_location(span0, file, 66, 28, 2279);
-    			add_location(span1, file, 67, 28, 2354);
+    			add_location(span0, file, 73, 28, 2689);
+    			add_location(span1, file, 74, 28, 2764);
     			attr_dev(td0, "class", "dateAndTime svelte-bzsnmq");
-    			add_location(td0, file, 65, 24, 2225);
+    			add_location(td0, file, 72, 24, 2635);
     			attr_dev(td1, "align", "center");
     			attr_dev(td1, "class", "svelte-bzsnmq");
-    			add_location(td1, file, 69, 24, 2456);
+    			add_location(td1, file, 76, 24, 2866);
     			attr_dev(button0, "class", "detailsBtn svelte-bzsnmq");
-    			add_location(button0, file, 74, 28, 2712);
+    			add_location(button0, file, 81, 28, 3122);
     			attr_dev(button1, "class", "deleteBtn svelte-bzsnmq");
-    			add_location(button1, file, 79, 28, 2955);
+    			add_location(button1, file, 86, 28, 3365);
     			attr_dev(td2, "align", "right");
     			attr_dev(td2, "class", "actions svelte-bzsnmq");
-    			add_location(td2, file, 73, 24, 2648);
-    			add_location(tr, file, 64, 20, 2152);
+    			add_location(td2, file, 80, 24, 3058);
+    			add_location(tr, file, 71, 20, 2562);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, tr, anchor);
@@ -8406,9 +8428,9 @@ var app = (function () {
     		},
     		p: function update(new_ctx, dirty) {
     			ctx = new_ctx;
-    			if ((!current || dirty & /*history*/ 1) && t0_value !== (t0_value = createCurrentDate(/*game*/ ctx[14].dateID) + "")) set_data_dev(t0, t0_value);
-    			if ((!current || dirty & /*history*/ 1) && t2_value !== (t2_value = createCurrentTime(/*game*/ ctx[14].dateID) + "")) set_data_dev(t2, t2_value);
-    			if ((!current || dirty & /*history*/ 1) && t4_value !== (t4_value = /*game*/ ctx[14].cardsOpened.length + /*game*/ ctx[14].cardsHiddened.length + "")) set_data_dev(t4, t4_value);
+    			if ((!current || dirty & /*history*/ 1) && t0_value !== (t0_value = createCurrentDate(/*game*/ ctx[13].dateID) + "")) set_data_dev(t0, t0_value);
+    			if ((!current || dirty & /*history*/ 1) && t2_value !== (t2_value = createCurrentTime(/*game*/ ctx[13].dateID) + "")) set_data_dev(t2, t2_value);
+    			if ((!current || dirty & /*history*/ 1) && t4_value !== (t4_value = /*game*/ ctx[13].cardsOpened.length + /*game*/ ctx[13].cardsHiddened.length + "")) set_data_dev(t4, t4_value);
     		},
     		i: function intro(local) {
     			if (current) return;
@@ -8437,14 +8459,14 @@ var app = (function () {
     		block,
     		id: create_each_block_2.name,
     		type: "each",
-    		source: "(64:16) {#each history as game, idx}",
+    		source: "(71:16) {#each history as game, idx}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (58:12) <Table>
+    // (65:12) <Table>
     function create_default_slot_4(ctx) {
     	let thead;
     	let th0;
@@ -8487,14 +8509,14 @@ var app = (function () {
     			each_1_anchor = empty();
     			attr_dev(th0, "align", "left");
     			attr_dev(th0, "class", "svelte-bzsnmq");
-    			add_location(th0, file, 59, 20, 1915);
+    			add_location(th0, file, 66, 20, 2325);
     			attr_dev(th1, "align", "center");
     			attr_dev(th1, "class", "svelte-bzsnmq");
-    			add_location(th1, file, 60, 20, 1971);
+    			add_location(th1, file, 67, 20, 2381);
     			attr_dev(th2, "align", "right");
     			attr_dev(th2, "class", "svelte-bzsnmq");
-    			add_location(th2, file, 61, 20, 2027);
-    			add_location(thead, file, 58, 16, 1886);
+    			add_location(th2, file, 68, 20, 2437);
+    			add_location(thead, file, 65, 16, 2296);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, thead, anchor);
@@ -8571,14 +8593,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_4.name,
     		type: "slot",
-    		source: "(58:12) <Table>",
+    		source: "(65:12) <Table>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (54:4) <Container>
+    // (61:4) <Container>
     function create_default_slot_3(ctx) {
     	let h1;
     	let t1;
@@ -8608,8 +8630,8 @@ var app = (function () {
     			t2 = space();
     			if_block.c();
     			if_block_anchor = empty();
-    			add_location(h1, file, 54, 8, 1777);
-    			add_location(hr, file, 55, 8, 1807);
+    			add_location(h1, file, 61, 8, 2187);
+    			add_location(hr, file, 62, 8, 2217);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, h1, anchor);
@@ -8670,14 +8692,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_3.name,
     		type: "slot",
-    		source: "(54:4) <Container>",
+    		source: "(61:4) <Container>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (53:0) <Layout>
+    // (60:0) <Layout>
     function create_default_slot_2(ctx) {
     	let container;
     	let current;
@@ -8701,7 +8723,7 @@ var app = (function () {
     		p: function update(ctx, dirty) {
     			const container_changes = {};
 
-    			if (dirty & /*$$scope, history*/ 131073) {
+    			if (dirty & /*$$scope, history*/ 32769) {
     				container_changes.$$scope = { dirty, ctx };
     			}
 
@@ -8725,14 +8747,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_2.name,
     		type: "slot",
-    		source: "(53:0) <Layout>",
+    		source: "(60:0) <Layout>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (100:0) {#if viewDetailsModalFlag}
+    // (107:0) {#if viewDetailsModalFlag}
     function create_if_block(ctx) {
     	let modal;
     	let current;
@@ -8758,7 +8780,7 @@ var app = (function () {
     			const modal_changes = {};
     			if (dirty & /*viewDetailsModalFlag*/ 4) modal_changes.clickEvent = /*func_1*/ ctx[8];
 
-    			if (dirty & /*$$scope, history, selectedHistoryGameID*/ 131075) {
+    			if (dirty & /*$$scope, history, selectedHistoryGameID*/ 32771) {
     				modal_changes.$$scope = { dirty, ctx };
     			}
 
@@ -8782,14 +8804,14 @@ var app = (function () {
     		block,
     		id: create_if_block.name,
     		type: "if",
-    		source: "(100:0) {#if viewDetailsModalFlag}",
+    		source: "(107:0) {#if viewDetailsModalFlag}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (114:24) {:else}
+    // (121:24) {:else}
     function create_else_block_1(ctx) {
     	let p;
 
@@ -8798,7 +8820,7 @@ var app = (function () {
     			p = element("p");
     			p.textContent = "Вскрытых карт нет";
     			attr_dev(p, "class", "emptyCardsTitle svelte-bzsnmq");
-    			add_location(p, file, 114, 28, 4469);
+    			add_location(p, file, 121, 28, 4895);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -8813,14 +8835,14 @@ var app = (function () {
     		block,
     		id: create_else_block_1.name,
     		type: "else",
-    		source: "(114:24) {:else}",
+    		source: "(121:24) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (110:24) {#if history[selectedHistoryGameID].cardsOpened.length > 0}
+    // (117:24) {#if history[selectedHistoryGameID].cardsOpened.length > 0}
     function create_if_block_2(ctx) {
     	let each_1_anchor;
     	let each_value_1 = /*history*/ ctx[0][/*selectedHistoryGameID*/ ctx[1]].cardsOpened;
@@ -8881,32 +8903,39 @@ var app = (function () {
     		block,
     		id: create_if_block_2.name,
     		type: "if",
-    		source: "(110:24) {#if history[selectedHistoryGameID].cardsOpened.length > 0}",
+    		source: "(117:24) {#if history[selectedHistoryGameID].cardsOpened.length > 0}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (111:28) {#each history[selectedHistoryGameID].cardsOpened as card}
+    // (118:28) {#each history[selectedHistoryGameID].cardsOpened as card, idx}
     function create_each_block_1(ctx) {
     	let span;
-    	let t_value = /*card*/ ctx[9] + "";
-    	let t;
+    	let t0_value = /*idx*/ ctx[11] + 1 + "";
+    	let t0;
+    	let t1;
+    	let t2_value = /*card*/ ctx[9] + "";
+    	let t2;
 
     	const block = {
     		c: function create() {
     			span = element("span");
-    			t = text(t_value);
+    			t0 = text(t0_value);
+    			t1 = text(". ");
+    			t2 = text(t2_value);
     			attr_dev(span, "class", "svelte-bzsnmq");
-    			add_location(span, file, 111, 32, 4350);
+    			add_location(span, file, 118, 32, 4765);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
-    			append_dev(span, t);
+    			append_dev(span, t0);
+    			append_dev(span, t1);
+    			append_dev(span, t2);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*history, selectedHistoryGameID*/ 3 && t_value !== (t_value = /*card*/ ctx[9] + "")) set_data_dev(t, t_value);
+    			if (dirty & /*history, selectedHistoryGameID*/ 3 && t2_value !== (t2_value = /*card*/ ctx[9] + "")) set_data_dev(t2, t2_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(span);
@@ -8917,14 +8946,14 @@ var app = (function () {
     		block,
     		id: create_each_block_1.name,
     		type: "each",
-    		source: "(111:28) {#each history[selectedHistoryGameID].cardsOpened as card}",
+    		source: "(118:28) {#each history[selectedHistoryGameID].cardsOpened as card, idx}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (130:24) {:else}
+    // (137:24) {:else}
     function create_else_block(ctx) {
     	let p;
 
@@ -8933,7 +8962,7 @@ var app = (function () {
     			p = element("p");
     			p.textContent = "Не вскрытых карт нет";
     			attr_dev(p, "class", "emptyCardsTitle svelte-bzsnmq");
-    			add_location(p, file, 130, 28, 5272);
+    			add_location(p, file, 137, 28, 5714);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -8948,14 +8977,14 @@ var app = (function () {
     		block,
     		id: create_else_block.name,
     		type: "else",
-    		source: "(130:24) {:else}",
+    		source: "(137:24) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (126:24) {#if history[selectedHistoryGameID].cardsHiddened.length > 0}
+    // (133:24) {#if history[selectedHistoryGameID].cardsHiddened.length > 0}
     function create_if_block_1(ctx) {
     	let each_1_anchor;
     	let each_value = /*history*/ ctx[0][/*selectedHistoryGameID*/ ctx[1]].cardsHiddened;
@@ -9016,32 +9045,39 @@ var app = (function () {
     		block,
     		id: create_if_block_1.name,
     		type: "if",
-    		source: "(126:24) {#if history[selectedHistoryGameID].cardsHiddened.length > 0}",
+    		source: "(133:24) {#if history[selectedHistoryGameID].cardsHiddened.length > 0}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (127:28) {#each history[selectedHistoryGameID].cardsHiddened as card}
+    // (134:28) {#each history[selectedHistoryGameID].cardsHiddened as card, idx}
     function create_each_block(ctx) {
     	let span;
-    	let t_value = /*card*/ ctx[9] + "";
-    	let t;
+    	let t0_value = /*idx*/ ctx[11] + 1 + "";
+    	let t0;
+    	let t1;
+    	let t2_value = /*card*/ ctx[9] + "";
+    	let t2;
 
     	const block = {
     		c: function create() {
     			span = element("span");
-    			t = text(t_value);
+    			t0 = text(t0_value);
+    			t1 = text(". ");
+    			t2 = text(t2_value);
     			attr_dev(span, "class", "svelte-bzsnmq");
-    			add_location(span, file, 127, 32, 5153);
+    			add_location(span, file, 134, 32, 5584);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
-    			append_dev(span, t);
+    			append_dev(span, t0);
+    			append_dev(span, t1);
+    			append_dev(span, t2);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*history, selectedHistoryGameID*/ 3 && t_value !== (t_value = /*card*/ ctx[9] + "")) set_data_dev(t, t_value);
+    			if (dirty & /*history, selectedHistoryGameID*/ 3 && t2_value !== (t2_value = /*card*/ ctx[9] + "")) set_data_dev(t2, t2_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(span);
@@ -9052,14 +9088,14 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(127:28) {#each history[selectedHistoryGameID].cardsHiddened as card}",
+    		source: "(134:28) {#each history[selectedHistoryGameID].cardsHiddened as card, idx}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (102:8) <ModalContainer customStyle="overflow-y: auto; margin: 30px 0px;">
+    // (109:8) <ModalContainer customStyle="overflow-y: auto; margin: 30px 0px;">
     function create_default_slot_1(ctx) {
     	let div4;
     	let div1;
@@ -9114,23 +9150,23 @@ var app = (function () {
     			p1.textContent = "В порядке от первой НЕ вскрытой к последующим:";
     			t8 = space();
     			if_block1.c();
-    			add_location(h30, file, 104, 20, 3916);
+    			add_location(h30, file, 111, 20, 4326);
     			attr_dev(p0, "class", "cardsListSubtitle svelte-bzsnmq");
-    			add_location(p0, file, 106, 24, 4011);
+    			add_location(p0, file, 113, 24, 4421);
     			attr_dev(div0, "class", "cardsList svelte-bzsnmq");
-    			add_location(div0, file, 105, 20, 3962);
+    			add_location(div0, file, 112, 20, 4372);
     			attr_dev(div1, "class", "cardsDetails");
-    			add_location(div1, file, 103, 16, 3868);
+    			add_location(div1, file, 110, 16, 4278);
     			attr_dev(h31, "class", "hiddenedCardsTitle svelte-bzsnmq");
-    			add_location(h31, file, 120, 20, 4668);
+    			add_location(h31, file, 127, 20, 5094);
     			attr_dev(p1, "class", "cardsListSubtitle svelte-bzsnmq");
-    			add_location(p1, file, 122, 24, 4807);
+    			add_location(p1, file, 129, 24, 5233);
     			attr_dev(div2, "class", "cardsList hiddenedCards svelte-bzsnmq");
-    			add_location(div2, file, 121, 20, 4744);
+    			add_location(div2, file, 128, 20, 5170);
     			attr_dev(div3, "class", "cardsDetails");
-    			add_location(div3, file, 119, 16, 4620);
+    			add_location(div3, file, 126, 16, 5046);
     			attr_dev(div4, "class", "detailsArea svelte-bzsnmq");
-    			add_location(div4, file, 102, 12, 3825);
+    			add_location(div4, file, 109, 12, 4235);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div4, anchor);
@@ -9186,14 +9222,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_1.name,
     		type: "slot",
-    		source: "(102:8) <ModalContainer customStyle=\\\"overflow-y: auto; margin: 30px 0px;\\\">",
+    		source: "(109:8) <ModalContainer customStyle=\\\"overflow-y: auto; margin: 30px 0px;\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (101:4) <Modal clickEvent={() => (viewDetailsModalFlag = false)}>
+    // (108:4) <Modal clickEvent={() => (viewDetailsModalFlag = false)}>
     function create_default_slot(ctx) {
     	let modalcontainer;
     	let current;
@@ -9218,7 +9254,7 @@ var app = (function () {
     		p: function update(ctx, dirty) {
     			const modalcontainer_changes = {};
 
-    			if (dirty & /*$$scope, history, selectedHistoryGameID*/ 131075) {
+    			if (dirty & /*$$scope, history, selectedHistoryGameID*/ 32771) {
     				modalcontainer_changes.$$scope = { dirty, ctx };
     			}
 
@@ -9242,7 +9278,7 @@ var app = (function () {
     		block,
     		id: create_default_slot.name,
     		type: "slot",
-    		source: "(101:4) <Modal clickEvent={() => (viewDetailsModalFlag = false)}>",
+    		source: "(108:4) <Modal clickEvent={() => (viewDetailsModalFlag = false)}>",
     		ctx
     	});
 
@@ -9285,7 +9321,7 @@ var app = (function () {
     		p: function update(ctx, [dirty]) {
     			const layout_changes = {};
 
-    			if (dirty & /*$$scope, history*/ 131073) {
+    			if (dirty & /*$$scope, history*/ 32769) {
     				layout_changes.$$scope = { dirty, ctx };
     			}
 
@@ -9355,6 +9391,7 @@ var app = (function () {
     	return today;
     }
 
+    //Преобразовать UNIX время в время формата: ЧЧ:ММ
     function createCurrentTime(unixDate) {
     	let today = new Date(unixDate * 1000);
     	today = String(today.getHours()).padStart(2, "0") + ":" + String(today.getMinutes()).padStart(2, "0");
@@ -9366,6 +9403,7 @@ var app = (function () {
     	validate_slots('HistoryDistribution', slots, []);
     	let history = JSON.parse(localStorage.getItem("history")) || [];
 
+    	//Удалить игру из истории раздач по её индексу
     	function onDeleteGame(idx) {
     		history.splice(idx, 1);
     		localStorage.setItem("history", JSON.stringify(history));
@@ -9378,7 +9416,10 @@ var app = (function () {
     		}
     	}
 
+    	//Переменная, хранящяя ID текущей игры (нужно, чтобы модалка по клику на "подробнее" знала, у какой игры брать данные)
     	let selectedHistoryGameID = 0;
+
+    	//Переменная и функция для показа/скрытия меню "подробнее" для игры
     	let viewDetailsModalFlag = false;
 
     	function viewGameDetails(gameID) {

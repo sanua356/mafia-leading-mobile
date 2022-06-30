@@ -10,8 +10,8 @@ function createStore() {
     return {
         subscribe,
         update,
-        loadCards: (cards) => {
-            //Перемешивание массива карт
+        //Перемешивание карт для выдачи
+        shuffleCards: (cards) => {
             let currentIndex = cards.length,
                 randomIndex;
             while (currentIndex != 0) {
@@ -37,6 +37,8 @@ function createStore() {
                 };
             });
         },
+
+        //Удалить из массива скрытых карт ту, которую сейчас при выдаче видит игрок
         deleteOpenedCard: (card) => {
             const cards = get(mainStore).cardsHiddened;
             cards.shift();
@@ -47,6 +49,7 @@ function createStore() {
                 };
             });
         },
+        //Вернуть карту в ротацию для показа (если игрок не успел посмотреть на свою роль)
         returnOpenedCardInRotation: () => {
             const hiddened = get(mainStore).cardsHiddened;
             let opened = get(mainStore).cardsOpened;
@@ -61,6 +64,7 @@ function createStore() {
             });
             mainStore.saveDistributionInLocalStorage();
         },
+        //Сохранить дату проведения раздачи (нужно для корректной работы "истории раздач")
         saveDistributionDate: () => {
             let d = new Date();
             let seconds = Math.round(d.getTime() / 1000);
@@ -71,6 +75,7 @@ function createStore() {
                 };
             });
         },
+        //Сохранение текущей раздачи в хранилище
         saveDistributionInLocalStorage: () => {
             let history = [];
             const store = get(mainStore);

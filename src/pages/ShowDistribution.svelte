@@ -36,7 +36,6 @@
 
     onMount(() => {
         mainStore.saveDistributionDate();
-        console.log($mainStore.cardsHiddened);
     });
 </script>
 
@@ -102,6 +101,11 @@
     }
     .cardFront {
         background-image: url("/assets/cardbg.jpg");
+        background-size: contain;
+    }
+    .cardFront img {
+        max-width: 100%;
+        height: auto;
     }
     .cardBack {
         background-color: #3f3d5e;

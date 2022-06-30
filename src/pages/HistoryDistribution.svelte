@@ -8,8 +8,10 @@
     import Modal from "../components/Modal.svelte";
     import ModalContainer from "../components/ModalContainer.svelte";
 
+    //Хранилище всех (100 последних) раздач
     let history = JSON.parse(localStorage.getItem("history")) || [];
 
+    //Преобразовать UNIX время в дату формата: ДД.ММ.ГГГГ
     function createCurrentDate(unixDate) {
         let today = new Date(unixDate * 1000);
         const yyyy = today.getFullYear();
@@ -22,6 +24,7 @@
         today = dd + "." + mm + "." + yyyy;
         return today;
     }
+    //Преобразовать UNIX время в время формата: ЧЧ:ММ
     function createCurrentTime(unixDate) {
         let today = new Date(unixDate * 1000);
         today =
@@ -31,6 +34,7 @@
         return today;
     }
 
+    //Удалить игру из истории раздач по её индексу
     function onDeleteGame(idx) {
         history.splice(idx, 1);
         localStorage.setItem("history", JSON.stringify(history));
@@ -42,7 +46,10 @@
         }
     }
 
+    //Переменная, хранящяя ID текущей игры (нужно, чтобы модалка по клику на "подробнее" знала, у какой игры брать данные)
     let selectedHistoryGameID = 0;
+
+    //Переменная и функция для показа/скрытия меню "подробнее" для игры
     let viewDetailsModalFlag = false;
     function viewGameDetails(gameID) {
         selectedHistoryGameID = gameID;
@@ -108,8 +115,8 @@
                             В порядке от первой вскрытой к последующим:
                         </p>
                         {#if history[selectedHistoryGameID].cardsOpened.length > 0}
-                            {#each history[selectedHistoryGameID].cardsOpened as card}
-                                <span>{card}</span>
+                            {#each history[selectedHistoryGameID].cardsOpened as card, idx}
+                                <span>{idx + 1}. {card}</span>
                             {/each}
                         {:else}
                             <p class="emptyCardsTitle">Вскрытых карт нет</p>
@@ -124,8 +131,8 @@
                             В порядке от первой НЕ вскрытой к последующим:
                         </p>
                         {#if history[selectedHistoryGameID].cardsHiddened.length > 0}
-                            {#each history[selectedHistoryGameID].cardsHiddened as card}
-                                <span>{card}</span>
+                            {#each history[selectedHistoryGameID].cardsHiddened as card, idx}
+                                <span>{idx + 1}. {card}</span>
                             {/each}
                         {:else}
                             <p class="emptyCardsTitle">Не вскрытых карт нет</p>
