@@ -36,6 +36,7 @@
         localStorage.setItem("history", JSON.stringify(history));
         if (history.length === 0) {
             localStorage.removeItem("history");
+            history = [];
         } else {
             history = JSON.parse(localStorage.getItem("history"));
         }

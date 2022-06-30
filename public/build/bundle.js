@@ -8142,7 +8142,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (88:8) {:else}
+    // (89:8) {:else}
     function create_else_block_2(ctx) {
     	let div;
     	let img;
@@ -8174,11 +8174,11 @@ var app = (function () {
     			if (!src_url_equal(img.src, img_src_value = "assets/nogames.png")) attr_dev(img, "src", img_src_value);
     			attr_dev(img, "alt", "Грусный смайлик :(");
     			attr_dev(img, "class", "svelte-bzsnmq");
-    			add_location(img, file, 89, 16, 3314);
+    			add_location(img, file, 90, 16, 3341);
     			attr_dev(span, "class", "svelte-bzsnmq");
-    			add_location(span, file, 90, 16, 3389);
+    			add_location(span, file, 91, 16, 3416);
     			attr_dev(div, "class", "noGamesArea svelte-bzsnmq");
-    			add_location(div, file, 88, 12, 3271);
+    			add_location(div, file, 89, 12, 3298);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -8217,14 +8217,14 @@ var app = (function () {
     		block,
     		id: create_else_block_2.name,
     		type: "else",
-    		source: "(88:8) {:else}",
+    		source: "(89:8) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (56:8) {#if history.length > 0}
+    // (57:8) {#if history.length > 0}
     function create_if_block_3(ctx) {
     	let table;
     	let current;
@@ -8272,14 +8272,14 @@ var app = (function () {
     		block,
     		id: create_if_block_3.name,
     		type: "if",
-    		source: "(56:8) {#if history.length > 0}",
+    		source: "(57:8) {#if history.length > 0}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (92:16) <Button clickEvent={() => navigateTo("home")}                      >
+    // (93:16) <Button clickEvent={() => navigateTo("home")}                      >
     function create_default_slot_5(ctx) {
     	let t;
 
@@ -8299,14 +8299,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_5.name,
     		type: "slot",
-    		source: "(92:16) <Button clickEvent={() => navigateTo(\\\"home\\\")}                      >",
+    		source: "(93:16) <Button clickEvent={() => navigateTo(\\\"home\\\")}                      >",
     		ctx
     	});
 
     	return block;
     }
 
-    // (63:16) {#each history as game, idx}
+    // (64:16) {#each history as game, idx}
     function create_each_block_2(ctx) {
     	let tr;
     	let td0;
@@ -8360,21 +8360,21 @@ var app = (function () {
     			button1 = element("button");
     			button1.textContent = "Удалить";
     			t9 = space();
-    			add_location(span0, file, 65, 28, 2252);
-    			add_location(span1, file, 66, 28, 2327);
+    			add_location(span0, file, 66, 28, 2279);
+    			add_location(span1, file, 67, 28, 2354);
     			attr_dev(td0, "class", "dateAndTime svelte-bzsnmq");
-    			add_location(td0, file, 64, 24, 2198);
+    			add_location(td0, file, 65, 24, 2225);
     			attr_dev(td1, "align", "center");
     			attr_dev(td1, "class", "svelte-bzsnmq");
-    			add_location(td1, file, 68, 24, 2429);
+    			add_location(td1, file, 69, 24, 2456);
     			attr_dev(button0, "class", "detailsBtn svelte-bzsnmq");
-    			add_location(button0, file, 73, 28, 2685);
+    			add_location(button0, file, 74, 28, 2712);
     			attr_dev(button1, "class", "deleteBtn svelte-bzsnmq");
-    			add_location(button1, file, 78, 28, 2928);
+    			add_location(button1, file, 79, 28, 2955);
     			attr_dev(td2, "align", "right");
     			attr_dev(td2, "class", "actions svelte-bzsnmq");
-    			add_location(td2, file, 72, 24, 2621);
-    			add_location(tr, file, 63, 20, 2125);
+    			add_location(td2, file, 73, 24, 2648);
+    			add_location(tr, file, 64, 20, 2152);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, tr, anchor);
@@ -8437,14 +8437,14 @@ var app = (function () {
     		block,
     		id: create_each_block_2.name,
     		type: "each",
-    		source: "(63:16) {#each history as game, idx}",
+    		source: "(64:16) {#each history as game, idx}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (57:12) <Table>
+    // (58:12) <Table>
     function create_default_slot_4(ctx) {
     	let thead;
     	let th0;
@@ -8487,14 +8487,14 @@ var app = (function () {
     			each_1_anchor = empty();
     			attr_dev(th0, "align", "left");
     			attr_dev(th0, "class", "svelte-bzsnmq");
-    			add_location(th0, file, 58, 20, 1888);
+    			add_location(th0, file, 59, 20, 1915);
     			attr_dev(th1, "align", "center");
     			attr_dev(th1, "class", "svelte-bzsnmq");
-    			add_location(th1, file, 59, 20, 1944);
+    			add_location(th1, file, 60, 20, 1971);
     			attr_dev(th2, "align", "right");
     			attr_dev(th2, "class", "svelte-bzsnmq");
-    			add_location(th2, file, 60, 20, 2000);
-    			add_location(thead, file, 57, 16, 1859);
+    			add_location(th2, file, 61, 20, 2027);
+    			add_location(thead, file, 58, 16, 1886);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, thead, anchor);
@@ -8571,14 +8571,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_4.name,
     		type: "slot",
-    		source: "(57:12) <Table>",
+    		source: "(58:12) <Table>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (53:4) <Container>
+    // (54:4) <Container>
     function create_default_slot_3(ctx) {
     	let h1;
     	let t1;
@@ -8608,8 +8608,8 @@ var app = (function () {
     			t2 = space();
     			if_block.c();
     			if_block_anchor = empty();
-    			add_location(h1, file, 53, 8, 1750);
-    			add_location(hr, file, 54, 8, 1780);
+    			add_location(h1, file, 54, 8, 1777);
+    			add_location(hr, file, 55, 8, 1807);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, h1, anchor);
@@ -8670,14 +8670,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_3.name,
     		type: "slot",
-    		source: "(53:4) <Container>",
+    		source: "(54:4) <Container>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (52:0) <Layout>
+    // (53:0) <Layout>
     function create_default_slot_2(ctx) {
     	let container;
     	let current;
@@ -8725,14 +8725,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_2.name,
     		type: "slot",
-    		source: "(52:0) <Layout>",
+    		source: "(53:0) <Layout>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (99:0) {#if viewDetailsModalFlag}
+    // (100:0) {#if viewDetailsModalFlag}
     function create_if_block(ctx) {
     	let modal;
     	let current;
@@ -8782,14 +8782,14 @@ var app = (function () {
     		block,
     		id: create_if_block.name,
     		type: "if",
-    		source: "(99:0) {#if viewDetailsModalFlag}",
+    		source: "(100:0) {#if viewDetailsModalFlag}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (113:24) {:else}
+    // (114:24) {:else}
     function create_else_block_1(ctx) {
     	let p;
 
@@ -8798,7 +8798,7 @@ var app = (function () {
     			p = element("p");
     			p.textContent = "Вскрытых карт нет";
     			attr_dev(p, "class", "emptyCardsTitle svelte-bzsnmq");
-    			add_location(p, file, 113, 28, 4442);
+    			add_location(p, file, 114, 28, 4469);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -8813,14 +8813,14 @@ var app = (function () {
     		block,
     		id: create_else_block_1.name,
     		type: "else",
-    		source: "(113:24) {:else}",
+    		source: "(114:24) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (109:24) {#if history[selectedHistoryGameID].cardsOpened.length > 0}
+    // (110:24) {#if history[selectedHistoryGameID].cardsOpened.length > 0}
     function create_if_block_2(ctx) {
     	let each_1_anchor;
     	let each_value_1 = /*history*/ ctx[0][/*selectedHistoryGameID*/ ctx[1]].cardsOpened;
@@ -8881,14 +8881,14 @@ var app = (function () {
     		block,
     		id: create_if_block_2.name,
     		type: "if",
-    		source: "(109:24) {#if history[selectedHistoryGameID].cardsOpened.length > 0}",
+    		source: "(110:24) {#if history[selectedHistoryGameID].cardsOpened.length > 0}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (110:28) {#each history[selectedHistoryGameID].cardsOpened as card}
+    // (111:28) {#each history[selectedHistoryGameID].cardsOpened as card}
     function create_each_block_1(ctx) {
     	let span;
     	let t_value = /*card*/ ctx[9] + "";
@@ -8899,7 +8899,7 @@ var app = (function () {
     			span = element("span");
     			t = text(t_value);
     			attr_dev(span, "class", "svelte-bzsnmq");
-    			add_location(span, file, 110, 32, 4323);
+    			add_location(span, file, 111, 32, 4350);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -8917,14 +8917,14 @@ var app = (function () {
     		block,
     		id: create_each_block_1.name,
     		type: "each",
-    		source: "(110:28) {#each history[selectedHistoryGameID].cardsOpened as card}",
+    		source: "(111:28) {#each history[selectedHistoryGameID].cardsOpened as card}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (129:24) {:else}
+    // (130:24) {:else}
     function create_else_block(ctx) {
     	let p;
 
@@ -8933,7 +8933,7 @@ var app = (function () {
     			p = element("p");
     			p.textContent = "Не вскрытых карт нет";
     			attr_dev(p, "class", "emptyCardsTitle svelte-bzsnmq");
-    			add_location(p, file, 129, 28, 5245);
+    			add_location(p, file, 130, 28, 5272);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -8948,14 +8948,14 @@ var app = (function () {
     		block,
     		id: create_else_block.name,
     		type: "else",
-    		source: "(129:24) {:else}",
+    		source: "(130:24) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (125:24) {#if history[selectedHistoryGameID].cardsHiddened.length > 0}
+    // (126:24) {#if history[selectedHistoryGameID].cardsHiddened.length > 0}
     function create_if_block_1(ctx) {
     	let each_1_anchor;
     	let each_value = /*history*/ ctx[0][/*selectedHistoryGameID*/ ctx[1]].cardsHiddened;
@@ -9016,14 +9016,14 @@ var app = (function () {
     		block,
     		id: create_if_block_1.name,
     		type: "if",
-    		source: "(125:24) {#if history[selectedHistoryGameID].cardsHiddened.length > 0}",
+    		source: "(126:24) {#if history[selectedHistoryGameID].cardsHiddened.length > 0}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (126:28) {#each history[selectedHistoryGameID].cardsHiddened as card}
+    // (127:28) {#each history[selectedHistoryGameID].cardsHiddened as card}
     function create_each_block(ctx) {
     	let span;
     	let t_value = /*card*/ ctx[9] + "";
@@ -9034,7 +9034,7 @@ var app = (function () {
     			span = element("span");
     			t = text(t_value);
     			attr_dev(span, "class", "svelte-bzsnmq");
-    			add_location(span, file, 126, 32, 5126);
+    			add_location(span, file, 127, 32, 5153);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -9052,14 +9052,14 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(126:28) {#each history[selectedHistoryGameID].cardsHiddened as card}",
+    		source: "(127:28) {#each history[selectedHistoryGameID].cardsHiddened as card}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (101:8) <ModalContainer customStyle="overflow-y: auto; margin: 30px 0px;">
+    // (102:8) <ModalContainer customStyle="overflow-y: auto; margin: 30px 0px;">
     function create_default_slot_1(ctx) {
     	let div4;
     	let div1;
@@ -9114,23 +9114,23 @@ var app = (function () {
     			p1.textContent = "В порядке от первой НЕ вскрытой к последующим:";
     			t8 = space();
     			if_block1.c();
-    			add_location(h30, file, 103, 20, 3889);
+    			add_location(h30, file, 104, 20, 3916);
     			attr_dev(p0, "class", "cardsListSubtitle svelte-bzsnmq");
-    			add_location(p0, file, 105, 24, 3984);
+    			add_location(p0, file, 106, 24, 4011);
     			attr_dev(div0, "class", "cardsList svelte-bzsnmq");
-    			add_location(div0, file, 104, 20, 3935);
+    			add_location(div0, file, 105, 20, 3962);
     			attr_dev(div1, "class", "cardsDetails");
-    			add_location(div1, file, 102, 16, 3841);
+    			add_location(div1, file, 103, 16, 3868);
     			attr_dev(h31, "class", "hiddenedCardsTitle svelte-bzsnmq");
-    			add_location(h31, file, 119, 20, 4641);
+    			add_location(h31, file, 120, 20, 4668);
     			attr_dev(p1, "class", "cardsListSubtitle svelte-bzsnmq");
-    			add_location(p1, file, 121, 24, 4780);
+    			add_location(p1, file, 122, 24, 4807);
     			attr_dev(div2, "class", "cardsList hiddenedCards svelte-bzsnmq");
-    			add_location(div2, file, 120, 20, 4717);
+    			add_location(div2, file, 121, 20, 4744);
     			attr_dev(div3, "class", "cardsDetails");
-    			add_location(div3, file, 118, 16, 4593);
+    			add_location(div3, file, 119, 16, 4620);
     			attr_dev(div4, "class", "detailsArea svelte-bzsnmq");
-    			add_location(div4, file, 101, 12, 3798);
+    			add_location(div4, file, 102, 12, 3825);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div4, anchor);
@@ -9186,14 +9186,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_1.name,
     		type: "slot",
-    		source: "(101:8) <ModalContainer customStyle=\\\"overflow-y: auto; margin: 30px 0px;\\\">",
+    		source: "(102:8) <ModalContainer customStyle=\\\"overflow-y: auto; margin: 30px 0px;\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (100:4) <Modal clickEvent={() => (viewDetailsModalFlag = false)}>
+    // (101:4) <Modal clickEvent={() => (viewDetailsModalFlag = false)}>
     function create_default_slot(ctx) {
     	let modalcontainer;
     	let current;
@@ -9242,7 +9242,7 @@ var app = (function () {
     		block,
     		id: create_default_slot.name,
     		type: "slot",
-    		source: "(100:4) <Modal clickEvent={() => (viewDetailsModalFlag = false)}>",
+    		source: "(101:4) <Modal clickEvent={() => (viewDetailsModalFlag = false)}>",
     		ctx
     	});
 
@@ -9372,6 +9372,7 @@ var app = (function () {
 
     		if (history.length === 0) {
     			localStorage.removeItem("history");
+    			$$invalidate(0, history = []);
     		} else {
     			$$invalidate(0, history = JSON.parse(localStorage.getItem("history")));
     		}
