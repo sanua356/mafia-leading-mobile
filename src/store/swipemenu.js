@@ -29,13 +29,14 @@ function createStore() {
                 };
             });
         },
-        onChangeDeathZoneSwipe: (value) => {
+        onChangeDeathZoneSwipe: (event) => {
             update((prev) => {
                 return {
                     ...prev,
-                    deathZoneSwipe: value,
+                    deathZoneSwipe: event.target.value,
                 };
             });
+            swipeMenuStore.changeDeathZoneSwipe(event.target.value);
         },
         //Добавить кастом значение "мёртвой зоны" для свайпов
         changeDeathZoneSwipe: (value) => {

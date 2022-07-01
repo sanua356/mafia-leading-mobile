@@ -1,27 +1,42 @@
 <script>
     import { onDestroy, onMount } from "svelte";
-
     import { navigateTo, routeIsActive } from "svelte-router-spa";
     import Modal from "../components/Modal.svelte";
     import { swipeMenuStore } from "../store/swipemenu.js";
     import { mainStore } from "../store/showdistrib.js";
 
+    let startX = null,
+        deathZone =
+            window.screen.width * ($swipeMenuStore.deathZoneSwipe / 100);
+    function initMenu() {
+        document.addEventListener("touchstart", touchStart);
+        document.addEventListener("touchmove", touchMove);
+    }
+    function touchStart(e) {
+        startX = e.touches[0].clientX;
+    }
+    function touchMove(e) {
+        if (e.touches[0].target.nodeName === "INPUT") {
+            return;
+        }
+        let movedX = e.touches[0].clientX;
+        if (movedX - startX > deathZone) {
+            swipeMenuStore.changeViewFlag(true);
+        }
+        if (movedX - startX < deathZone) {
+            swipeMenuStore.changeViewFlag(false);
+        }
+    }
+
+    $: {
+        deathZone =
+            window.screen.width * ($swipeMenuStore.deathZoneSwipe / 100);
+        document.removeEventListener("touchstart", touchStart, false);
+        document.removeEventListener("touchmove", touchStart, false);
+        initMenu();
+    }
     onMount(() => {
-        let startX = null,
-            deathZone =
-                window.screen.width * ($swipeMenuStore.deathZoneSwipe / 100);
-        document.addEventListener("touchstart", function (e) {
-            startX = e.touches[0].clientX;
-        });
-        document.addEventListener("touchmove", function (e) {
-            let movedX = e.touches[0].clientX;
-            if (movedX - startX > deathZone) {
-                swipeMenuStore.changeViewFlag(true);
-            }
-            if (movedX - startX < deathZone) {
-                swipeMenuStore.changeViewFlag(false);
-            }
-        });
+        initMenu();
     });
     onDestroy(() => {
         document.removeEventListener("touchstart");
