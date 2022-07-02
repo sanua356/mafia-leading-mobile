@@ -2522,7 +2522,7 @@ var app = (function () {
             //Добавить кастом значение "мёртвой зоны" для свайпов
             changeDeathZoneSwipe: (value) => {
                 if (localStorage.getItem("settings") !== null) {
-                    let settings = localStorage.getItem("settings");
+                    let settings = JSON.parse(localStorage.getItem("settings"));
                     settings.deathZone = value;
                     localStorage.setItem("settings", JSON.stringify(settings));
                 } else {
@@ -4476,17 +4476,65 @@ var app = (function () {
     }
 
     const cards = {
-        mafia: "Мафия",
-        civilian: "Мирный житель",
-        doctor: "Доктор",
-        commissioner: "Комиссар",
-        exmafia: "Дон мафии",
-        maniac: "Маньяк",
-        prostitute: "Путана",
-        boss: "Босс",
-        yakuza: "Якудза",
-        thief: "Вор",
+        mafia: {
+            icon: "assets/icon.png",
+            name: "Мафия",
+            description: "Описание...",
+        },
+        civilian: {
+            icon: "assets/icon.png",
+            name: "Мирный житель",
+            description: "Описание...",
+        },
+        doctor: {
+            icon: "assets/icon.png",
+            name: "Доктор",
+            description: "Описание...",
+        },
+        commissioner: {
+            icon: "assets/icon.png",
+            name: "Коммиссар",
+            description: "Описание...",
+        },
+        exmafia: {
+            icon: "assets/icon.png",
+            name: "Дон мафии",
+            description: "Описание...",
+        },
+        maniac: {
+            icon: "assets/icon.png",
+            name: "Маньяк",
+            description: "Описание...",
+        },
+        prostitute: {
+            icon: "assets/icon.png",
+            name: "Путана",
+            description: "Описание...",
+        },
+        boss: {
+            icon: "assets/icon.png",
+            name: "Босс",
+            description: "Описание...",
+        },
+        yakuza: {
+            icon: "assets/icon.png",
+            name: "Якудза",
+            description: "Описание...",
+        },
+        thief: {
+            icon: "assets/icon.png",
+            name: "Вор",
+            description: "Описание...",
+        },
     };
+
+    function allCardsList() {
+        return Object.assign(
+            {},
+            cards,
+            JSON.parse(localStorage.getItem("customRoles"))
+        );
+    }
 
     function createStore$2() {
         const { subscribe, update } = writable({
@@ -4504,22 +4552,22 @@ var app = (function () {
                 let cards = [];
                 //Подсчёт всех "мафий"
                 for (let i = 0; i < Math.ceil(playersCount / 4); i++) {
-                    cards.push("Мафия");
+                    cards.push("mafia");
                 }
                 playersCount -= Math.ceil(playersCount / 4);
                 //Проверка на то, хватает ли игроков для добавления роли "Доктор"
                 if (playersCount >= 4) {
-                    cards.push("Доктор");
+                    cards.push("doctor");
                     playersCount--;
                 }
                 //Добавление "комиссара" в раздачу
                 if (playersCount > 0) {
-                    cards.push("Комиссар");
+                    cards.push("commissioner");
                     playersCount--;
                 }
                 //Дозагрузка всех оставшихся карт как "мирные жители"
                 for (let i = 0; i < playersCount; i++) {
-                    cards.push("Мирный житель");
+                    cards.push("civilian");
                 }
 
                 //Обновление store созданной колодой
@@ -4548,14 +4596,9 @@ var app = (function () {
             //
             loadCardsManual: (cardsObj) => {
                 let cardsArray = [];
-                const cardsDB = Object.assign(
-                    {},
-                    cards,
-                    JSON.parse(localStorage.getItem("customRoles"))
-                );
                 Object.keys(cardsObj).forEach((cardName) => {
                     for (let i = 0; i < cardsObj[cardName]; i++) {
-                        cardsArray.push(cardsDB[cardName]);
+                        cardsArray.push(cardName);
                     }
                 });
                 update((prev) => {
@@ -5399,24 +5442,18 @@ var app = (function () {
     const cyrillicToTranslit = new CyrillicToTranslit();
 
     //Инициализация store с дефолными и пользовательскими картами
-    function initStore() {
+    function initStore$1() {
         let initialStore = {};
-        Object.keys(cards).forEach((card) => {
+        Object.keys(allCardsList()).forEach((card) => {
             initialStore[card] = 0;
         });
-        if (localStorage.getItem("customRoles") !== null) {
-            const customRoles = JSON.parse(localStorage.getItem("customRoles"));
-            Object.keys(customRoles).forEach((card) => {
-                initialStore[card] = 0;
-            });
-        }
 
         return initialStore;
     }
 
     function createStore$1() {
         const { update, subscribe } = writable({
-            cards: initStore(),
+            cards: initStore$1(),
             newRoleName: "",
         });
 
@@ -5428,7 +5465,7 @@ var app = (function () {
                 update((prev) => {
                     return {
                         ...prev,
-                        cards: initStore(),
+                        cards: initStore$1(),
                     };
                 });
             },
@@ -5479,19 +5516,7 @@ var app = (function () {
             //Загрузка карт из ручного режима, если пользователь захотел изменить пак автонабора
             loadCardsFromAutoDistribution: (autoCards) => {
                 manualStore.reinit();
-                let prevStore = get_store_value(manualStore).cards;
-                const entries = Object.entries(cards);
-                const autoCardsEntries = Object.entries(autoCards);
-                for (let i = 0; i < autoCardsEntries.length; i++) {
-                    for (let j = 0; j < entries.length; j++) {
-                        if (
-                            entries[j][1].toLowerCase() ===
-                            autoCardsEntries[i][0].toLowerCase()
-                        ) {
-                            prevStore[entries[j][0]] = autoCardsEntries[i][1];
-                        }
-                    }
-                }
+                let prevStore = { ...get_store_value(manualStore).cards, ...autoCards };
                 update((prev) => {
                     return {
                         ...prev,
@@ -5532,7 +5557,11 @@ var app = (function () {
                     if (savedCustomRoles.hasOwnProperty(storageRoleName)) {
                         return false;
                     } else {
-                        savedCustomRoles[storageRoleName] = newRoleName;
+                        savedCustomRoles[storageRoleName] = {
+                            name: newRoleName,
+                            icon: "",
+                            description: "",
+                        };
                         localStorage.setItem(
                             "customRoles",
                             JSON.stringify(savedCustomRoles)
@@ -5541,11 +5570,15 @@ var app = (function () {
                     }
                 } else {
                     let savedRole = {};
-                    savedRole[storageRoleName] = newRoleName;
-                    localStorage.setItem(
-                        "customRoles",
-                        JSON.stringify({ ...savedRole })
-                    );
+                    (savedRole[storageRoleName] = {
+                        name: newRoleName,
+                        icon: "",
+                        description: "",
+                    }),
+                        localStorage.setItem(
+                            "customRoles",
+                            JSON.stringify({ ...savedRole })
+                        );
                     return true;
                 }
             },
@@ -5768,11 +5801,11 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (30:16) {#each Object.entries($store.cardsCount) as [key, value]}
+    // (31:16) {#each Object.entries($store.cardsCount) as [key, value]}
     function create_each_block$2(ctx) {
     	let tr;
     	let td0;
-    	let t0_value = /*key*/ ctx[5] + "";
+    	let t0_value = allCardsList()[/*key*/ ctx[5]].name + "";
     	let t0;
     	let td1;
     	let t1_value = /*value*/ ctx[6] + "";
@@ -5785,10 +5818,10 @@ var app = (function () {
     			t0 = text(t0_value);
     			td1 = element("td");
     			t1 = text(t1_value);
-    			add_location(td0, file$5, 30, 24, 1047);
+    			add_location(td0, file$5, 32, 25, 1136);
     			attr_dev(td1, "align", "right");
-    			add_location(td1, file$5, 30, 38, 1061);
-    			add_location(tr, file$5, 30, 20, 1043);
+    			add_location(td1, file$5, 32, 60, 1171);
+    			add_location(tr, file$5, 31, 20, 1106);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, tr, anchor);
@@ -5798,7 +5831,7 @@ var app = (function () {
     			append_dev(td1, t1);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*$store*/ 2 && t0_value !== (t0_value = /*key*/ ctx[5] + "")) set_data_dev(t0, t0_value);
+    			if (dirty & /*$store*/ 2 && t0_value !== (t0_value = allCardsList()[/*key*/ ctx[5]].name + "")) set_data_dev(t0, t0_value);
     			if (dirty & /*$store*/ 2 && t1_value !== (t1_value = /*value*/ ctx[6] + "")) set_data_dev(t1, t1_value);
     		},
     		d: function destroy(detaching) {
@@ -5810,14 +5843,14 @@ var app = (function () {
     		block,
     		id: create_each_block$2.name,
     		type: "each",
-    		source: "(30:16) {#each Object.entries($store.cardsCount) as [key, value]}",
+    		source: "(31:16) {#each Object.entries($store.cardsCount) as [key, value]}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (25:12) <Table>
+    // (26:12) <Table>
     function create_default_slot_4$3(ctx) {
     	let thead;
     	let th0;
@@ -5849,10 +5882,10 @@ var app = (function () {
 
     			each_1_anchor = empty();
     			attr_dev(th0, "align", "left");
-    			add_location(th0, file$5, 26, 20, 829);
+    			add_location(th0, file$5, 27, 20, 892);
     			attr_dev(th1, "align", "right");
-    			add_location(th1, file$5, 27, 20, 887);
-    			add_location(thead, file$5, 25, 16, 800);
+    			add_location(th1, file$5, 28, 20, 950);
+    			add_location(thead, file$5, 26, 16, 863);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, thead, anchor);
@@ -5868,7 +5901,7 @@ var app = (function () {
     			insert_dev(target, each_1_anchor, anchor);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*Object, $store*/ 2) {
+    			if (dirty & /*Object, $store, allCardsList*/ 2) {
     				each_value = Object.entries(/*$store*/ ctx[1].cardsCount);
     				validate_each_argument(each_value);
     				let i;
@@ -5904,14 +5937,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_4$3.name,
     		type: "slot",
-    		source: "(25:12) <Table>",
+    		source: "(26:12) <Table>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (40:12) <Button clickEvent={onDistributionCards} style="font-size: 1rem;"                  >
+    // (45:12) <Button clickEvent={onDistributionCards} style="font-size: 1rem;"                  >
     function create_default_slot_3$3(ctx) {
     	let t;
 
@@ -5931,14 +5964,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_3$3.name,
     		type: "slot",
-    		source: "(40:12) <Button clickEvent={onDistributionCards} style=\\\"font-size: 1rem;\\\"                  >",
+    		source: "(45:12) <Button clickEvent={onDistributionCards} style=\\\"font-size: 1rem;\\\"                  >",
     		ctx
     	});
 
     	return block;
     }
 
-    // (43:12) <Button                  style="font-size: 1rem;"                  color="secondary"                  clickEvent={backBtnEvent}>
+    // (48:12) <Button                  style="font-size: 1rem;"                  color="secondary"                  clickEvent={backBtnEvent}>
     function create_default_slot_2$3(ctx) {
     	let t;
 
@@ -5958,14 +5991,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_2$3.name,
     		type: "slot",
-    		source: "(43:12) <Button                  style=\\\"font-size: 1rem;\\\"                  color=\\\"secondary\\\"                  clickEvent={backBtnEvent}>",
+    		source: "(48:12) <Button                  style=\\\"font-size: 1rem;\\\"                  color=\\\"secondary\\\"                  clickEvent={backBtnEvent}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (19:4) <Container>
+    // (20:4) <Container>
     function create_default_slot_1$4(ctx) {
     	let div0;
     	let h1;
@@ -6033,15 +6066,15 @@ var app = (function () {
     			create_component(button0.$$.fragment);
     			t5 = space();
     			create_component(button1.$$.fragment);
-    			add_location(h1, file$5, 20, 12, 676);
-    			add_location(hr, file$5, 21, 12, 710);
-    			add_location(div0, file$5, 19, 8, 657);
+    			add_location(h1, file$5, 21, 12, 739);
+    			add_location(hr, file$5, 22, 12, 773);
+    			add_location(div0, file$5, 20, 8, 720);
     			attr_dev(div1, "class", "table svelte-1ah5qxi");
-    			add_location(div1, file$5, 23, 8, 742);
+    			add_location(div1, file$5, 24, 8, 805);
     			attr_dev(div2, "class", "buttons customButtons svelte-1ah5qxi");
-    			add_location(div2, file$5, 35, 8, 1171);
+    			add_location(div2, file$5, 40, 8, 1359);
     			attr_dev(div3, "class", "buttons svelte-1ah5qxi");
-    			add_location(div3, file$5, 38, 8, 1254);
+    			add_location(div3, file$5, 43, 8, 1442);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div0, anchor);
@@ -6139,14 +6172,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_1$4.name,
     		type: "slot",
-    		source: "(19:4) <Container>",
+    		source: "(20:4) <Container>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (18:0) <Layout>
+    // (19:0) <Layout>
     function create_default_slot$5(ctx) {
     	let container;
     	let current;
@@ -6194,7 +6227,7 @@ var app = (function () {
     		block,
     		id: create_default_slot$5.name,
     		type: "slot",
-    		source: "(18:0) <Layout>",
+    		source: "(19:0) <Layout>",
     		ctx
     	});
 
@@ -6288,6 +6321,8 @@ var app = (function () {
     		Container,
     		Layout,
     		Table,
+    		allCardsList,
+    		cards,
     		store,
     		mainStore,
     		onDistributionCards,
@@ -6915,11 +6950,11 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (61:16) {#each Object.entries(Object.assign({}, cards, JSON.parse(localStorage.getItem("customRoles")))) as [cardName, role]}
+    // (61:16) {#each Object.entries(allCardsList()) as [cardName, role]}
     function create_each_block$1(ctx) {
     	let tr;
     	let td0;
-    	let t0_value = /*role*/ ctx[12] + "";
+    	let t0_value = /*role*/ ctx[12].name + "";
     	let t0;
     	let t1;
     	let td1;
@@ -6965,13 +7000,13 @@ var app = (function () {
     			button1 = element("button");
     			t5 = text("-");
     			t6 = space();
-    			add_location(td0, file$3, 62, 24, 2191);
+    			add_location(td0, file$3, 62, 24, 2146);
 
     			attr_dev(button0, "class", button0_class_value = "changeCardCountBtn " + (/*$manualStore*/ ctx[2].cards[/*cardName*/ ctx[11]] >= 100
     			? 'disabledBtn'
     			: '') + " svelte-13nmxl9");
 
-    			add_location(button0, file$3, 64, 28, 2306);
+    			add_location(button0, file$3, 64, 28, 2266);
     			attr_dev(input, "type", "number");
     			attr_dev(input, "min", "0");
     			attr_dev(input, "max", "100");
@@ -6982,17 +7017,17 @@ var app = (function () {
     			? 'activeCard'
     			: '') + " svelte-13nmxl9");
 
-    			add_location(input, file$3, 73, 28, 2773);
+    			add_location(input, file$3, 73, 28, 2733);
 
     			attr_dev(button1, "class", button1_class_value = "changeCardCountBtn " + (/*$manualStore*/ ctx[2].cards[/*cardName*/ ctx[11]] <= 0
     			? 'disabledBtn'
     			: '') + " svelte-13nmxl9");
 
-    			add_location(button1, file$3, 86, 28, 3444);
+    			add_location(button1, file$3, 86, 28, 3404);
     			attr_dev(td1, "align", "right");
     			attr_dev(td1, "class", "cardCounterColumn svelte-13nmxl9");
-    			add_location(td1, file$3, 63, 24, 2232);
-    			add_location(tr, file$3, 61, 20, 2161);
+    			add_location(td1, file$3, 63, 24, 2192);
+    			add_location(tr, file$3, 61, 20, 2116);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, tr, anchor);
@@ -7055,7 +7090,7 @@ var app = (function () {
     		block,
     		id: create_each_block$1.name,
     		type: "each",
-    		source: "(61:16) {#each Object.entries(Object.assign({}, cards, JSON.parse(localStorage.getItem(\\\"customRoles\\\")))) as [cardName, role]}",
+    		source: "(61:16) {#each Object.entries(allCardsList()) as [cardName, role]}",
     		ctx
     	});
 
@@ -7070,7 +7105,7 @@ var app = (function () {
     	let th1;
     	let t3;
     	let each_1_anchor;
-    	let each_value = Object.entries(Object.assign({}, cards, JSON.parse(localStorage.getItem("customRoles"))));
+    	let each_value = Object.entries(allCardsList());
     	validate_each_argument(each_value);
     	let each_blocks = [];
 
@@ -7094,10 +7129,10 @@ var app = (function () {
 
     			each_1_anchor = empty();
     			attr_dev(th0, "align", "left");
-    			add_location(th0, file$3, 57, 20, 1887);
+    			add_location(th0, file$3, 57, 20, 1901);
     			attr_dev(th1, "align", "right");
-    			add_location(th1, file$3, 58, 20, 1945);
-    			add_location(thead, file$3, 56, 16, 1858);
+    			add_location(th1, file$3, 58, 20, 1959);
+    			add_location(thead, file$3, 56, 16, 1872);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, thead, anchor);
@@ -7113,8 +7148,8 @@ var app = (function () {
     			insert_dev(target, each_1_anchor, anchor);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*$manualStore, Object, cards, JSON, localStorage, manualStore*/ 4) {
-    				each_value = Object.entries(Object.assign({}, cards, JSON.parse(localStorage.getItem("customRoles"))));
+    			if (dirty & /*$manualStore, Object, allCardsList, manualStore*/ 4) {
+    				each_value = Object.entries(allCardsList());
     				validate_each_argument(each_value);
     				let i;
 
@@ -7284,18 +7319,18 @@ var app = (function () {
     			create_component(button0.$$.fragment);
     			t9 = space();
     			create_component(button1.$$.fragment);
-    			add_location(h1, file$3, 51, 12, 1731);
-    			add_location(hr, file$3, 52, 12, 1768);
-    			add_location(div0, file$3, 50, 8, 1712);
+    			add_location(h1, file$3, 51, 12, 1745);
+    			add_location(hr, file$3, 52, 12, 1782);
+    			add_location(div0, file$3, 50, 8, 1726);
     			attr_dev(div1, "class", "roles svelte-13nmxl9");
-    			add_location(div1, file$3, 54, 8, 1800);
+    			add_location(div1, file$3, 54, 8, 1814);
     			attr_dev(span, "class", "addCustomRole svelte-13nmxl9");
     			toggle_class(span, "active", /*modalCustomRoleFlag*/ ctx[0]);
-    			add_location(span, file$3, 100, 8, 4010);
+    			add_location(span, file$3, 100, 8, 3970);
     			attr_dev(h2, "class", "cardCounterIndicator svelte-13nmxl9");
-    			add_location(h2, file$3, 107, 8, 4243);
+    			add_location(h2, file$3, 107, 8, 4203);
     			attr_dev(div2, "class", "buttons svelte-13nmxl9");
-    			add_location(div2, file$3, 113, 8, 4464);
+    			add_location(div2, file$3, 113, 8, 4424);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div0, anchor);
@@ -7621,11 +7656,11 @@ var app = (function () {
     			span = element("span");
     			t5 = text("Недопустимое название роли. Введите корректное название.");
     			attr_dev(label, "for", "roleName");
-    			add_location(label, file$3, 126, 16, 4909);
+    			add_location(label, file$3, 126, 16, 4869);
     			attr_dev(div, "class", "modalArea buttons svelte-13nmxl9");
-    			add_location(div, file$3, 125, 12, 4860);
+    			add_location(div, file$3, 125, 12, 4820);
     			attr_dev(span, "class", span_class_value = "modalError " + (/*errorFlag*/ ctx[1] && 'modalShow') + " svelte-13nmxl9");
-    			add_location(span, file$3, 143, 12, 5629);
+    			add_location(span, file$3, 143, 12, 5589);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -7912,6 +7947,7 @@ var app = (function () {
     		Container,
     		Layout,
     		Table,
+    		allCardsList,
     		cards,
     		manualStore,
     		store,
@@ -7964,10 +8000,75 @@ var app = (function () {
     	}
     }
 
+    function initStore() {
+        const initialStore = {
+            hiddeningCardsFlag: false, //Флаг скрытия карт с экрана (false - по клику, true - по таймеру)
+            hiddeningCardsFlagTimer: 5, //Количество секунд, после которых карта при выдаче автоматически скроется (только при hiddeningCardsFlag = true)
+        };
+        if (localStorage.getItem("settings") !== null) {
+            return {
+                ...initialStore,
+                ...JSON.parse(localStorage.getItem("settings")),
+            };
+        } else {
+            return initialStore;
+        }
+    }
+
+    function createStore() {
+        const { update, subscribe } = writable(initStore());
+
+        return {
+            update,
+            subscribe,
+            //Сохранение всех настроек в хранилище
+            saveSettingsInLocalStorage: () => {
+                if (localStorage.getItem("settings") !== null) {
+                    const oldSettings = JSON.parse(
+                        localStorage.getItem("settings")
+                    );
+                    console.log(get_store_value(settingsStore));
+                    localStorage.setItem(
+                        "settings",
+                        JSON.stringify({ ...oldSettings, ...get_store_value(settingsStore) })
+                    );
+                } else {
+                    localStorage.setItem(
+                        "settings",
+                        JSON.stringify({ ...get_store_value(settingsStore) })
+                    );
+                }
+            },
+            //onChange на Input смены типа скрытия карт (по клику или по таймеру)
+            onChangeFlagHiddeningCards: (e) => {
+                update((prev) => {
+                    return {
+                        ...prev,
+                        hiddeningCardsFlag: e.target.checked,
+                    };
+                });
+                settingsStore.saveSettingsInLocalStorage();
+            },
+            onChangeHiddeningCardsTimer: (e) => {
+                if (Number(e.target.value) !== NaN) {
+                    update((prev) => {
+                        return {
+                            ...prev,
+                            hiddeningCardsFlagTimer: e.target.value,
+                        };
+                    });
+                    settingsStore.saveSettingsInLocalStorage();
+                }
+            },
+        };
+    }
+
+    const settingsStore = createStore();
+
     /* src\pages\ShowDistribution.svelte generated by Svelte v3.48.0 */
     const file$2 = "src\\pages\\ShowDistribution.svelte";
 
-    // (42:0) <Layout>
+    // (63:0) <Layout>
     function create_default_slot$2(ctx) {
     	let div3;
     	let h1;
@@ -8008,22 +8109,22 @@ var app = (function () {
     			t5 = text("Осталось карт: ");
     			t6 = text(t6_value);
     			attr_dev(h1, "class", "svelte-k4nks2");
-    			add_location(h1, file$2, 43, 8, 1429);
+    			add_location(h1, file$2, 64, 8, 2359);
     			if (!src_url_equal(img.src, img_src_value = "assets/logo2.png")) attr_dev(img, "src", img_src_value);
     			attr_dev(img, "alt", "Логотип");
     			attr_dev(img, "class", "svelte-k4nks2");
-    			add_location(img, file$2, 46, 16, 1629);
+    			add_location(img, file$2, 67, 16, 2559);
     			attr_dev(div0, "class", div0_class_value = "cardFront" + (/*cardViewFlag*/ ctx[0] ? ' cardFrontHiddened' : '') + " svelte-k4nks2");
-    			add_location(div0, file$2, 45, 12, 1546);
-    			add_location(span0, file$2, 49, 16, 1786);
+    			add_location(div0, file$2, 66, 12, 2476);
+    			add_location(span0, file$2, 70, 16, 2716);
     			attr_dev(div1, "class", div1_class_value = "cardBack" + (/*cardViewFlag*/ ctx[0] ? ' cardBackOpened' : '') + " svelte-k4nks2");
-    			add_location(div1, file$2, 48, 12, 1707);
+    			add_location(div1, file$2, 69, 12, 2637);
     			attr_dev(div2, "class", "card svelte-k4nks2");
-    			add_location(div2, file$2, 44, 8, 1490);
+    			add_location(div2, file$2, 65, 8, 2420);
     			attr_dev(span1, "class", "cardsCounter svelte-k4nks2");
-    			add_location(span1, file$2, 52, 8, 1857);
+    			add_location(span1, file$2, 73, 8, 2787);
     			attr_dev(div3, "class", "cardsArea svelte-k4nks2");
-    			add_location(div3, file$2, 42, 4, 1396);
+    			add_location(div3, file$2, 63, 4, 2326);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div3, anchor);
@@ -8070,7 +8171,7 @@ var app = (function () {
     		block,
     		id: create_default_slot$2.name,
     		type: "slot",
-    		source: "(42:0) <Layout>",
+    		source: "(63:0) <Layout>",
     		ctx
     	});
 
@@ -8103,7 +8204,7 @@ var app = (function () {
     		p: function update(ctx, [dirty]) {
     			const layout_changes = {};
 
-    			if (dirty & /*$$scope, $mainStore, cardViewFlag, activeCard*/ 39) {
+    			if (dirty & /*$$scope, $mainStore, cardViewFlag, activeCard*/ 135) {
     				layout_changes.$$scope = { dirty, ctx };
     			}
 
@@ -8135,7 +8236,10 @@ var app = (function () {
     }
 
     function instance$3($$self, $$props, $$invalidate) {
+    	let $settingsStore;
     	let $mainStore;
+    	validate_store(settingsStore, 'settingsStore');
+    	component_subscribe($$self, settingsStore, $$value => $$invalidate(6, $settingsStore = $$value));
     	validate_store(mainStore, 'mainStore');
     	component_subscribe($$self, mainStore, $$value => $$invalidate(2, $mainStore = $$value));
     	let { $$slots: slots = {}, $$scope } = $$props;
@@ -8148,19 +8252,41 @@ var app = (function () {
     	//Статус завершения раздачи (true - раздача окончена)
     	let closeDistributionFlag = false;
 
+    	//Таймер отображения вскрытой карты на экране
+    	let timer = null;
+
     	//Функция показа ролей карт
     	function onCardOpened() {
     		let openedCardsCount = $mainStore.cardsHiddened.length;
 
     		if (openedCardsCount > 0) {
+    			//Если роль на данный момент не видна игроку
     			if (cardViewFlag === false) {
     				$$invalidate(1, activeCard = $mainStore.cardsHiddened[0]);
     				mainStore.deleteOpenedCard();
     				mainStore.pushToHistoryDistribution(activeCard);
     				mainStore.saveDistributionInLocalStorage();
-    			}
+    				$$invalidate(1, activeCard = allCardsList()[activeCard].name);
+    				$$invalidate(0, cardViewFlag = true);
+    			} else {
+    				//Если в настройках установлен тип скрытия карт "по таймеру"
+    				if ($settingsStore.hiddeningCardsFlag) {
+    					if (timer === null) {
+    						timer = setTimeout(
+    							() => {
+    								$$invalidate(0, cardViewFlag = false);
+    								clearTimeout(timer);
+    								timer = null;
+    							},
+    							$settingsStore.hiddeningCardsFlagTimer * 1000
+    						);
+    					}
 
-    			$$invalidate(0, cardViewFlag = !cardViewFlag);
+    					return;
+    				} else {
+    					$$invalidate(0, cardViewFlag = false);
+    				}
+    			}
     		} else {
     			if (closeDistributionFlag === true) {
     				navigateTo("/");
@@ -8187,10 +8313,15 @@ var app = (function () {
     		Layout,
     		navigateTo,
     		onMount,
+    		settingsStore,
+    		allCardsList,
+    		cards,
     		cardViewFlag,
     		activeCard,
     		closeDistributionFlag,
+    		timer,
     		onCardOpened,
+    		$settingsStore,
     		$mainStore
     	});
 
@@ -8198,6 +8329,7 @@ var app = (function () {
     		if ('cardViewFlag' in $$props) $$invalidate(0, cardViewFlag = $$props.cardViewFlag);
     		if ('activeCard' in $$props) $$invalidate(1, activeCard = $$props.activeCard);
     		if ('closeDistributionFlag' in $$props) closeDistributionFlag = $$props.closeDistributionFlag;
+    		if ('timer' in $$props) timer = $$props.timer;
     	};
 
     	if ($$props && "$$inject" in $$props) {
@@ -8245,7 +8377,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (96:8) {:else}
+    // (97:8) {:else}
     function create_else_block_2(ctx) {
     	let div;
     	let img;
@@ -8277,11 +8409,11 @@ var app = (function () {
     			if (!src_url_equal(img.src, img_src_value = "assets/nogames.png")) attr_dev(img, "src", img_src_value);
     			attr_dev(img, "alt", "Грусный смайлик :(");
     			attr_dev(img, "class", "svelte-bzsnmq");
-    			add_location(img, file$1, 97, 16, 3751);
+    			add_location(img, file$1, 98, 16, 3807);
     			attr_dev(span, "class", "svelte-bzsnmq");
-    			add_location(span, file$1, 98, 16, 3826);
+    			add_location(span, file$1, 99, 16, 3882);
     			attr_dev(div, "class", "noGamesArea svelte-bzsnmq");
-    			add_location(div, file$1, 96, 12, 3708);
+    			add_location(div, file$1, 97, 12, 3764);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -8320,14 +8452,14 @@ var app = (function () {
     		block,
     		id: create_else_block_2.name,
     		type: "else",
-    		source: "(96:8) {:else}",
+    		source: "(97:8) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (64:8) {#if history.length > 0}
+    // (65:8) {#if history.length > 0}
     function create_if_block_3(ctx) {
     	let table;
     	let current;
@@ -8375,14 +8507,14 @@ var app = (function () {
     		block,
     		id: create_if_block_3.name,
     		type: "if",
-    		source: "(64:8) {#if history.length > 0}",
+    		source: "(65:8) {#if history.length > 0}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (100:16) <Button clickEvent={() => navigateTo("home")}                      >
+    // (101:16) <Button clickEvent={() => navigateTo("home")}                      >
     function create_default_slot_5(ctx) {
     	let t;
 
@@ -8402,14 +8534,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_5.name,
     		type: "slot",
-    		source: "(100:16) <Button clickEvent={() => navigateTo(\\\"home\\\")}                      >",
+    		source: "(101:16) <Button clickEvent={() => navigateTo(\\\"home\\\")}                      >",
     		ctx
     	});
 
     	return block;
     }
 
-    // (71:16) {#each history as game, idx}
+    // (72:16) {#each history as game, idx}
     function create_each_block_2(ctx) {
     	let tr;
     	let td0;
@@ -8463,21 +8595,21 @@ var app = (function () {
     			button1 = element("button");
     			button1.textContent = "Удалить";
     			t9 = space();
-    			add_location(span0, file$1, 73, 28, 2689);
-    			add_location(span1, file$1, 74, 28, 2764);
+    			add_location(span0, file$1, 74, 28, 2745);
+    			add_location(span1, file$1, 75, 28, 2820);
     			attr_dev(td0, "class", "dateAndTime svelte-bzsnmq");
-    			add_location(td0, file$1, 72, 24, 2635);
+    			add_location(td0, file$1, 73, 24, 2691);
     			attr_dev(td1, "align", "center");
     			attr_dev(td1, "class", "svelte-bzsnmq");
-    			add_location(td1, file$1, 76, 24, 2866);
+    			add_location(td1, file$1, 77, 24, 2922);
     			attr_dev(button0, "class", "detailsBtn svelte-bzsnmq");
-    			add_location(button0, file$1, 81, 28, 3122);
+    			add_location(button0, file$1, 82, 28, 3178);
     			attr_dev(button1, "class", "deleteBtn svelte-bzsnmq");
-    			add_location(button1, file$1, 86, 28, 3365);
+    			add_location(button1, file$1, 87, 28, 3421);
     			attr_dev(td2, "align", "right");
     			attr_dev(td2, "class", "actions svelte-bzsnmq");
-    			add_location(td2, file$1, 80, 24, 3058);
-    			add_location(tr, file$1, 71, 20, 2562);
+    			add_location(td2, file$1, 81, 24, 3114);
+    			add_location(tr, file$1, 72, 20, 2618);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, tr, anchor);
@@ -8540,14 +8672,14 @@ var app = (function () {
     		block,
     		id: create_each_block_2.name,
     		type: "each",
-    		source: "(71:16) {#each history as game, idx}",
+    		source: "(72:16) {#each history as game, idx}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (65:12) <Table>
+    // (66:12) <Table>
     function create_default_slot_4(ctx) {
     	let thead;
     	let th0;
@@ -8590,14 +8722,14 @@ var app = (function () {
     			each_1_anchor = empty();
     			attr_dev(th0, "align", "left");
     			attr_dev(th0, "class", "svelte-bzsnmq");
-    			add_location(th0, file$1, 66, 20, 2325);
+    			add_location(th0, file$1, 67, 20, 2381);
     			attr_dev(th1, "align", "center");
     			attr_dev(th1, "class", "svelte-bzsnmq");
-    			add_location(th1, file$1, 67, 20, 2381);
+    			add_location(th1, file$1, 68, 20, 2437);
     			attr_dev(th2, "align", "right");
     			attr_dev(th2, "class", "svelte-bzsnmq");
-    			add_location(th2, file$1, 68, 20, 2437);
-    			add_location(thead, file$1, 65, 16, 2296);
+    			add_location(th2, file$1, 69, 20, 2493);
+    			add_location(thead, file$1, 66, 16, 2352);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, thead, anchor);
@@ -8674,14 +8806,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_4.name,
     		type: "slot",
-    		source: "(65:12) <Table>",
+    		source: "(66:12) <Table>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (61:4) <Container>
+    // (62:4) <Container>
     function create_default_slot_3(ctx) {
     	let h1;
     	let t1;
@@ -8711,8 +8843,8 @@ var app = (function () {
     			t2 = space();
     			if_block.c();
     			if_block_anchor = empty();
-    			add_location(h1, file$1, 61, 8, 2187);
-    			add_location(hr, file$1, 62, 8, 2217);
+    			add_location(h1, file$1, 62, 8, 2243);
+    			add_location(hr, file$1, 63, 8, 2273);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, h1, anchor);
@@ -8773,14 +8905,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_3.name,
     		type: "slot",
-    		source: "(61:4) <Container>",
+    		source: "(62:4) <Container>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (60:0) <Layout>
+    // (61:0) <Layout>
     function create_default_slot_2(ctx) {
     	let container;
     	let current;
@@ -8828,14 +8960,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_2.name,
     		type: "slot",
-    		source: "(60:0) <Layout>",
+    		source: "(61:0) <Layout>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (107:0) {#if viewDetailsModalFlag}
+    // (108:0) {#if viewDetailsModalFlag}
     function create_if_block$1(ctx) {
     	let modal;
     	let current;
@@ -8885,14 +9017,14 @@ var app = (function () {
     		block,
     		id: create_if_block$1.name,
     		type: "if",
-    		source: "(107:0) {#if viewDetailsModalFlag}",
+    		source: "(108:0) {#if viewDetailsModalFlag}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (121:24) {:else}
+    // (124:24) {:else}
     function create_else_block_1(ctx) {
     	let p;
 
@@ -8901,7 +9033,7 @@ var app = (function () {
     			p = element("p");
     			p.textContent = "Вскрытых карт нет";
     			attr_dev(p, "class", "emptyCardsTitle svelte-bzsnmq");
-    			add_location(p, file$1, 121, 28, 4895);
+    			add_location(p, file$1, 124, 28, 5044);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -8916,14 +9048,14 @@ var app = (function () {
     		block,
     		id: create_else_block_1.name,
     		type: "else",
-    		source: "(121:24) {:else}",
+    		source: "(124:24) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (117:24) {#if history[selectedHistoryGameID].cardsOpened.length > 0}
+    // (118:24) {#if history[selectedHistoryGameID].cardsOpened.length > 0}
     function create_if_block_2(ctx) {
     	let each_1_anchor;
     	let each_value_1 = /*history*/ ctx[0][/*selectedHistoryGameID*/ ctx[1]].cardsOpened;
@@ -8950,7 +9082,7 @@ var app = (function () {
     			insert_dev(target, each_1_anchor, anchor);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*history, selectedHistoryGameID*/ 3) {
+    			if (dirty & /*allCardsList, history, selectedHistoryGameID*/ 3) {
     				each_value_1 = /*history*/ ctx[0][/*selectedHistoryGameID*/ ctx[1]].cardsOpened;
     				validate_each_argument(each_value_1);
     				let i;
@@ -8984,21 +9116,22 @@ var app = (function () {
     		block,
     		id: create_if_block_2.name,
     		type: "if",
-    		source: "(117:24) {#if history[selectedHistoryGameID].cardsOpened.length > 0}",
+    		source: "(118:24) {#if history[selectedHistoryGameID].cardsOpened.length > 0}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (118:28) {#each history[selectedHistoryGameID].cardsOpened as card, idx}
+    // (119:28) {#each history[selectedHistoryGameID].cardsOpened as card, idx}
     function create_each_block_1(ctx) {
     	let span;
     	let t0_value = /*idx*/ ctx[11] + 1 + "";
     	let t0;
     	let t1;
-    	let t2_value = /*card*/ ctx[9] + "";
+    	let t2_value = allCardsList()[/*card*/ ctx[9]].name + "";
     	let t2;
+    	let t3;
 
     	const block = {
     		c: function create() {
@@ -9006,17 +9139,19 @@ var app = (function () {
     			t0 = text(t0_value);
     			t1 = text(". ");
     			t2 = text(t2_value);
+    			t3 = space();
     			attr_dev(span, "class", "svelte-bzsnmq");
-    			add_location(span, file$1, 118, 32, 4765);
+    			add_location(span, file$1, 119, 32, 4821);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
     			append_dev(span, t0);
     			append_dev(span, t1);
     			append_dev(span, t2);
+    			append_dev(span, t3);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*history, selectedHistoryGameID*/ 3 && t2_value !== (t2_value = /*card*/ ctx[9] + "")) set_data_dev(t2, t2_value);
+    			if (dirty & /*history, selectedHistoryGameID*/ 3 && t2_value !== (t2_value = allCardsList()[/*card*/ ctx[9]].name + "")) set_data_dev(t2, t2_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(span);
@@ -9027,14 +9162,14 @@ var app = (function () {
     		block,
     		id: create_each_block_1.name,
     		type: "each",
-    		source: "(118:28) {#each history[selectedHistoryGameID].cardsOpened as card, idx}",
+    		source: "(119:28) {#each history[selectedHistoryGameID].cardsOpened as card, idx}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (137:24) {:else}
+    // (142:24) {:else}
     function create_else_block(ctx) {
     	let p;
 
@@ -9043,7 +9178,7 @@ var app = (function () {
     			p = element("p");
     			p.textContent = "Не вскрытых карт нет";
     			attr_dev(p, "class", "emptyCardsTitle svelte-bzsnmq");
-    			add_location(p, file$1, 137, 28, 5714);
+    			add_location(p, file$1, 142, 28, 5956);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -9058,14 +9193,14 @@ var app = (function () {
     		block,
     		id: create_else_block.name,
     		type: "else",
-    		source: "(137:24) {:else}",
+    		source: "(142:24) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (133:24) {#if history[selectedHistoryGameID].cardsHiddened.length > 0}
+    // (136:24) {#if history[selectedHistoryGameID].cardsHiddened.length > 0}
     function create_if_block_1(ctx) {
     	let each_1_anchor;
     	let each_value = /*history*/ ctx[0][/*selectedHistoryGameID*/ ctx[1]].cardsHiddened;
@@ -9092,7 +9227,7 @@ var app = (function () {
     			insert_dev(target, each_1_anchor, anchor);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*history, selectedHistoryGameID*/ 3) {
+    			if (dirty & /*allCardsList, history, selectedHistoryGameID*/ 3) {
     				each_value = /*history*/ ctx[0][/*selectedHistoryGameID*/ ctx[1]].cardsHiddened;
     				validate_each_argument(each_value);
     				let i;
@@ -9126,21 +9261,22 @@ var app = (function () {
     		block,
     		id: create_if_block_1.name,
     		type: "if",
-    		source: "(133:24) {#if history[selectedHistoryGameID].cardsHiddened.length > 0}",
+    		source: "(136:24) {#if history[selectedHistoryGameID].cardsHiddened.length > 0}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (134:28) {#each history[selectedHistoryGameID].cardsHiddened as card, idx}
+    // (137:28) {#each history[selectedHistoryGameID].cardsHiddened as card, idx}
     function create_each_block(ctx) {
     	let span;
     	let t0_value = /*idx*/ ctx[11] + 1 + "";
     	let t0;
     	let t1;
-    	let t2_value = /*card*/ ctx[9] + "";
+    	let t2_value = allCardsList()[/*card*/ ctx[9]].name + "";
     	let t2;
+    	let t3;
 
     	const block = {
     		c: function create() {
@@ -9148,17 +9284,19 @@ var app = (function () {
     			t0 = text(t0_value);
     			t1 = text(". ");
     			t2 = text(t2_value);
+    			t3 = space();
     			attr_dev(span, "class", "svelte-bzsnmq");
-    			add_location(span, file$1, 134, 32, 5584);
+    			add_location(span, file$1, 137, 32, 5733);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
     			append_dev(span, t0);
     			append_dev(span, t1);
     			append_dev(span, t2);
+    			append_dev(span, t3);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*history, selectedHistoryGameID*/ 3 && t2_value !== (t2_value = /*card*/ ctx[9] + "")) set_data_dev(t2, t2_value);
+    			if (dirty & /*history, selectedHistoryGameID*/ 3 && t2_value !== (t2_value = allCardsList()[/*card*/ ctx[9]].name + "")) set_data_dev(t2, t2_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(span);
@@ -9169,14 +9307,14 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(134:28) {#each history[selectedHistoryGameID].cardsHiddened as card, idx}",
+    		source: "(137:28) {#each history[selectedHistoryGameID].cardsHiddened as card, idx}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (109:8) <ModalContainer customStyle="overflow-y: auto; margin: 30px 0px;">
+    // (110:8) <ModalContainer customStyle="overflow-y: auto; margin: 30px 0px;">
     function create_default_slot_1$1(ctx) {
     	let div4;
     	let div1;
@@ -9231,23 +9369,23 @@ var app = (function () {
     			p1.textContent = "В порядке от первой НЕ вскрытой к последующим:";
     			t8 = space();
     			if_block1.c();
-    			add_location(h30, file$1, 111, 20, 4326);
+    			add_location(h30, file$1, 112, 20, 4382);
     			attr_dev(p0, "class", "cardsListSubtitle svelte-bzsnmq");
-    			add_location(p0, file$1, 113, 24, 4421);
+    			add_location(p0, file$1, 114, 24, 4477);
     			attr_dev(div0, "class", "cardsList svelte-bzsnmq");
-    			add_location(div0, file$1, 112, 20, 4372);
+    			add_location(div0, file$1, 113, 20, 4428);
     			attr_dev(div1, "class", "cardsDetails");
-    			add_location(div1, file$1, 110, 16, 4278);
+    			add_location(div1, file$1, 111, 16, 4334);
     			attr_dev(h31, "class", "hiddenedCardsTitle svelte-bzsnmq");
-    			add_location(h31, file$1, 127, 20, 5094);
+    			add_location(h31, file$1, 130, 20, 5243);
     			attr_dev(p1, "class", "cardsListSubtitle svelte-bzsnmq");
-    			add_location(p1, file$1, 129, 24, 5233);
+    			add_location(p1, file$1, 132, 24, 5382);
     			attr_dev(div2, "class", "cardsList hiddenedCards svelte-bzsnmq");
-    			add_location(div2, file$1, 128, 20, 5170);
+    			add_location(div2, file$1, 131, 20, 5319);
     			attr_dev(div3, "class", "cardsDetails");
-    			add_location(div3, file$1, 126, 16, 5046);
+    			add_location(div3, file$1, 129, 16, 5195);
     			attr_dev(div4, "class", "detailsArea svelte-bzsnmq");
-    			add_location(div4, file$1, 109, 12, 4235);
+    			add_location(div4, file$1, 110, 12, 4291);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div4, anchor);
@@ -9303,14 +9441,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_1$1.name,
     		type: "slot",
-    		source: "(109:8) <ModalContainer customStyle=\\\"overflow-y: auto; margin: 30px 0px;\\\">",
+    		source: "(110:8) <ModalContainer customStyle=\\\"overflow-y: auto; margin: 30px 0px;\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (108:4) <Modal clickEvent={() => (viewDetailsModalFlag = false)}>
+    // (109:4) <Modal clickEvent={() => (viewDetailsModalFlag = false)}>
     function create_default_slot$1(ctx) {
     	let modalcontainer;
     	let current;
@@ -9359,7 +9497,7 @@ var app = (function () {
     		block,
     		id: create_default_slot$1.name,
     		type: "slot",
-    		source: "(108:4) <Modal clickEvent={() => (viewDetailsModalFlag = false)}>",
+    		source: "(109:4) <Modal clickEvent={() => (viewDetailsModalFlag = false)}>",
     		ctx
     	});
 
@@ -9529,6 +9667,7 @@ var app = (function () {
     		navigateTo,
     		Modal,
     		ModalContainer,
+    		allCardsList,
     		history,
     		createCurrentDate,
     		createCurrentTime,
@@ -9574,59 +9713,6 @@ var app = (function () {
     		});
     	}
     }
-
-    function createStore() {
-        const { update, subscribe } = writable({
-            hiddeningCardsFlag: false, //Флаг скрытия карт с экрана (false - по клику, true - по таймеру)
-            hiddeningCardsFlagTimer: 5, //Количество секунд, после которых карта при выдаче автоматически скроется (только при hiddeningCardsFlag = true)
-        });
-
-        return {
-            update,
-            subscribe,
-            //Сохранение всех настроек в хранилище
-            saveSettingsInLocalStorage: () => {
-                if (localStorage.getItem("settings") !== null) {
-                    const oldSettings = JSON.parse(
-                        localStorage.getItem("settings")
-                    );
-                    console.log(get_store_value(settingsStore));
-                    localStorage.setItem(
-                        "settings",
-                        JSON.stringify({ ...oldSettings, ...get_store_value(settingsStore) })
-                    );
-                } else {
-                    localStorage.setItem(
-                        "settings",
-                        JSON.stringify({ ...get_store_value(settingsStore) })
-                    );
-                }
-            },
-            //onChange на Input смены типа скрытия карт (по клику или по таймеру)
-            onChangeFlagHiddeningCards: (e) => {
-                update((prev) => {
-                    return {
-                        ...prev,
-                        hiddeningCardsFlag: e.target.checked,
-                    };
-                });
-                settingsStore.saveSettingsInLocalStorage();
-            },
-            onChangeHiddeningCardsTimer: (e) => {
-                if (Number(e.target.value) !== NaN) {
-                    update((prev) => {
-                        return {
-                            ...prev,
-                            hiddeningCardsFlagTimer: e.target.value,
-                        };
-                    });
-                    settingsStore.saveSettingsInLocalStorage();
-                }
-            },
-        };
-    }
-
-    const settingsStore = createStore();
 
     /* src\pages\Settings.svelte generated by Svelte v3.48.0 */
     const file = "src\\pages\\Settings.svelte";

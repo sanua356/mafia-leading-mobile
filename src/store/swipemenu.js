@@ -41,7 +41,7 @@ function createStore() {
         //Добавить кастом значение "мёртвой зоны" для свайпов
         changeDeathZoneSwipe: (value) => {
             if (localStorage.getItem("settings") !== null) {
-                let settings = localStorage.getItem("settings");
+                let settings = JSON.parse(localStorage.getItem("settings"));
                 settings.deathZone = value;
                 localStorage.setItem("settings", JSON.stringify(settings));
             } else {

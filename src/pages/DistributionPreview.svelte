@@ -4,6 +4,7 @@
     import Container from "../components/Container.svelte";
     import Layout from "../components/Layout.svelte";
     import Table from "../components/Table.svelte";
+    import { allCardsList, cards } from "../constants/cards";
     import { store } from "../store/autodistrib.js";
     import { mainStore } from "../store/showdistrib.js";
 
@@ -28,7 +29,11 @@
                     <th align="right">Количество</th>
                 </thead>
                 {#each Object.entries($store.cardsCount) as [key, value]}
-                    <tr><td>{key}</td><td align="right">{value}</td></tr>
+                    <tr
+                        ><td>{allCardsList()[key].name}</td><td align="right"
+                            >{value}</td
+                        ></tr
+                    >
                 {/each}
             </Table>
         </div>

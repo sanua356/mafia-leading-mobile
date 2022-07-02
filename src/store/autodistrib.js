@@ -17,22 +17,22 @@ function createStore() {
             let cards = [];
             //Подсчёт всех "мафий"
             for (let i = 0; i < Math.ceil(playersCount / 4); i++) {
-                cards.push("Мафия");
+                cards.push("mafia");
             }
             playersCount -= Math.ceil(playersCount / 4);
             //Проверка на то, хватает ли игроков для добавления роли "Доктор"
             if (playersCount >= 4) {
-                cards.push("Доктор");
+                cards.push("doctor");
                 playersCount--;
             }
             //Добавление "комиссара" в раздачу
             if (playersCount > 0) {
-                cards.push("Комиссар");
+                cards.push("commissioner");
                 playersCount--;
             }
             //Дозагрузка всех оставшихся карт как "мирные жители"
             for (let i = 0; i < playersCount; i++) {
-                cards.push("Мирный житель");
+                cards.push("civilian");
             }
 
             //Обновление store созданной колодой
@@ -61,14 +61,9 @@ function createStore() {
         //
         loadCardsManual: (cardsObj) => {
             let cardsArray = [];
-            const cardsDB = Object.assign(
-                {},
-                cards,
-                JSON.parse(localStorage.getItem("customRoles"))
-            );
             Object.keys(cardsObj).forEach((cardName) => {
                 for (let i = 0; i < cardsObj[cardName]; i++) {
-                    cardsArray.push(cardsDB[cardName]);
+                    cardsArray.push(cardName);
                 }
             });
             update((prev) => {

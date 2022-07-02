@@ -1,5 +1,5 @@
 import { writable, get } from "svelte/store";
-import { cards } from "./../constants/cards";
+import { allCardsList, cards } from "./../constants/cards";
 import CyrillicToTranslit from "cyrillic-to-translit-js";
 
 //Подгрузка библиотеки транслитерации (для добавления кастом ролей)
@@ -8,15 +8,9 @@ const cyrillicToTranslit = new CyrillicToTranslit();
 //Инициализация store с дефолными и пользовательскими картами
 function initStore() {
     let initialStore = {};
-    Object.keys(cards).forEach((card) => {
+    Object.keys(allCardsList()).forEach((card) => {
         initialStore[card] = 0;
     });
-    if (localStorage.getItem("customRoles") !== null) {
-        const customRoles = JSON.parse(localStorage.getItem("customRoles"));
-        Object.keys(customRoles).forEach((card) => {
-            initialStore[card] = 0;
-        });
-    }
 
     return initialStore;
 }
@@ -86,19 +80,7 @@ function createStore() {
         //Загрузка карт из ручного режима, если пользователь захотел изменить пак автонабора
         loadCardsFromAutoDistribution: (autoCards) => {
             manualStore.reinit();
-            let prevStore = get(manualStore).cards;
-            const entries = Object.entries(cards);
-            const autoCardsEntries = Object.entries(autoCards);
-            for (let i = 0; i < autoCardsEntries.length; i++) {
-                for (let j = 0; j < entries.length; j++) {
-                    if (
-                        entries[j][1].toLowerCase() ===
-                        autoCardsEntries[i][0].toLowerCase()
-                    ) {
-                        prevStore[entries[j][0]] = autoCardsEntries[i][1];
-                    }
-                }
-            }
+            let prevStore = { ...get(manualStore).cards, ...autoCards };
             update((prev) => {
                 return {
                     ...prev,
@@ -139,7 +121,11 @@ function createStore() {
                 if (savedCustomRoles.hasOwnProperty(storageRoleName)) {
                     return false;
                 } else {
-                    savedCustomRoles[storageRoleName] = newRoleName;
+                    savedCustomRoles[storageRoleName] = {
+                        name: newRoleName,
+                        icon: "",
+                        description: "",
+                    };
                     localStorage.setItem(
                         "customRoles",
                         JSON.stringify(savedCustomRoles)
@@ -148,11 +134,15 @@ function createStore() {
                 }
             } else {
                 let savedRole = {};
-                savedRole[storageRoleName] = newRoleName;
-                localStorage.setItem(
-                    "customRoles",
-                    JSON.stringify({ ...savedRole })
-                );
+                (savedRole[storageRoleName] = {
+                    name: newRoleName,
+                    icon: "",
+                    description: "",
+                }),
+                    localStorage.setItem(
+                        "customRoles",
+                        JSON.stringify({ ...savedRole })
+                    );
                 return true;
             }
         },

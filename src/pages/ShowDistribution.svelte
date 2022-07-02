@@ -3,6 +3,8 @@
     import Layout from "../components/Layout.svelte";
     import { navigateTo } from "svelte-router-spa";
     import { onMount } from "svelte";
+    import { settingsStore } from "../store/settings.js";
+    import { allCardsList, cards } from "../constants/cards.js";
 
     //Статус показа карты (рубашка - false, название карты - true)
     let cardViewFlag = false;
@@ -13,17 +15,36 @@
     //Статус завершения раздачи (true - раздача окончена)
     let closeDistributionFlag = false;
 
+    //Таймер отображения вскрытой карты на экране
+    let timer = null;
+
     //Функция показа ролей карт
     function onCardOpened() {
         let openedCardsCount = $mainStore.cardsHiddened.length;
         if (openedCardsCount > 0) {
+            //Если роль на данный момент не видна игроку
             if (cardViewFlag === false) {
                 activeCard = $mainStore.cardsHiddened[0];
                 mainStore.deleteOpenedCard();
                 mainStore.pushToHistoryDistribution(activeCard);
                 mainStore.saveDistributionInLocalStorage();
+                activeCard = allCardsList()[activeCard].name;
+                cardViewFlag = true;
+            } else {
+                //Если в настройках установлен тип скрытия карт "по таймеру"
+                if ($settingsStore.hiddeningCardsFlag) {
+                    if (timer === null) {
+                        timer = setTimeout(() => {
+                            cardViewFlag = false;
+                            clearTimeout(timer);
+                            timer = null;
+                        }, $settingsStore.hiddeningCardsFlagTimer * 1000);
+                    }
+                    return;
+                } else {
+                    cardViewFlag = false;
+                }
             }
-            cardViewFlag = !cardViewFlag;
         } else {
             if (closeDistributionFlag === true) {
                 navigateTo("/");

@@ -7,6 +7,7 @@
     import { navigateTo } from "svelte-router-spa";
     import Modal from "../components/Modal.svelte";
     import ModalContainer from "../components/ModalContainer.svelte";
+    import { allCardsList } from "../constants/cards";
 
     //Хранилище всех (100 последних) раздач
     let history = JSON.parse(localStorage.getItem("history")) || [];
@@ -116,7 +117,9 @@
                         </p>
                         {#if history[selectedHistoryGameID].cardsOpened.length > 0}
                             {#each history[selectedHistoryGameID].cardsOpened as card, idx}
-                                <span>{idx + 1}. {card}</span>
+                                <span>
+                                    {idx + 1}. {allCardsList()[card].name}
+                                </span>
                             {/each}
                         {:else}
                             <p class="emptyCardsTitle">Вскрытых карт нет</p>
@@ -132,7 +135,9 @@
                         </p>
                         {#if history[selectedHistoryGameID].cardsHiddened.length > 0}
                             {#each history[selectedHistoryGameID].cardsHiddened as card, idx}
-                                <span>{idx + 1}. {card}</span>
+                                <span>
+                                    {idx + 1}. {allCardsList()[card].name}
+                                </span>
                             {/each}
                         {:else}
                             <p class="emptyCardsTitle">Не вскрытых карт нет</p>

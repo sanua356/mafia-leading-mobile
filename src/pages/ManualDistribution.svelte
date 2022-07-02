@@ -4,7 +4,7 @@
     import Container from "../components/Container.svelte";
     import Layout from "../components/Layout.svelte";
     import Table from "../components/Table.svelte";
-    import { cards } from "../constants/cards.js";
+    import { allCardsList, cards } from "../constants/cards.js";
     import { manualStore } from "../store/manualdistrib.js";
     import { store } from "../store/autodistrib.js";
     import Modal from "../components/Modal.svelte";
@@ -58,9 +58,9 @@
                     <th align="left">Название карты</th>
                     <th align="right">Количество</th>
                 </thead>
-                {#each Object.entries(Object.assign({}, cards, JSON.parse(localStorage.getItem("customRoles")))) as [cardName, role]}
+                {#each Object.entries(allCardsList()) as [cardName, role]}
                     <tr>
-                        <td>{role}</td>
+                        <td>{role.name}</td>
                         <td align="right" class="cardCounterColumn">
                             <button
                                 class="changeCardCountBtn 

@@ -1,10 +1,22 @@
 import { get, writable } from "svelte/store";
 
-function createStore() {
-    const { update, subscribe } = writable({
+function initStore() {
+    const initialStore = {
         hiddeningCardsFlag: false, //Флаг скрытия карт с экрана (false - по клику, true - по таймеру)
         hiddeningCardsFlagTimer: 5, //Количество секунд, после которых карта при выдаче автоматически скроется (только при hiddeningCardsFlag = true)
-    });
+    };
+    if (localStorage.getItem("settings") !== null) {
+        return {
+            ...initialStore,
+            ...JSON.parse(localStorage.getItem("settings")),
+        };
+    } else {
+        return initialStore;
+    }
+}
+
+function createStore() {
+    const { update, subscribe } = writable(initStore());
 
     return {
         update,
