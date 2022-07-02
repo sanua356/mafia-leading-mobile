@@ -20,17 +20,14 @@
 
     //Функция показа ролей карт
     function onCardOpened() {
-        let openedCardsCount = $mainStore.cardsHiddened.length;
-        if (openedCardsCount > 0) {
+        if ($mainStore.cardsHiddened.length > 0) {
             //Если роль на данный момент не видна игроку
             if (cardViewFlag === false) {
                 activeCard = $mainStore.cardsHiddened[0];
                 mainStore.deleteOpenedCard();
                 mainStore.pushToHistoryDistribution(activeCard);
                 mainStore.saveDistributionInLocalStorage();
-                activeCard = allCardsList()[activeCard].name;
                 cardViewFlag = true;
-            } else {
                 //Если в настройках установлен тип скрытия карт "по таймеру"
                 if ($settingsStore.hiddeningCardsFlag) {
                     if (timer === null) {
@@ -40,8 +37,9 @@
                             timer = null;
                         }, $settingsStore.hiddeningCardsFlagTimer * 1000);
                     }
-                    return;
-                } else {
+                }
+            } else {
+                if (timer === null) {
                     cardViewFlag = false;
                 }
             }
@@ -68,7 +66,11 @@
                 <img src="assets/logo2.png" alt="Логотип" />
             </div>
             <div class="cardBack{cardViewFlag ? ' cardBackOpened' : ''}">
-                <span>{activeCard}</span>
+                <span
+                    >{allCardsList().hasOwnProperty(activeCard)
+                        ? allCardsList()[activeCard].name
+                        : activeCard}</span
+                >
             </div>
         </div>
         <span class="cardsCounter"
@@ -114,6 +116,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        flex-direction: column;
         transition: 1s;
         backface-visibility: hidden;
         overflow: hidden;
