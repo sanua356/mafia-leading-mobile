@@ -16,18 +16,23 @@ function createStore() {
             let playersCount = get(store).playersCount;
             let cards = [];
             //Подсчёт всех "мафий"
-            for (let i = 0; i < Math.ceil(playersCount / 4); i++) {
+            for (let i = 0; i <= Math.floor(playersCount / 3.5); i++) {
                 cards.push("mafia");
-            }
-            playersCount -= Math.ceil(playersCount / 4);
-            //Проверка на то, хватает ли игроков для добавления роли "Доктор"
-            if (playersCount >= 4) {
-                cards.push("doctor");
                 playersCount--;
             }
+            if (cards.length >= 3) {
+                for (let i = 0; i < Math.floor(cards.length / 3); i++) {
+                    cards.pop();
+                    cards.unshift("exmafia");
+                }
+            }
             //Добавление "комиссара" в раздачу
-            if (playersCount > 0) {
+            for (let i = 0; i < Math.floor(playersCount / 4); i++) {
                 cards.push("commissioner");
+            }
+            //Проверка на то, хватает ли игроков для добавления роли "Доктор"
+            for (let i = 0; i < Math.floor(playersCount / 4); i++) {
+                cards.push("doctor");
                 playersCount--;
             }
             //Дозагрузка всех оставшихся карт как "мирные жители"

@@ -1,8 +1,13 @@
 <script>
-    export let customStyle = null;
+    export let customStyle = null,
+        clickEvent = () => {};
 </script>
 
-<div class="modalContainer" style={customStyle !== null ? customStyle : ""}>
+<div
+    class="modalContainer"
+    style={customStyle !== null ? customStyle : ""}
+    on:click={clickEvent}
+>
     <slot />
 </div>
 

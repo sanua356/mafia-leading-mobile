@@ -7,6 +7,7 @@ import ShowDistributionPage from "../pages/ShowDistribution.svelte";
 import PreviewDistiributionPage from "../pages/DistributionPreview.svelte";
 import HistoryDistributionPage from "../pages/HistoryDistribution.svelte";
 import SettingsPage from "../pages/Settings.svelte";
+import HelpPage from "../pages/HelpPage/Help.svelte";
 
 export const routes = [
     {
@@ -45,5 +46,9 @@ export const routes = [
     {
         name: "settings",
         component: SettingsPage,
+    },
+    {
+        name: "help",
+        component: HelpPage,
     },
 ];
