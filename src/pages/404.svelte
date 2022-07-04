@@ -1,7 +1,17 @@
 <script>
+    import { onMount } from "svelte";
+
     import { navigateTo } from "svelte-router-spa";
     import Button from "../components/Button.svelte";
     import Layout from "../components/Layout.svelte";
+    import { mainStore } from "../store/showdistrib.js";
+
+    onMount(() => {
+        if ($mainStore.applicationLoaded === false) {
+            navigateTo("/");
+            mainStore.applicationLoaded(true);
+        }
+    });
 </script>
 
 <Layout customStyles="flex-direction: column; text-align: center;">

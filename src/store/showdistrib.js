@@ -5,11 +5,21 @@ function createStore() {
         cardsHiddened: [],
         cardsOpened: [],
         distributionDate: 0,
+        applicationLoaded: false, //Флаг загрузки приложения (нужен для фикса бага Cordova)
     });
 
     return {
         subscribe,
         update,
+        //Смена флага загрузки приложения во время инициализации Cordova
+        aplicationLoaded: (value) => {
+            update((prev) => {
+                return {
+                    ...prev,
+                    applicationLoaded: value,
+                };
+            });
+        },
         //Перемешивание карт для выдачи
         shuffleCards: (cards) => {
             let currentIndex = cards.length,
