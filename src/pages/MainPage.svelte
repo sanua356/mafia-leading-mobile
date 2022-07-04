@@ -2,7 +2,7 @@
     import { navigateTo } from "svelte-router-spa";
     import Layout from "../components/Layout.svelte";
     import Button from "../components/Button.svelte";
-    import { swipeMenuStore } from "../store/swipemenu.js";
+    import { settingsStore } from "../store/settings.js";
 </script>
 
 <Layout>
@@ -15,7 +15,7 @@
         >
         <Button
             clickEvent={() => {
-                swipeMenuStore.changeViewFlag(!$swipeMenuStore.menuViewFlag);
+                settingsStore.changeViewFlag(!$settingsStore.menuViewFlag);
             }}
             color="secondary"
             >Меню

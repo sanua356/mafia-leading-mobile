@@ -2,12 +2,11 @@
     import { onDestroy, onMount } from "svelte";
     import { navigateTo, routeIsActive } from "svelte-router-spa";
     import Modal from "../components/Modal.svelte";
-    import { swipeMenuStore } from "../store/swipemenu.js";
+    import { settingsStore } from "../store/settings.js";
     import { mainStore } from "../store/showdistrib.js";
 
     let startX = null,
-        deathZone =
-            window.screen.width * ($swipeMenuStore.deathZoneSwipe / 100);
+        deathZone = window.screen.width * ($settingsStore.deathZoneSwipe / 100);
     function initMenu() {
         document.addEventListener("touchstart", touchStart);
         document.addEventListener("touchmove", touchMove);
@@ -21,16 +20,15 @@
         }
         let movedX = e.touches[0].clientX;
         if (movedX - startX > deathZone) {
-            swipeMenuStore.changeViewFlag(true);
+            settingsStore.changeViewFlag(true);
         }
         if (movedX - startX < deathZone) {
-            swipeMenuStore.changeViewFlag(false);
+            settingsStore.changeViewFlag(false);
         }
     }
 
     $: {
-        deathZone =
-            window.screen.width * ($swipeMenuStore.deathZoneSwipe / 100);
+        deathZone = window.screen.width * ($settingsStore.deathZoneSwipe / 100);
         document.removeEventListener("touchstart", touchStart, false);
         document.removeEventListener("touchmove", touchStart, false);
         initMenu();
@@ -44,15 +42,15 @@
     });
 </script>
 
-{#if $swipeMenuStore.menuViewFlag === true}
+{#if $settingsStore.menuViewFlag === true}
     <Modal
         style={"z-index: 9999;"}
-        clickEvent={() => swipeMenuStore.changeViewFlag(false)}
+        clickEvent={() => settingsStore.changeViewFlag(false)}
     >
         <div class="swipeMenu" on:click={(e) => e.stopPropagation()}>
             <h1>Меню</h1>
             <nav>
-                <ul on:click={() => swipeMenuStore.changeViewFlag(false)}>
+                <ul on:click={() => settingsStore.changeViewFlag(false)}>
                     <li on:click={() => navigateTo("/")}>Главная</li>
                     <li on:click={() => navigateTo("home")}>Раздать карты</li>
                     <li on:click={() => navigateTo("history")}>История игр</li>

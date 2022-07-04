@@ -4,6 +4,8 @@ function initStore() {
     const initialStore = {
         hiddeningCardsFlag: false, //Флаг скрытия карт с экрана (false - по клику, true - по таймеру)
         hiddeningCardsFlagTimer: 5, //Количество секунд, после которых карта при выдаче автоматически скроется (только при hiddeningCardsFlag = true)
+        menuViewFlag: false, //Флаг показа/скрытия меню по свайпу
+        deathZoneSwipe: 25, //Мертвая зопа свайпов (в процентах ширины экрана)
     };
     if (localStorage.getItem("settings") !== null) {
         return {
@@ -27,7 +29,6 @@ function createStore() {
                 const oldSettings = JSON.parse(
                     localStorage.getItem("settings")
                 );
-                console.log(get(settingsStore));
                 localStorage.setItem(
                     "settings",
                     JSON.stringify({ ...oldSettings, ...get(settingsStore) })
@@ -59,6 +60,24 @@ function createStore() {
                 });
                 settingsStore.saveSettingsInLocalStorage();
             }
+        },
+        //Изменить состояние флага показа меню на экране
+        changeViewFlag: (value) => {
+            update((prev) => {
+                return {
+                    ...prev,
+                    menuViewFlag: value,
+                };
+            });
+        },
+        onChangeDeathZoneSwipe: (event) => {
+            update((prev) => {
+                return {
+                    ...prev,
+                    deathZoneSwipe: event.target.value,
+                };
+            });
+            settingsStore.saveSettingsInLocalStorage();
         },
     };
 }

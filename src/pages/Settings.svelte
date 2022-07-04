@@ -2,7 +2,6 @@
     import Button from "../components/Button.svelte";
     import Container from "../components/Container.svelte";
     import Layout from "../components/Layout.svelte";
-    import { swipeMenuStore } from "../store/swipemenu.js";
     import { settingsStore } from "../store/settings.js";
 </script>
 
@@ -19,11 +18,11 @@
                         type="range"
                         max="90"
                         min="5"
-                        value={$swipeMenuStore.deathZoneSwipe}
+                        value={$settingsStore.deathZoneSwipe}
                         on:input={(e) =>
-                            swipeMenuStore.onChangeDeathZoneSwipe(e)}
+                            settingsStore.onChangeDeathZoneSwipe(e)}
                     />
-                    <span>{$swipeMenuStore.deathZoneSwipe}</span>
+                    <span>{$settingsStore.deathZoneSwipe}</span>
                 </div>
                 <p>
                     "Мертвая зона" указывает на то, насколько далеко вы должны
