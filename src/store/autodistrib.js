@@ -29,6 +29,7 @@ function createStore() {
             //Добавление "комиссара" в раздачу
             for (let i = 0; i < Math.floor(playersCount / 4); i++) {
                 cards.push("commissioner");
+                playersCount--;
             }
             //Проверка на то, хватает ли игроков для добавления роли "Доктор"
             for (let i = 0; i < Math.floor(playersCount / 4); i++) {
