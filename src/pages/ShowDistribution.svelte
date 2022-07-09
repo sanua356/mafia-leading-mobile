@@ -4,7 +4,8 @@
     import { navigateTo } from "svelte-router-spa";
     import { onMount } from "svelte";
     import { settingsStore } from "../store/settings.js";
-    import { allCardsList, cards } from "../constants/cards.js";
+    import { allCardsList, unknownCardIcon } from "../constants/cards.js";
+    import Image from "../components/Image.svelte";
 
     //Статус показа карты (рубашка - false, название карты - true)
     let cardViewFlag = false;
@@ -62,15 +63,27 @@
     <div class="cardsArea">
         <h1>Нажмите на карту, чтобы получить свою роль</h1>
         <div class="card" on:click={onCardOpened}>
-            <div class="cardFront{cardViewFlag ? ' cardFrontHiddened' : ''}">
-                <img src="assets/logo2.png" alt="Логотип" />
-            </div>
+            <div class="cardFront{cardViewFlag ? ' cardFrontHiddened' : ''}" />
             <div class="cardBack{cardViewFlag ? ' cardBackOpened' : ''}">
-                <span
+                {#if !closeDistributionFlag}
+                    <Image
+                        alt="Иконка роли"
+                        imgSrc={allCardsList()[activeCard]?.icon}
+                        boundaryImgSrc={unknownCardIcon}
+                    />
+                {/if}
+                <span class="activeRoleName"
                     >{allCardsList().hasOwnProperty(activeCard)
                         ? allCardsList()[activeCard].name
                         : activeCard}</span
                 >
+                {#if !closeDistributionFlag}
+                    <p class="roleDescription">
+                        {allCardsList()[activeCard]?.description?.length > 0
+                            ? allCardsList()[activeCard]?.description
+                            : "Для данной роли нет описания"}
+                    </p>
+                {/if}
             </div>
         </div>
         <span class="cardsCounter"
@@ -121,20 +134,33 @@
         backface-visibility: hidden;
         overflow: hidden;
         border-radius: 20px;
+        border: 2px solid #eeeef5;
         text-align: center;
     }
     .cardFront {
         background-image: url("/assets/cardbg.jpg");
         background-size: contain;
     }
-    .cardFront img {
-        max-width: 100%;
-        height: auto;
-    }
     .cardBack {
         background-color: #3f3d5e;
         font-size: 1.8rem;
         transform: rotateY(-180deg);
+    }
+    :global(.cardBack img) {
+        max-width: 70%;
+        height: auto;
+        margin: 10px auto;
+    }
+    .activeRoleName {
+        font-size: 1.7rem;
+        margin: 0 5%;
+    }
+    .roleDescription {
+        font-size: 0.9rem;
+        opacity: 0.6;
+        width: 80%;
+        margin: 0 auto;
+        margin-top: 5px;
     }
     .cardFrontHiddened {
         transform: rotateY(-180deg);

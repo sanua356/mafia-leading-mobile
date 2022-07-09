@@ -1,55 +1,67 @@
 export const cards = {
     mafia: {
-        icon: "assets/icon.png",
+        icon: "assets/mafia2.png",
         name: "Мафия",
-        description: "Описание...",
+        description:
+            "Просыпается каждую ночь и убивает одного из игроков. Цель: убить всех мирных игроков.",
     },
     civilian: {
-        icon: "assets/icon.png",
+        icon: "assets/civilian.png",
         name: "Мирный житель",
-        description: "Описание...",
+        description:
+            "Самая частая роль для игроков. Не просыпается ночью. Цель: исключить голосованием всех мафиози.",
     },
     doctor: {
-        icon: "assets/icon.png",
+        icon: "assets/doctor.png",
         name: "Доктор",
-        description: "Описание...",
+        description:
+            "Просыпается каждую ночь и лечит одного из игроков. Если мафиози и доктор выбрали одного и того же игрока, он выживает.",
     },
     commissioner: {
-        icon: "assets/icon.png",
+        icon: "assets/policeman.png",
         name: "Коммиссар",
-        description: "Описание...",
+        description:
+            "Просыпается каждую ночь и проверяет одного из игроков, является ли игрок мафией. Цель: исключить голосованием всех мафиози.",
     },
     exmafia: {
-        icon: "assets/icon.png",
+        icon: "assets/bandit.png",
         name: "Дон мафии",
-        description: "Описание...",
+        description:
+            "Просыпается каждую ночь и проверяет одного из игроков, является ли игрок комиссаром. Цель: убить всех мирных игроков.",
     },
     maniac: {
-        icon: "assets/icon.png",
+        icon: "assets/maniac.png",
         name: "Маньяк",
-        description: "Описание...",
+        description:
+            "Просыпается каждую ночь (не одновременно с мафией) и убивает одного из игроков. Цель: остаться единственным выжившим.",
     },
     prostitute: {
-        icon: "assets/icon.png",
+        icon: "assets/woman.png",
         name: "Путана",
-        description: "Описание...",
+        description:
+            "Просыпается каждую ночь и указывает на игрока, которого следующим днём нельзя будет исключить голосованием.",
     },
     boss: {
-        icon: "assets/icon.png",
+        icon: "assets/boss.png",
         name: "Босс",
-        description: "Описание...",
+        description:
+            "Главный среди мафиози. Просыпается каждую ночь и убивает одного из игроков (если мафиози выбрали другого игрока, их выбор не учитывается).",
     },
     yakuza: {
-        icon: "assets/icon.png",
+        icon: "assets/tattoo.png",
         name: "Якудза",
-        description: "Описание...",
+        description:
+            "Задача: истребить мирных жителей и мафию. Просыпается каждую ночь. В первую ночь договаривается об убийствах, а начиная со второй стреляет",
     },
     thief: {
-        icon: "assets/icon.png",
+        icon: "assets/thief.png",
         name: "Вор",
-        description: "Описание...",
+        description:
+            "Играет за мирных жителей. Просыпается первым и лишает спецдействия одного из игроков. Таким образом игрок не может совершить действие ночью, а днём не может голосовать.",
     },
 };
+
+export const unknownCardIcon = "assets/anonymity.png";
 
 export function allCardsList() {
     return Object.assign(
