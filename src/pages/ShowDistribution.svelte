@@ -12,6 +12,8 @@
 
     //Название показываемой на данный момент карты
     let activeCard = "";
+    //Переменная с DOM элементом карточки для выдачи
+    let cardNode;
 
     //Статус завершения раздачи (true - раздача окончена)
     let closeDistributionFlag = false;
@@ -21,6 +23,16 @@
 
     //Функция показа ролей карт
     function onCardOpened() {
+        function disableClickInAnimationTime() {
+            cardNode.style.pointerEvents = "none";
+            setTimeout(() => {
+                cardNode.style.pointerEvents = "auto";
+            }, 900);
+        }
+
+        if (closeDistributionFlag === false) {
+            disableClickInAnimationTime();
+        }
         if ($mainStore.cardsHiddened.length > 0) {
             //Если роль на данный момент не видна игроку
             if (cardViewFlag === false) {
@@ -36,6 +48,7 @@
                             cardViewFlag = false;
                             clearTimeout(timer);
                             timer = null;
+                            disableClickInAnimationTime();
                         }, $settingsStore.hiddeningCardsFlagTimer * 1000);
                     }
                 }
@@ -62,7 +75,7 @@
 <Layout>
     <div class="cardsArea">
         <h1>Нажмите на карту, чтобы получить свою роль</h1>
-        <div class="card" on:click={onCardOpened}>
+        <div class="card" on:click={onCardOpened} bind:this={cardNode}>
             <div class="cardFront{cardViewFlag ? ' cardFrontHiddened' : ''}" />
             <div class="cardBack{cardViewFlag ? ' cardBackOpened' : ''}">
                 {#if !closeDistributionFlag}
