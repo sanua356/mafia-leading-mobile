@@ -6,6 +6,8 @@ function initStore() {
         hiddeningCardsFlagTimer: 5, //Количество секунд, после которых карта при выдаче автоматически скроется (только при hiddeningCardsFlag = true)
         menuViewFlag: false, //Флаг показа/скрытия меню по свайпу
         deathZoneSwipe: 25, //Мертвая зопа свайпов (в процентах ширины экрана)
+        viewIconsCards: true, //Флаг показа/скрытия иконок ролей при выдаче карт
+        viewDescriptionCards: true, //Флаг показа/скрытия описания ролей при выдаче карт
     };
     if (localStorage.getItem("settings") !== null) {
         return {
@@ -75,6 +77,24 @@ function createStore() {
                 return {
                     ...prev,
                     deathZoneSwipe: event.target.value,
+                };
+            });
+            settingsStore.saveSettingsInLocalStorage();
+        },
+        onChangeViewIconsFlag: (e) => {
+            update((prev) => {
+                return {
+                    ...prev,
+                    viewIconsCards: e.target.checked,
+                };
+            });
+            settingsStore.saveSettingsInLocalStorage();
+        },
+        onChangeViewDescriptionsFlag: (e) => {
+            update((prev) => {
+                return {
+                    ...prev,
+                    viewDescriptionCards: e.target.checked,
                 };
             });
             settingsStore.saveSettingsInLocalStorage();

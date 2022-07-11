@@ -78,7 +78,7 @@
         <div class="card" on:click={onCardOpened} bind:this={cardNode}>
             <div class="cardFront{cardViewFlag ? ' cardFrontHiddened' : ''}" />
             <div class="cardBack{cardViewFlag ? ' cardBackOpened' : ''}">
-                {#if !closeDistributionFlag}
+                {#if !closeDistributionFlag && $settingsStore.viewIconsCards}
                     <Image
                         alt="Иконка роли"
                         imgSrc={allCardsList()[activeCard]?.icon}
@@ -90,7 +90,7 @@
                         ? allCardsList()[activeCard].name
                         : activeCard}</span
                 >
-                {#if !closeDistributionFlag}
+                {#if !closeDistributionFlag && $settingsStore.viewDescriptionCards}
                     <p class="roleDescription">
                         {allCardsList()[activeCard]?.description?.length > 0
                             ? allCardsList()[activeCard]?.description
