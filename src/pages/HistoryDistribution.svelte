@@ -156,6 +156,16 @@
     td {
         font-size: 0.9rem;
     }
+    @media screen and (min-width: 600px) and (max-width: 992px) {
+        td {
+            font-size: 1rem;
+        }
+    }
+    @media screen and (min-width: 993px) and (max-width: 1440px) {
+        td {
+            font-size: 1.1rem;
+        }
+    }
     .detailsBtn {
         background-color: #3f3d5e;
         margin-bottom: 5px;
@@ -168,6 +178,15 @@
         border: none;
         border-radius: 5px;
         padding: 5px 8px;
+    }
+    @media screen and (min-width: 600px) and (max-width: 1440px) {
+        .actions button {
+            padding: 5px 15px;
+            font-size: 1rem;
+        }
+        .actions button:first-child {
+            margin-right: 10px;
+        }
     }
     .noGamesArea {
         display: flex;

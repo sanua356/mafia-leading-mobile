@@ -2827,30 +2827,30 @@ var app = (function () {
     			span = element("span");
     			t15 = text("Доступно только во время выдачи карт игрокам");
     			add_location(h1, file$l, 50, 12, 1727);
-    			attr_dev(li0, "class", "svelte-1qu7vxi");
+    			attr_dev(li0, "class", "svelte-19iliqd");
     			add_location(li0, file$l, 53, 20, 1856);
-    			attr_dev(li1, "class", "svelte-1qu7vxi");
+    			attr_dev(li1, "class", "svelte-19iliqd");
     			add_location(li1, file$l, 54, 20, 1927);
-    			attr_dev(li2, "class", "svelte-1qu7vxi");
+    			attr_dev(li2, "class", "svelte-19iliqd");
     			add_location(li2, file$l, 55, 20, 2007);
-    			attr_dev(li3, "class", "svelte-1qu7vxi");
+    			attr_dev(li3, "class", "svelte-19iliqd");
     			add_location(li3, file$l, 56, 20, 2088);
-    			attr_dev(li4, "class", "svelte-1qu7vxi");
+    			attr_dev(li4, "class", "svelte-19iliqd");
     			add_location(li4, file$l, 57, 20, 2168);
-    			attr_dev(li5, "class", "svelte-1qu7vxi");
+    			attr_dev(li5, "class", "svelte-19iliqd");
     			add_location(li5, file$l, 58, 20, 2241);
-    			attr_dev(span, "class", "" + (null_to_empty(routeIsActive("show-distribution") ? "hiddened" : "") + " svelte-1qu7vxi"));
+    			attr_dev(span, "class", "" + (null_to_empty(routeIsActive("show-distribution") ? "hiddened" : "") + " svelte-19iliqd"));
     			add_location(span, file$l, 66, 56, 2687);
 
     			attr_dev(li6, "class", li6_class_value = "" + (null_to_empty(!routeIsActive("show-distribution") || /*$mainStore*/ ctx[1].cardsOpened.length === 0
     			? "disabled"
-    			: "") + " svelte-1qu7vxi"));
+    			: "") + " svelte-19iliqd"));
 
     			add_location(li6, file$l, 59, 20, 2321);
-    			attr_dev(ul, "class", "svelte-1qu7vxi");
+    			attr_dev(ul, "class", "svelte-19iliqd");
     			add_location(ul, file$l, 52, 16, 1777);
     			add_location(nav, file$l, 51, 12, 1754);
-    			attr_dev(div, "class", "swipeMenu svelte-1qu7vxi");
+    			attr_dev(div, "class", "swipeMenu svelte-19iliqd");
     			add_location(div, file$l, 49, 8, 1652);
     		},
     		m: function mount(target, anchor) {
@@ -2895,7 +2895,7 @@ var app = (function () {
     		p: function update(ctx, dirty) {
     			if (dirty & /*$mainStore*/ 2 && li6_class_value !== (li6_class_value = "" + (null_to_empty(!routeIsActive("show-distribution") || /*$mainStore*/ ctx[1].cardsOpened.length === 0
     			? "disabled"
-    			: "") + " svelte-1qu7vxi"))) {
+    			: "") + " svelte-19iliqd"))) {
     				attr_dev(li6, "class", li6_class_value);
     			}
     		},
@@ -4434,7 +4434,7 @@ var app = (function () {
     		c: function create() {
     			div = element("div");
     			if (default_slot) default_slot.c();
-    			attr_dev(div, "class", "modalContainer svelte-1owcrcr");
+    			attr_dev(div, "class", "modalContainer svelte-1ujy7v5");
 
     			attr_dev(div, "style", div_style_value = /*customStyle*/ ctx[0] !== null
     			? /*customStyle*/ ctx[0]
@@ -8374,7 +8374,7 @@ var app = (function () {
     		c: function create() {
     			p = element("p");
     			t = text(t_value);
-    			attr_dev(p, "class", "roleDescription svelte-pi0txe");
+    			attr_dev(p, "class", "roleDescription svelte-1gmhmps");
     			add_location(p, file$7, 93, 20, 3716);
     		},
     		m: function mount(target, anchor) {
@@ -8453,19 +8453,19 @@ var app = (function () {
     			span1 = element("span");
     			t7 = text("Осталось карт: ");
     			t8 = text(t8_value);
-    			attr_dev(h1, "class", "svelte-pi0txe");
+    			attr_dev(h1, "class", "svelte-1gmhmps");
     			add_location(h1, file$7, 76, 8, 2773);
-    			attr_dev(div0, "class", div0_class_value = "cardFront" + (/*cardViewFlag*/ ctx[0] ? ' cardFrontHiddened' : '') + " svelte-pi0txe");
+    			attr_dev(div0, "class", div0_class_value = "cardFront" + (/*cardViewFlag*/ ctx[0] ? ' cardFrontHiddened' : '') + " svelte-1gmhmps");
     			add_location(div0, file$7, 78, 12, 2911);
-    			attr_dev(span0, "class", "activeRoleName svelte-pi0txe");
+    			attr_dev(span0, "class", "activeRoleName svelte-1gmhmps");
     			add_location(span0, file$7, 87, 16, 3393);
-    			attr_dev(div1, "class", div1_class_value = "cardBack" + (/*cardViewFlag*/ ctx[0] ? ' cardBackOpened' : '') + " svelte-pi0txe");
+    			attr_dev(div1, "class", div1_class_value = "cardBack" + (/*cardViewFlag*/ ctx[0] ? ' cardBackOpened' : '') + " svelte-1gmhmps");
     			add_location(div1, file$7, 79, 12, 2992);
-    			attr_dev(div2, "class", "card svelte-pi0txe");
+    			attr_dev(div2, "class", "card svelte-1gmhmps");
     			add_location(div2, file$7, 77, 8, 2834);
-    			attr_dev(span1, "class", "cardsCounter svelte-pi0txe");
+    			attr_dev(span1, "class", "cardsCounter svelte-1gmhmps");
     			add_location(span1, file$7, 101, 8, 4050);
-    			attr_dev(div3, "class", "cardsArea svelte-pi0txe");
+    			attr_dev(div3, "class", "cardsArea svelte-1gmhmps");
     			add_location(div3, file$7, 75, 4, 2740);
     		},
     		m: function mount(target, anchor) {
@@ -8495,7 +8495,7 @@ var app = (function () {
     			}
     		},
     		p: function update(ctx, dirty) {
-    			if (!current || dirty & /*cardViewFlag*/ 1 && div0_class_value !== (div0_class_value = "cardFront" + (/*cardViewFlag*/ ctx[0] ? ' cardFrontHiddened' : '') + " svelte-pi0txe")) {
+    			if (!current || dirty & /*cardViewFlag*/ 1 && div0_class_value !== (div0_class_value = "cardFront" + (/*cardViewFlag*/ ctx[0] ? ' cardFrontHiddened' : '') + " svelte-1gmhmps")) {
     				attr_dev(div0, "class", div0_class_value);
     			}
 
@@ -8539,7 +8539,7 @@ var app = (function () {
     				if_block1 = null;
     			}
 
-    			if (!current || dirty & /*cardViewFlag*/ 1 && div1_class_value !== (div1_class_value = "cardBack" + (/*cardViewFlag*/ ctx[0] ? ' cardBackOpened' : '') + " svelte-pi0txe")) {
+    			if (!current || dirty & /*cardViewFlag*/ 1 && div1_class_value !== (div1_class_value = "cardBack" + (/*cardViewFlag*/ ctx[0] ? ' cardBackOpened' : '') + " svelte-1gmhmps")) {
     				attr_dev(div1, "class", div1_class_value);
     			}
 
@@ -8840,11 +8840,11 @@ var app = (function () {
     			create_component(button.$$.fragment);
     			if (!src_url_equal(img.src, img_src_value = "assets/nogames.png")) attr_dev(img, "src", img_src_value);
     			attr_dev(img, "alt", "Грусный смайлик :(");
-    			attr_dev(img, "class", "svelte-bzsnmq");
+    			attr_dev(img, "class", "svelte-d3ukxe");
     			add_location(img, file$6, 98, 16, 3807);
-    			attr_dev(span, "class", "svelte-bzsnmq");
+    			attr_dev(span, "class", "svelte-d3ukxe");
     			add_location(span, file$6, 99, 16, 3882);
-    			attr_dev(div, "class", "noGamesArea svelte-bzsnmq");
+    			attr_dev(div, "class", "noGamesArea svelte-d3ukxe");
     			add_location(div, file$6, 97, 12, 3764);
     		},
     		m: function mount(target, anchor) {
@@ -9029,17 +9029,17 @@ var app = (function () {
     			t9 = space();
     			add_location(span0, file$6, 74, 28, 2745);
     			add_location(span1, file$6, 75, 28, 2820);
-    			attr_dev(td0, "class", "dateAndTime svelte-bzsnmq");
+    			attr_dev(td0, "class", "dateAndTime svelte-d3ukxe");
     			add_location(td0, file$6, 73, 24, 2691);
     			attr_dev(td1, "align", "center");
-    			attr_dev(td1, "class", "svelte-bzsnmq");
+    			attr_dev(td1, "class", "svelte-d3ukxe");
     			add_location(td1, file$6, 77, 24, 2922);
-    			attr_dev(button0, "class", "detailsBtn svelte-bzsnmq");
+    			attr_dev(button0, "class", "detailsBtn svelte-d3ukxe");
     			add_location(button0, file$6, 82, 28, 3178);
-    			attr_dev(button1, "class", "deleteBtn svelte-bzsnmq");
+    			attr_dev(button1, "class", "deleteBtn svelte-d3ukxe");
     			add_location(button1, file$6, 87, 28, 3421);
     			attr_dev(td2, "align", "right");
-    			attr_dev(td2, "class", "actions svelte-bzsnmq");
+    			attr_dev(td2, "class", "actions svelte-d3ukxe");
     			add_location(td2, file$6, 81, 24, 3114);
     			add_location(tr, file$6, 72, 20, 2618);
     		},
@@ -9153,13 +9153,13 @@ var app = (function () {
 
     			each_1_anchor = empty();
     			attr_dev(th0, "align", "left");
-    			attr_dev(th0, "class", "svelte-bzsnmq");
+    			attr_dev(th0, "class", "svelte-d3ukxe");
     			add_location(th0, file$6, 67, 20, 2381);
     			attr_dev(th1, "align", "center");
-    			attr_dev(th1, "class", "svelte-bzsnmq");
+    			attr_dev(th1, "class", "svelte-d3ukxe");
     			add_location(th1, file$6, 68, 20, 2437);
     			attr_dev(th2, "align", "right");
-    			attr_dev(th2, "class", "svelte-bzsnmq");
+    			attr_dev(th2, "class", "svelte-d3ukxe");
     			add_location(th2, file$6, 69, 20, 2493);
     			add_location(thead, file$6, 66, 16, 2352);
     		},
@@ -9464,7 +9464,7 @@ var app = (function () {
     		c: function create() {
     			p = element("p");
     			p.textContent = "Вскрытых карт нет";
-    			attr_dev(p, "class", "emptyCardsTitle svelte-bzsnmq");
+    			attr_dev(p, "class", "emptyCardsTitle svelte-d3ukxe");
     			add_location(p, file$6, 124, 28, 5044);
     		},
     		m: function mount(target, anchor) {
@@ -9572,7 +9572,7 @@ var app = (function () {
     			t1 = text(". ");
     			t2 = text(t2_value);
     			t3 = space();
-    			attr_dev(span, "class", "svelte-bzsnmq");
+    			attr_dev(span, "class", "svelte-d3ukxe");
     			add_location(span, file$6, 119, 32, 4821);
     		},
     		m: function mount(target, anchor) {
@@ -9609,7 +9609,7 @@ var app = (function () {
     		c: function create() {
     			p = element("p");
     			p.textContent = "Не вскрытых карт нет";
-    			attr_dev(p, "class", "emptyCardsTitle svelte-bzsnmq");
+    			attr_dev(p, "class", "emptyCardsTitle svelte-d3ukxe");
     			add_location(p, file$6, 142, 28, 5956);
     		},
     		m: function mount(target, anchor) {
@@ -9717,7 +9717,7 @@ var app = (function () {
     			t1 = text(". ");
     			t2 = text(t2_value);
     			t3 = space();
-    			attr_dev(span, "class", "svelte-bzsnmq");
+    			attr_dev(span, "class", "svelte-d3ukxe");
     			add_location(span, file$6, 137, 32, 5733);
     		},
     		m: function mount(target, anchor) {
@@ -9802,21 +9802,21 @@ var app = (function () {
     			t8 = space();
     			if_block1.c();
     			add_location(h30, file$6, 112, 20, 4382);
-    			attr_dev(p0, "class", "cardsListSubtitle svelte-bzsnmq");
+    			attr_dev(p0, "class", "cardsListSubtitle svelte-d3ukxe");
     			add_location(p0, file$6, 114, 24, 4477);
-    			attr_dev(div0, "class", "cardsList svelte-bzsnmq");
+    			attr_dev(div0, "class", "cardsList svelte-d3ukxe");
     			add_location(div0, file$6, 113, 20, 4428);
     			attr_dev(div1, "class", "cardsDetails");
     			add_location(div1, file$6, 111, 16, 4334);
-    			attr_dev(h31, "class", "hiddenedCardsTitle svelte-bzsnmq");
+    			attr_dev(h31, "class", "hiddenedCardsTitle svelte-d3ukxe");
     			add_location(h31, file$6, 130, 20, 5243);
-    			attr_dev(p1, "class", "cardsListSubtitle svelte-bzsnmq");
+    			attr_dev(p1, "class", "cardsListSubtitle svelte-d3ukxe");
     			add_location(p1, file$6, 132, 24, 5382);
-    			attr_dev(div2, "class", "cardsList hiddenedCards svelte-bzsnmq");
+    			attr_dev(div2, "class", "cardsList hiddenedCards svelte-d3ukxe");
     			add_location(div2, file$6, 131, 20, 5319);
     			attr_dev(div3, "class", "cardsDetails");
     			add_location(div3, file$6, 129, 16, 5195);
-    			attr_dev(div4, "class", "detailsArea svelte-bzsnmq");
+    			attr_dev(div4, "class", "detailsArea svelte-d3ukxe");
     			add_location(div4, file$6, 110, 12, 4291);
     		},
     		m: function mount(target, anchor) {

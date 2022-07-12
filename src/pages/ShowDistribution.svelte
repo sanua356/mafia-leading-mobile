@@ -117,6 +117,17 @@
         align-self: baseline;
         padding: 25px;
         min-height: 100vh;
+        margin: 0 auto;
+    }
+    @media screen and (min-width: 481px) and (max-width: 768px) {
+        .cardsArea {
+            width: 70%;
+        }
+    }
+    @media screen and (min-width: 769px) and (max-width: 1440px) {
+        .cardsArea {
+            width: 60%;
+        }
     }
     .cardsArea h1 {
         font-size: 1.5rem;

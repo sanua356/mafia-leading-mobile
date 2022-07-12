@@ -86,9 +86,17 @@
         min-height: 100vh;
         background-color: #27263b;
         color: #eeeef5;
-    }
-    .swipeMenu {
         padding: 30px 20px;
+    }
+    @media screen and (min-width: 481px) and (max-width: 1024px) {
+        .swipeMenu {
+            width: 45%;
+        }
+    }
+    @media screen and (min-width: 1025px) and (max-width: 1440px) {
+        .swipeMenu {
+            width: 35%;
+        }
     }
     .swipeMenu ul {
         margin-top: 40px;

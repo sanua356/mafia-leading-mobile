@@ -11,6 +11,19 @@
         margin-right: auto;
         padding: 25px;
     }
+    @media screen and (min-width: 481px) and (max-width: 1024px) {
+        :global(.container) {
+            width: 80%;
+            margin: 0 auto;
+        }
+    }
+    @media screen and (min-width: 1025px) and (max-width: 1440px) {
+        :global(.container) {
+            width: 70%;
+            margin: 0 auto;
+        }
+    }
+
     :global(.container h1) {
         font-size: 2.2rem;
     }

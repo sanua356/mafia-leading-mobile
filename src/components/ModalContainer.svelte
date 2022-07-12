@@ -23,6 +23,17 @@
         background-color: #27263b;
         border-radius: 10px;
     }
+
+    @media screen and (min-width: 481px) and (max-width: 768px) {
+        .modalContainer {
+            width: 60%;
+        }
+    }
+    @media screen and (min-width: 769px) and (max-width: 1440px) {
+        .modalContainer {
+            width: 50%;
+        }
+    }
     :global(.modalContainer h3) {
         font-size: 1.3rem;
     }
