@@ -105,49 +105,55 @@
         {/if}
     </Container>
 </Layout>
-{#if viewDetailsModalFlag}
-    <Modal clickEvent={() => (viewDetailsModalFlag = false)}>
-        <ModalContainer customStyle="overflow-y: auto; margin: 30px 0px;">
-            <div class="detailsArea">
-                <div class="cardsDetails">
-                    <h3>Вскрытые карты:</h3>
-                    <div class="cardsList">
-                        <p class="cardsListSubtitle">
-                            В порядке от первой вскрытой к последующим:
-                        </p>
-                        {#if history[selectedHistoryGameID].cardsOpened.length > 0}
-                            {#each history[selectedHistoryGameID].cardsOpened as card, idx}
-                                <span>
-                                    {idx + 1}. {allCardsList()[card].name}
-                                </span>
-                            {/each}
-                        {:else}
-                            <p class="emptyCardsTitle">Вскрытых карт нет</p>
-                        {/if}
-                    </div>
-                </div>
-
-                <div class="cardsDetails">
-                    <h3 class="hiddenedCardsTitle">Не вскрытые карты:</h3>
-                    <div class="cardsList hiddenedCards">
-                        <p class="cardsListSubtitle">
-                            В порядке от первой НЕ вскрытой к последующим:
-                        </p>
-                        {#if history[selectedHistoryGameID].cardsHiddened.length > 0}
-                            {#each history[selectedHistoryGameID].cardsHiddened as card, idx}
-                                <span>
-                                    {idx + 1}. {allCardsList()[card].name}
-                                </span>
-                            {/each}
-                        {:else}
-                            <p class="emptyCardsTitle">Не вскрытых карт нет</p>
-                        {/if}
-                    </div>
+<Modal
+    showFlag={viewDetailsModalFlag}
+    clickEvent={() => (viewDetailsModalFlag = false)}
+>
+    <ModalContainer customStyle="overflow-y: auto; margin: 30px 0px;">
+        <div class="detailsArea">
+            <div class="cardsDetails">
+                <h3>Вскрытые карты:</h3>
+                <div class="cardsList">
+                    <p class="cardsListSubtitle">
+                        В порядке от первой вскрытой к последующим:
+                    </p>
+                    {#if history[selectedHistoryGameID].cardsOpened.length > 0}
+                        {#each history[selectedHistoryGameID].cardsOpened as card, idx}
+                            <span>
+                                {idx + 1}. {allCardsList()[card].name}
+                            </span>
+                        {/each}
+                    {:else}
+                        <p class="emptyCardsTitle">Вскрытых карт нет</p>
+                    {/if}
                 </div>
             </div>
-        </ModalContainer>
-    </Modal>
-{/if}
+
+            <div class="cardsDetails">
+                <h3 class="hiddenedCardsTitle">Не вскрытые карты:</h3>
+                <div class="cardsList hiddenedCards">
+                    <p class="cardsListSubtitle">
+                        В порядке от первой НЕ вскрытой к последующим:
+                    </p>
+                    {#if history[selectedHistoryGameID].cardsHiddened.length > 0}
+                        {#each history[selectedHistoryGameID].cardsHiddened as card, idx}
+                            <span>
+                                {idx + 1}. {allCardsList()[card].name}
+                            </span>
+                        {/each}
+                    {:else}
+                        <p
+                            class="emptyCardsTitle"
+                            style="padding-bottom: 15px;"
+                        >
+                            Не вскрытых карт нет
+                        </p>
+                    {/if}
+                </div>
+            </div>
+        </div>
+    </ModalContainer>
+</Modal>
 
 <style>
     th {

@@ -1,13 +1,21 @@
 <script>
-    import { onMount } from "svelte";
-    import { blur } from "svelte/transition";
+    import Transition from "./Transition.svelte";
+
     export let style = "",
-        clickEvent = () => {};
+        clickEvent = () => {},
+        showFlag = false;
 </script>
 
-<div class="modal" {style} on:click={clickEvent} transition:blur|local>
-    <slot />
-</div>
+<Transition
+    {showFlag}
+    mountClass={"modalMounting"}
+    unmountClass={"modalUnmounting"}
+    unmountDuration={800}
+>
+    <div class="modal" {style} on:click={clickEvent}>
+        <slot />
+    </div>
+</Transition>
 
 <style>
     .modal {
@@ -23,7 +31,17 @@
         margin: auto;
         flex-direction: column;
         background: rgba(0, 0, 0, 0.3);
-        backdrop-filter: blur(10px);
         z-index: 999;
+        transition: all 0.8s ease-in-out;
+        backdrop-filter: blur(0px);
+        opacity: 0;
+    }
+    :global(.modalMounting) {
+        backdrop-filter: blur(10px) !important;
+        opacity: 1 !important;
+    }
+    :global(.modalUnmounting) {
+        backdrop-filter: blur(0px) !important;
+        opacity: 0 !important;
     }
 </style>

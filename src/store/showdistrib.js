@@ -22,20 +22,12 @@ function createStore() {
         },
         //Перемешивание карт для выдачи
         shuffleCards: (cards) => {
-            let currentIndex = cards.length,
-                randomIndex;
-            while (currentIndex != 0) {
-                randomIndex = Math.floor(Math.random() * currentIndex);
-                currentIndex--;
-
-                [cards[currentIndex], cards[randomIndex]] = [
-                    cards[randomIndex],
-                    cards[currentIndex],
-                ];
+            let suffledCards = cards;
+            for (let i = 0; i < 100; i++) {
+                suffledCards.sort(() => Math.random() - 0.5);
             }
-
             //Загрузка массива карт в store для показа игрокам
-            set({ cardsHiddened: cards, cardsOpened: [] });
+            set({ cardsHiddened: suffledCards, cardsOpened: [] });
         },
         //Сохранить уже открытые карты в массиве вскрытых карт
         pushToHistoryDistribution: (card) => {

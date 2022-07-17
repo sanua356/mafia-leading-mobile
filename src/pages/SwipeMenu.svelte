@@ -2,6 +2,7 @@
     import { onDestroy, onMount } from "svelte";
     import { navigateTo, routeIsActive } from "svelte-router-spa";
     import Modal from "../components/Modal.svelte";
+    import Transition from "../components/Transition.svelte";
     import { settingsStore } from "../store/settings.js";
     import { mainStore } from "../store/showdistrib.js";
 
@@ -40,53 +41,71 @@
         document.removeEventListener("touchstart");
         document.removeEventListener("touchmove");
     });
+
+    let animationFlag = false;
+    $: {
+        if ($settingsStore.menuViewFlag) {
+            window.setTimeout(() => {
+                animationFlag = true;
+            }, 15);
+        } else {
+            animationFlag = false;
+        }
+    }
 </script>
 
-{#if $settingsStore.menuViewFlag === true}
-    <Modal
-        style={"z-index: 9999;"}
-        clickEvent={() => settingsStore.changeViewFlag(false)}
+<Modal
+    showFlag={$settingsStore.menuViewFlag}
+    style={"z-index: 9999;"}
+    clickEvent={() => settingsStore.changeViewFlag(false)}
+>
+    <div
+        class="swipeMenu"
+        class:enabled={animationFlag}
+        on:click={(e) => e.stopPropagation()}
     >
-        <div class="swipeMenu" on:click={(e) => e.stopPropagation()}>
-            <h1>Меню</h1>
-            <nav>
-                <ul on:click={() => settingsStore.changeViewFlag(false)}>
-                    <li on:click={() => navigateTo("/")}>Главная</li>
-                    <li on:click={() => navigateTo("home")}>Раздать карты</li>
-                    <li on:click={() => navigateTo("history")}>История игр</li>
-                    <li on:click={() => navigateTo("settings")}>Настройки</li>
-                    <li on:click={() => navigateTo("help")}>Помощь</li>
-                    <li on:click={() => navigateTo("rules")}>Правила игры</li>
-                    <li
-                        on:click={mainStore.returnOpenedCardInRotation}
-                        class={!routeIsActive("show-distribution") ||
-                        $mainStore.cardsOpened.length === 0
-                            ? "disabled"
+        <h1>Меню</h1>
+        <nav>
+            <ul on:click={() => settingsStore.changeViewFlag(false)}>
+                <li on:click={() => navigateTo("/")}>Главная</li>
+                <li on:click={() => navigateTo("home")}>Раздать карты</li>
+                <li on:click={() => navigateTo("history")}>История игр</li>
+                <li on:click={() => navigateTo("settings")}>Настройки</li>
+                <li on:click={() => navigateTo("help")}>Помощь</li>
+                <li on:click={() => navigateTo("rules")}>Правила игры</li>
+                <li
+                    on:click={mainStore.returnOpenedCardInRotation}
+                    class={!routeIsActive("show-distribution") ||
+                    $mainStore.cardsOpened.length === 0
+                        ? "disabled"
+                        : ""}
+                >
+                    Вернуть прошлую карту в ротацию <span
+                        class={routeIsActive("show-distribution")
+                            ? "hiddened"
                             : ""}
+                        >Доступно только во время выдачи карт игрокам</span
                     >
-                        Вернуть прошлую карту в ротацию <span
-                            class={routeIsActive("show-distribution")
-                                ? "hiddened"
-                                : ""}
-                            >Доступно только во время выдачи карт игрокам</span
-                        >
-                    </li>
-                </ul>
-            </nav>
-        </div>
-    </Modal>
-{/if}
+                </li>
+            </ul>
+        </nav>
+    </div>
+</Modal>
 
 <style>
     .swipeMenu {
         position: absolute;
         top: 0;
-        left: 0;
+        left: -100%;
         width: 60%;
         min-height: 100vh;
         background-color: #27263b;
         color: #eeeef5;
         padding: 30px 20px;
+        transition: 0.5s ease-in-out all;
+    }
+    .enabled {
+        left: 0 !important;
     }
     @media screen and (min-width: 481px) and (max-width: 1024px) {
         .swipeMenu {

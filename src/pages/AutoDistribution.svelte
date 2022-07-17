@@ -36,33 +36,31 @@
     }
 </script>
 
-{#if $store.playersCount <= 0 || modalFlag}
-    <Modal>
-        <ModalContainer customStyle="padding: 5px 30px 25px 30px;">
-            <div class="modalArea buttons">
-                <label for="playersCount">Количество игроков</label>
-                <Input
-                    id="playersCount"
-                    type="number"
-                    value={$store.playersCount}
-                    onChange={store.onChangePlayersCount}
-                    style="margin-bottom: 15px;"
-                />
-                <Button clickEvent={onSavePlayers} style="font-size: 1rem;"
-                    >Сохранить</Button
-                >
-                <Button
-                    clickEvent={() => navigateTo("/home")}
-                    style="font-size: 1rem;"
-                    color="secondary">Назад</Button
-                >
-            </div>
-            <span class="modalError {errorFlag && 'modalShow'}">
-                Недопустимое число игроков. Введите корректное число.
-            </span>
-        </ModalContainer>
-    </Modal>
-{/if}
+<Modal showFlag={$store.playersCount <= 0 || modalFlag}>
+    <ModalContainer customStyle="padding: 5px 30px 25px 30px;">
+        <div class="modalArea buttons">
+            <label for="playersCount">Количество игроков</label>
+            <Input
+                id="playersCount"
+                type="number"
+                value={$store.playersCount}
+                onChange={store.onChangePlayersCount}
+                style="margin-bottom: 15px;"
+            />
+            <Button clickEvent={onSavePlayers} style="font-size: 1rem;"
+                >Сохранить</Button
+            >
+            <Button
+                clickEvent={() => navigateTo("/home")}
+                style="font-size: 1rem;"
+                color="secondary">Назад</Button
+            >
+        </div>
+        <span class="modalError {errorFlag && 'modalShow'}">
+            Недопустимое число игроков. Введите корректное число.
+        </span>
+    </ModalContainer>
+</Modal>
 
 <DistributionPreview backBtnEvent={() => (modalFlag = true)}>
     <Button

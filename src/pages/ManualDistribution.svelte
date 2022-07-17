@@ -121,33 +121,31 @@
     </Container>
 </Layout>
 
-{#if modalCustomRoleFlag}
-    <Modal>
-        <ModalContainer customStyle="padding: 5px 30px 25px 30px;">
-            <div class="modalArea buttons">
-                <label for="roleName">Название новой роли</label>
-                <Input
-                    id="roleName"
-                    type="text"
-                    value={$manualStore.newRoleName}
-                    onChange={manualStore.onChangeNameCustomRole}
-                    style="margin-bottom: 15px;"
-                />
-                <Button clickEvent={onCreateCustomRole} style="font-size: 1rem;"
-                    >Сохранить</Button
-                >
-                <Button
-                    clickEvent={() => (modalCustomRoleFlag = false)}
-                    style="font-size: 1rem;"
-                    color="secondary">Назад</Button
-                >
-            </div>
-            <span class="modalError {errorFlag && 'modalShow'}">
-                Недопустимое название роли. Введите корректное название.
-            </span>
-        </ModalContainer>
-    </Modal>
-{/if}
+<Modal showFlag={modalCustomRoleFlag}>
+    <ModalContainer customStyle="padding: 5px 30px 25px 30px;">
+        <div class="modalArea buttons">
+            <label for="roleName">Название новой роли</label>
+            <Input
+                id="roleName"
+                type="text"
+                value={$manualStore.newRoleName}
+                onChange={manualStore.onChangeNameCustomRole}
+                style="margin-bottom: 15px;"
+            />
+            <Button clickEvent={onCreateCustomRole} style="font-size: 1rem;"
+                >Сохранить</Button
+            >
+            <Button
+                clickEvent={() => (modalCustomRoleFlag = false)}
+                style="font-size: 1rem;"
+                color="secondary">Назад</Button
+            >
+        </div>
+        <span class="modalError {errorFlag && 'modalShow'}">
+            Недопустимое название роли. Введите корректное название.
+        </span>
+    </ModalContainer>
+</Modal>
 
 <style>
     .roles {

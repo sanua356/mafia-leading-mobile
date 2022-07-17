@@ -52,27 +52,25 @@
     </Container>
 </Layout>
 
-{#if modalFlag}
-    <Modal clickEvent={() => (modalFlag = false)}>
-        <ModalContainer
-            customStyle="padding: 10px 20px; max-height: 80vh;"
-            clickEvent={(e) => e.stopPropagation()}
-        >
-            {#if helpSection === "distributionInstruction"}
-                <DistributionInstruction />
-            {/if}
-            {#if helpSection === "historyInstruction"}
-                <HistoryGamesInstruction />
-            {/if}
-            {#if helpSection === "settingsInstruction"}
-                <SettingsInstruction />
-            {/if}
-            {#if helpSection === "developerContact"}
-                <Contacts />
-            {/if}
-        </ModalContainer>
-    </Modal>
-{/if}
+<Modal showFlag={modalFlag} clickEvent={() => (modalFlag = false)}>
+    <ModalContainer
+        customStyle="padding: 10px 20px; max-height: 80vh;"
+        clickEvent={(e) => e.stopPropagation()}
+    >
+        {#if helpSection === "distributionInstruction"}
+            <DistributionInstruction />
+        {/if}
+        {#if helpSection === "historyInstruction"}
+            <HistoryGamesInstruction />
+        {/if}
+        {#if helpSection === "settingsInstruction"}
+            <SettingsInstruction />
+        {/if}
+        {#if helpSection === "developerContact"}
+            <Contacts />
+        {/if}
+    </ModalContainer>
+</Modal>
 
 <style>
     :global(.instruction) {

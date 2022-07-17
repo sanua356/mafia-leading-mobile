@@ -3,8 +3,20 @@
     import Setting from "../Setting.svelte";
     import { fly } from "svelte/transition";
     import { onMount } from "svelte";
+    import Modal from "../../../components/Modal.svelte";
+    import ModalContainer from "../../../components/ModalContainer.svelte";
+    import Input from "../../../components/Input.svelte";
+    import Button from "../../../components/Button.svelte";
+    import Textarea from "../../../components/Textarea.svelte";
+    import Transition from "../../../components/Transition.svelte";
 
     let customRoles = [];
+    let changeDescriptionParams = {
+        viewFlag: false,
+        inputValue: "",
+        key: "",
+    };
+
     onMount(() => {
         if (localStorage.getItem("customRoles") !== null) {
             customRoles = Object.entries(
@@ -21,6 +33,24 @@
         delete rolesList[key];
         localStorage.setItem("customRoles", JSON.stringify(rolesList));
         customRoles = Object.entries(rolesList);
+    }
+
+    function onChangeDescriptionRole(key) {
+        changeDescriptionParams.viewFlag = true;
+        if (localStorage.getItem("customRoles") !== null) {
+            let roles = JSON.parse(localStorage.getItem("customRoles"));
+            changeDescriptionParams.inputValue = String(roles[key].description);
+        } else {
+            changeDescriptionParams.inputValue = "";
+        }
+        changeDescriptionParams.key = key;
+    }
+    function onSaveDescription() {
+        let roles = JSON.parse(localStorage.getItem("customRoles"));
+        roles[changeDescriptionParams.key].description =
+            changeDescriptionParams.inputValue;
+        localStorage.setItem("customRoles", JSON.stringify(roles));
+        changeDescriptionParams.viewFlag = false;
     }
 </script>
 
@@ -47,7 +77,12 @@
                             >
                                 Удалить
                             </button>
-                            <button class="customRolesChangeDescBtn">
+                            <button
+                                class="customRolesChangeDescBtn"
+                                on:click={() => {
+                                    onChangeDescriptionRole(role[0]);
+                                }}
+                            >
                                 Изменить описание
                             </button>
                             <button class="customRolesChangeIconBtn">
@@ -65,12 +100,54 @@
     {/if}
 </Setting>
 
+<Modal showFlag={changeDescriptionParams.viewFlag}>
+    <ModalContainer customStyle="padding: 5px 30px 25px 30px;">
+        <div class="modalArea buttons">
+            <h2 class="settingTitle">Изменить описание</h2>
+            <Textarea
+                rows="5"
+                value={changeDescriptionParams.inputValue}
+                onChange={(e) =>
+                    (changeDescriptionParams.inputValue = e.target.value)}
+                style="margin-bottom: 15px;"
+            />
+            <Button clickEvent={onSaveDescription} style="font-size: 1rem;"
+                >Сохранить</Button
+            >
+            <Button
+                clickEvent={() => {
+                    changeDescriptionParams.viewFlag = false;
+                }}
+                style="font-size: 1rem;"
+                color="secondary">Назад</Button
+            >
+        </div>
+        <span
+            class="modalError {changeDescriptionParams.inputValue.length ===
+                0 &&
+                changeDescriptionParams.inputValue.length > 255 &&
+                'modalShow'}"
+        >
+            Описание должно иметь не менее 1 и не более 255 символов.
+        </span>
+    </ModalContainer>
+</Modal>
+
 <style>
+    .settingTitle {
+        font-size: 1.5rem;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto;
+        margin-bottom: 15px;
+    }
     th {
         font-size: 1.1rem;
     }
     td {
-        font-size: 1rem;
+        font-size: 1.1rem;
     }
 
     .actions button {
