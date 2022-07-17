@@ -1,4 +1,8 @@
-<table class="table"><slot /></table>
+<script>
+    export let style = "";
+</script>
+
+<table class="table" {style}><slot /></table>
 
 <style>
     :global(.table) {

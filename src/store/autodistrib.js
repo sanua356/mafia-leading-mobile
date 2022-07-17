@@ -1,5 +1,4 @@
 import { get, writable } from "svelte/store";
-import { cards } from "./../constants/cards";
 
 function createStore() {
     const { subscribe, update } = writable({

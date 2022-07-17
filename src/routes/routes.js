@@ -6,7 +6,7 @@ import ManualDistributionPage from "../pages/ManualDistribution.svelte";
 import ShowDistributionPage from "../pages/ShowDistribution.svelte";
 import PreviewDistiributionPage from "../pages/DistributionPreview.svelte";
 import HistoryDistributionPage from "../pages/HistoryDistribution.svelte";
-import SettingsPage from "../pages/Settings.svelte";
+import SettingsPage from "../pages/SettingsPage/Settings.svelte";
 import HelpPage from "../pages/HelpPage/Help.svelte";
 
 export const routes = [

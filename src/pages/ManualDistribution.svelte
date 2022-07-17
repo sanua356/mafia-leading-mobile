@@ -39,6 +39,7 @@
             } else {
                 manualStore.reinit();
                 modalCustomRoleFlag = false;
+                manualStore.clearCustomRoleField();
             }
         } else {
             errorFlag = true;
