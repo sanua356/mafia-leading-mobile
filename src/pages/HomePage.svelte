@@ -9,14 +9,20 @@
         <h1>Выберите тип раздачи</h1>
         <Button
             style={"margin-bottom: 20px;"}
+            clickEvent={() => navigateTo("manual-distribution")}
+            color="secondary"
+            >Ручная
+        </Button>
+        <Button
+            style={"margin-bottom: 20px;"}
             clickEvent={() => navigateTo("auto-distribution")}
             >Автоматическая
         </Button>
         <Button
             style={"margin-bottom: 20px;"}
-            clickEvent={() => navigateTo("manual-distribution")}
+            clickEvent={() => navigateTo("presets")}
             color="secondary"
-            >Ручная
+            >Пресеты
         </Button>
     </div>
 </Layout>

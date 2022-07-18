@@ -69,6 +69,7 @@
             <ul on:click={() => settingsStore.changeViewFlag(false)}>
                 <li on:click={() => navigateTo("/")}>Главная</li>
                 <li on:click={() => navigateTo("home")}>Раздать карты</li>
+                <li on:click={() => navigateTo("notes")}>Заметки</li>
                 <li on:click={() => navigateTo("history")}>История игр</li>
                 <li on:click={() => navigateTo("settings")}>Настройки</li>
                 <li on:click={() => navigateTo("help")}>Помощь</li>

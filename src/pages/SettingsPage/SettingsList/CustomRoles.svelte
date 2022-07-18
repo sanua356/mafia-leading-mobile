@@ -5,10 +5,8 @@
     import { onMount } from "svelte";
     import Modal from "../../../components/Modal.svelte";
     import ModalContainer from "../../../components/ModalContainer.svelte";
-    import Input from "../../../components/Input.svelte";
     import Button from "../../../components/Button.svelte";
     import Textarea from "../../../components/Textarea.svelte";
-    import Transition from "../../../components/Transition.svelte";
 
     let customRoles = [];
     let changeDescriptionParams = {
@@ -161,6 +159,24 @@
         .actions button {
             padding: 5px 15px;
             font-size: 1rem;
+        }
+    }
+    .customRoleButtons {
+        display: flex;
+        flex-direction: column;
+        max-width: fit-content;
+    }
+
+    .customRoleButtons button {
+        padding: 8px;
+        margin-bottom: 8px;
+    }
+    @media screen and (min-width: 600px) and (max-width: 1440px) {
+        .customRoleButtons {
+            flex-direction: row;
+        }
+        .customRoleButtons button {
+            margin-right: 10px;
         }
     }
     .customRolesDeleteBtn {

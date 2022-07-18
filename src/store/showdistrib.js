@@ -12,7 +12,7 @@ function createStore() {
         subscribe,
         update,
         //Смена флага загрузки приложения во время инициализации Cordova
-        aplicationLoaded: (value) => {
+        applicationLoaded: (value) => {
             update((prev) => {
                 return {
                     ...prev,

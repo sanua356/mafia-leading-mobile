@@ -9,6 +9,8 @@ import HistoryDistributionPage from "../pages/HistoryDistribution.svelte";
 import SettingsPage from "../pages/SettingsPage/Settings.svelte";
 import HelpPage from "../pages/HelpPage/Help.svelte";
 import RulesPage from "../pages/Rules.svelte";
+import PresetsPage from "../pages/Presets.svelte";
+import NotesPage from "../pages/Notes.svelte";
 
 export const routes = [
     {
@@ -55,5 +57,13 @@ export const routes = [
     {
         name: "rules",
         component: RulesPage,
+    },
+    {
+        name: "presets",
+        component: PresetsPage,
+    },
+    {
+        name: "notes",
+        component: NotesPage,
     },
 ];

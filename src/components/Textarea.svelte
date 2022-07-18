@@ -28,6 +28,7 @@
         background-color: #151429;
         border: none;
         transition: 0.2s ease-in-out all;
+        resize: none;
     }
     textarea:focus {
         color: white;
