@@ -13,7 +13,7 @@
     //Название показываемой на данный момент карты
     let activeCard = "";
     //Переменная с DOM элементом карточки для выдачи
-    let cardNode;
+    let cardNode = undefined;
 
     //Статус завершения раздачи (true - раздача окончена)
     let closeDistributionFlag = false;

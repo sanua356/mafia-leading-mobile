@@ -1,6 +1,6 @@
 <script>
-    import Container from "../../components/Container.svelte";
-    import Layout from "../../components/Layout.svelte";
+    import Container from "../components/Container.svelte";
+    import Layout from "../components/Layout.svelte";
 </script>
 
 <Layout>
@@ -163,6 +163,11 @@
                     </ul>
                 </nav>
             </div>
+            <aside class="link">
+                Описание ролей и правила игры частично взяты с <a
+                    href="https://summoning.ru/games/mafia.shtml">этого</a
+                > сайта
+            </aside>
         </div>
     </Container>
 </Layout>
@@ -196,5 +201,16 @@
         list-style-type: none;
         content: "●";
         margin-right: 10px;
+    }
+    .link {
+        opacity: 0.5;
+        display: block;
+        text-align: center;
+        margin: 30px 0;
+        color: white;
+    }
+    .link a {
+        color: white;
+        text-decoration: underline;
     }
 </style>
