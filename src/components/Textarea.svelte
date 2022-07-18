@@ -21,7 +21,7 @@
 <style>
     textarea {
         width: 100%;
-        font-size: 1.1rem;
+        font-size: 1.2rem;
         padding: 7px 15px;
         border-radius: 5px;
         color: rgba(255, 255, 255, 0.8);
@@ -35,7 +35,7 @@
     @media screen and (max-width: 440px) {
         textarea {
             width: 90%;
-            font-size: 1.3rem;
+            font-size: 1.1rem;
         }
     }
 </style>

@@ -4,7 +4,7 @@
     import Container from "../components/Container.svelte";
     import Layout from "../components/Layout.svelte";
     import Table from "../components/Table.svelte";
-    import { allCardsList, cards } from "../constants/cards";
+    import { allCardsList } from "../constants/cards";
     import { store } from "../store/autodistrib.js";
     import { mainStore } from "../store/showdistrib.js";
 

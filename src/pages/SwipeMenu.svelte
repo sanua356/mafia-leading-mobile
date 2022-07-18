@@ -102,7 +102,7 @@
         background-color: #27263b;
         color: #eeeef5;
         padding: 30px 20px;
-        transition: 0.5s ease-in-out all;
+        transition: 0.3s ease-in-out all;
     }
     .enabled {
         left: 0 !important;

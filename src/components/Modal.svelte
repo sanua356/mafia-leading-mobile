@@ -10,7 +10,7 @@
     {showFlag}
     mountClass={"modalMounting"}
     unmountClass={"modalUnmounting"}
-    unmountDuration={800}
+    unmountDuration={300}
 >
     <div class="modal" {style} on:click={clickEvent}>
         <slot />
@@ -32,7 +32,7 @@
         flex-direction: column;
         background: rgba(0, 0, 0, 0.3);
         z-index: 999;
-        transition: all 0.8s ease-in-out;
+        transition: all 0.3s ease-in-out;
         backdrop-filter: blur(0px);
         opacity: 0;
     }
