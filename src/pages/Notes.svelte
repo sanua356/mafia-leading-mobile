@@ -118,9 +118,9 @@
     .notes {
         flex: 1 1 auto;
     }
-    :global(.notes textarea) {
-        background-color: #3f3d5e;
-        width: 100%;
+    :global(.note textarea) {
+        background-color: #3f3d5e !important;
+        width: 100% !important;
     }
     .note {
         margin-bottom: 20px;

@@ -24,9 +24,13 @@
     //Функция показа ролей карт
     function onCardOpened() {
         function disableClickInAnimationTime() {
-            cardNode.style.pointerEvents = "none";
+            if (cardNode) {
+                cardNode.style.pointerEvents = "none";
+            }
             setTimeout(() => {
-                cardNode.style.pointerEvents = "auto";
+                if (cardNode) {
+                    cardNode.style.pointerEvents = "auto";
+                }
             }, 900);
         }
 

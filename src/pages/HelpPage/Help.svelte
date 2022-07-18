@@ -96,6 +96,8 @@
         border-radius: 5px;
         margin-bottom: 10px;
         text-align: left;
+        max-width: fit-content;
+        word-break: break-all;
     }
     .author {
         text-align: center;
