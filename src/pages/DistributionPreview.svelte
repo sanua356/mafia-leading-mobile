@@ -30,9 +30,10 @@
                 </thead>
                 {#each Object.entries($store.cardsCount) as [key, value]}
                     <tr
-                        ><td>{allCardsList()[key].name}</td><td align="right"
-                            >{value}</td
-                        ></tr
+                        ><td
+                            >{allCardsList()[key]?.name ||
+                                "Неизвестная роль"}</td
+                        ><td align="right">{value}</td></tr
                     >
                 {/each}
             </Table>

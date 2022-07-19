@@ -1,5 +1,4 @@
 import { get, writable } from "svelte/store";
-import { manualStore } from "./manualdistrib.js";
 
 function createStore() {
     const { update, subscribe } = writable({
@@ -9,10 +8,16 @@ function createStore() {
     return {
         update,
         subscribe,
-        createPreset: (name) => {
-            const savedPresets = localStorage.getItem("presets") || [];
-            const cardsPreset = get(manualStore).cards;
-            savedPresets.push({ name, cards: cardsPreset });
+        createPreset: (name, cards) => {
+            const savedPresets =
+                JSON.parse(localStorage.getItem("presets")) || [];
+            savedPresets.push({ name, cards });
+            localStorage.setItem("presets", JSON.stringify(savedPresets));
+        },
+        deletePreset: (idx) => {
+            const savedPresets =
+                JSON.parse(localStorage.getItem("presets")) || [];
+            savedPresets.splice(idx, 1);
             localStorage.setItem("presets", JSON.stringify(savedPresets));
         },
     };

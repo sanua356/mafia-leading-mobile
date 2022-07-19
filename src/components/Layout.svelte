@@ -1,9 +1,8 @@
 <script>
-    import { fade } from "svelte/transition";
     export let customStyles = "";
 </script>
 
-<section class="layout" style={customStyles} in:fade>
+<section class="layout" style={customStyles}>
     <slot />
 </section>
 

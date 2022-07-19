@@ -85,14 +85,17 @@
                 {#if !closeDistributionFlag && $settingsStore.viewIconsCards}
                     <Image
                         alt="Иконка роли"
-                        imgSrc={allCardsList()[activeCard]?.icon}
+                        imgSrc={allCardsList()[activeCard]?.icon ||
+                            unknownCardIcon}
                         boundaryImgSrc={unknownCardIcon}
                     />
                 {/if}
                 <span class="activeRoleName"
                     >{allCardsList().hasOwnProperty(activeCard)
-                        ? allCardsList()[activeCard].name
-                        : activeCard}</span
+                        ? allCardsList()[activeCard]?.name
+                        : closeDistributionFlag
+                        ? activeCard
+                        : "Неизвестная роль"}</span
                 >
                 {#if !closeDistributionFlag && $settingsStore.viewDescriptionCards}
                     <p class="roleDescription">

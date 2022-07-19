@@ -4,7 +4,7 @@
     import Container from "../components/Container.svelte";
     import Layout from "../components/Layout.svelte";
     import Table from "../components/Table.svelte";
-    import { allCardsList, cards } from "../constants/cards.js";
+    import { allCardsList } from "../constants/cards.js";
     import { manualStore } from "../store/manualdistrib.js";
     import { store } from "../store/autodistrib.js";
     import Modal from "../components/Modal.svelte";
@@ -13,7 +13,10 @@
     import { onMount } from "svelte";
 
     let modalCustomRoleFlag = false; //Флаг модалки добавления своей роли
-    let errorFlag = false;
+    let errorFlag = false; //Флаг ошибки модалки (если поле ввода кастом роли пусто)
+
+    export let confirmBtnText = "Подтвердить",
+        confirmBtnEvent = onDistributionComplieted;
 
     onMount(() => {
         manualStore.clearCustomRoleField();
@@ -113,7 +116,7 @@
             )}
         </h2>
         <div class="buttons">
-            <Button clickEvent={onDistributionComplieted}>Подтвердить</Button>
+            <Button clickEvent={confirmBtnEvent}>{confirmBtnText}</Button>
             <Button color="secondary" clickEvent={() => navigateTo("/home")}
                 >Назад</Button
             >

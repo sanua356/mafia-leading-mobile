@@ -1,6 +1,5 @@
 <script>
     import { navigateTo } from "svelte-router-spa";
-
     import { onMount } from "svelte/internal";
     import Button from "../components/Button.svelte";
     import Input from "../components/Input.svelte";
