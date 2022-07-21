@@ -1,4 +1,5 @@
 import { get, writable } from "svelte/store";
+import * as idb from "../utils/indexeddb.js";
 
 function initStore() {
     const initialStore = {
@@ -98,6 +99,21 @@ function createStore() {
                 };
             });
             settingsStore.saveSettingsInLocalStorage();
+        },
+        saveCustomIcon: (key, file) => {
+            idb.convertImageToBase64(file, (fileData) => {
+                idb.setValue(
+                    key,
+                    fileData,
+                    "roles",
+                    () => {
+                        console.log("Картинка успешно загружена");
+                    },
+                    (e) => {
+                        console.error(e);
+                    }
+                );
+            });
         },
     };
 }

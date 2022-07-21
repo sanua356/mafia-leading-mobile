@@ -4,7 +4,11 @@
     import { navigateTo } from "svelte-router-spa";
     import { onMount } from "svelte";
     import { settingsStore } from "../store/settings.js";
-    import { allCardsList, unknownCardIcon } from "../constants/cards.js";
+    import {
+        allCardsList,
+        reloadSavedIcons,
+        unknownCardIcon,
+    } from "../constants/cards.js";
     import Image from "../components/Image.svelte";
 
     //Статус показа карты (рубашка - false, название карты - true)
@@ -73,6 +77,7 @@
 
     onMount(() => {
         mainStore.saveDistributionDate();
+        reloadSavedIcons();
     });
 </script>
 

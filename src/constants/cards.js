@@ -1,3 +1,5 @@
+import * as idb from "../utils/indexeddb.js";
+
 export const cards = {
     mafia: {
         icon: "assets/mafia2.png",
@@ -63,10 +65,33 @@ export const cards = {
 
 export const unknownCardIcon = "assets/anonymity.png";
 
+let savedIcons = {};
+
+export function reloadSavedIcons() {
+    Object.keys(allCardsList()).forEach((key) => {
+        idb.getValue(
+            key,
+            "roles",
+            (icon) => {
+                if (icon !== undefined) {
+                    savedIcons[key] = { icon: icon.value };
+                }
+            },
+            (e) => {
+                console.error(e);
+            }
+        );
+    });
+}
+
 export function allCardsList() {
-    return Object.assign(
+    let allCards = Object.assign(
         {},
         cards,
         JSON.parse(localStorage.getItem("customRoles"))
     );
+    Object.keys(savedIcons).forEach((key) => {
+        allCards[key].icon = savedIcons[key].icon;
+    });
+    return allCards;
 }

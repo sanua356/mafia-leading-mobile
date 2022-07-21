@@ -2776,6 +2776,63 @@ var app = (function () {
     	}
     }
 
+    let indexedDB =
+        window.indexedDB ||
+        window.mozIndexedDB ||
+        window.webkitIndexedDB ||
+        window.msIndexedDB;
+
+    function connectDB(cb) {
+        let request = indexedDB.open("db", 1);
+        request.onerror = function (e) {
+            console.log(e);
+        };
+        request.onsuccess = function () {
+            cb(request.result);
+        };
+        request.onupgradeneeded = function (e) {
+            e.currentTarget.result.createObjectStore("roles", {
+                keyPath: "key",
+            });
+            connectDB(cb);
+        };
+    }
+
+    function getValue(key, objStore, successCallback, errorCallback) {
+        connectDB(function (db) {
+            let request = db
+                .transaction([objStore], "readonly")
+                .objectStore(objStore)
+                .get(key);
+            request.onerror = (e) => errorCallback(e);
+            request.onsuccess = function () {
+                successCallback(request.result ? request.result : undefined);
+            };
+        });
+    }
+
+    function setValue(key, value, objStore, successCallback, errorCallback) {
+        connectDB(function (db) {
+            let request = db
+                .transaction([objStore], "readwrite")
+                .objectStore(objStore)
+                .put({ value, key });
+            request.onerror = (e) => errorCallback(e);
+            request.onsuccess = function () {
+                successCallback();
+            };
+        });
+    }
+
+    function convertImageToBase64(file, resultCallback) {
+        var reader = new FileReader();
+
+        reader.onload = function (frEvent) {
+            resultCallback(frEvent.target.result);
+        };
+        reader.readAsDataURL(file);
+    }
+
     function initStore$1() {
         const initialStore = {
             hiddeningCardsFlag: false, //Флаг скрытия карт с экрана (false - по клику, true - по таймеру)
@@ -2874,6 +2931,21 @@ var app = (function () {
                     };
                 });
                 settingsStore.saveSettingsInLocalStorage();
+            },
+            saveCustomIcon: (key, file) => {
+                convertImageToBase64(file, (fileData) => {
+                    setValue(
+                        key,
+                        fileData,
+                        "roles",
+                        () => {
+                            console.log("Картинка успешно загружена");
+                        },
+                        (e) => {
+                            console.error(e);
+                        }
+                    );
+                });
             },
         };
     }
@@ -5057,12 +5129,35 @@ var app = (function () {
 
     const unknownCardIcon = "assets/anonymity.png";
 
+    let savedIcons = {};
+
+    function reloadSavedIcons() {
+        Object.keys(allCardsList()).forEach((key) => {
+            getValue(
+                key,
+                "roles",
+                (icon) => {
+                    if (icon !== undefined) {
+                        savedIcons[key] = { icon: icon.value };
+                    }
+                },
+                (e) => {
+                    console.error(e);
+                }
+            );
+        });
+    }
+
     function allCardsList() {
-        return Object.assign(
+        let allCards = Object.assign(
             {},
             cards,
             JSON.parse(localStorage.getItem("customRoles"))
         );
+        Object.keys(savedIcons).forEach((key) => {
+            allCards[key].icon = savedIcons[key].icon;
+        });
+        return allCards;
     }
 
     /**
@@ -7501,7 +7596,7 @@ var app = (function () {
     }
 
     // (60:12) <Table>
-    function create_default_slot_8$1(ctx) {
+    function create_default_slot_8$2(ctx) {
     	let thead;
     	let th0;
     	let t1;
@@ -7585,7 +7680,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_default_slot_8$1.name,
+    		id: create_default_slot_8$2.name,
     		type: "slot",
     		source: "(60:12) <Table>",
     		ctx
@@ -7595,7 +7690,7 @@ var app = (function () {
     }
 
     // (119:12) <Button clickEvent={confirmBtnEvent}>
-    function create_default_slot_7$1(ctx) {
+    function create_default_slot_7$2(ctx) {
     	let t;
 
     	const block = {
@@ -7615,7 +7710,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_default_slot_7$1.name,
+    		id: create_default_slot_7$2.name,
     		type: "slot",
     		source: "(119:12) <Button clickEvent={confirmBtnEvent}>",
     		ctx
@@ -7625,7 +7720,7 @@ var app = (function () {
     }
 
     // (120:12) <Button color="secondary" clickEvent={() => navigateTo("/home")}                  >
-    function create_default_slot_6$1(ctx) {
+    function create_default_slot_6$2(ctx) {
     	let t;
 
     	const block = {
@@ -7642,7 +7737,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_default_slot_6$1.name,
+    		id: create_default_slot_6$2.name,
     		type: "slot",
     		source: "(120:12) <Button color=\\\"secondary\\\" clickEvent={() => navigateTo(\\\"/home\\\")}                  >",
     		ctx
@@ -7678,7 +7773,7 @@ var app = (function () {
 
     	table = new Table({
     			props: {
-    				$$slots: { default: [create_default_slot_8$1] },
+    				$$slots: { default: [create_default_slot_8$2] },
     				$$scope: { ctx }
     			},
     			$$inline: true
@@ -7687,7 +7782,7 @@ var app = (function () {
     	button0 = new Button({
     			props: {
     				clickEvent: /*confirmBtnEvent*/ ctx[1],
-    				$$slots: { default: [create_default_slot_7$1] },
+    				$$slots: { default: [create_default_slot_7$2] },
     				$$scope: { ctx }
     			},
     			$$inline: true
@@ -7697,7 +7792,7 @@ var app = (function () {
     			props: {
     				color: "secondary",
     				clickEvent: /*func_1*/ ctx[10],
-    				$$slots: { default: [create_default_slot_6$1] },
+    				$$slots: { default: [create_default_slot_6$2] },
     				$$scope: { ctx }
     			},
     			$$inline: true
@@ -8548,7 +8643,7 @@ var app = (function () {
     /* src\pages\ShowDistribution.svelte generated by Svelte v3.48.0 */
     const file$g = "src\\pages\\ShowDistribution.svelte";
 
-    // (85:16) {#if !closeDistributionFlag && $settingsStore.viewIconsCards}
+    // (90:16) {#if !closeDistributionFlag && $settingsStore.viewIconsCards}
     function create_if_block_1$3(ctx) {
     	let image;
     	let current;
@@ -8593,14 +8688,14 @@ var app = (function () {
     		block,
     		id: create_if_block_1$3.name,
     		type: "if",
-    		source: "(85:16) {#if !closeDistributionFlag && $settingsStore.viewIconsCards}",
+    		source: "(90:16) {#if !closeDistributionFlag && $settingsStore.viewIconsCards}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (100:16) {#if !closeDistributionFlag && $settingsStore.viewDescriptionCards}
+    // (105:16) {#if !closeDistributionFlag && $settingsStore.viewDescriptionCards}
     function create_if_block$5(ctx) {
     	let p;
 
@@ -8615,7 +8710,7 @@ var app = (function () {
     			p = element("p");
     			t = text(t_value);
     			attr_dev(p, "class", "roleDescription svelte-1gmhmps");
-    			add_location(p, file$g, 100, 20, 3976);
+    			add_location(p, file$g, 105, 20, 4056);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -8635,14 +8730,14 @@ var app = (function () {
     		block,
     		id: create_if_block$5.name,
     		type: "if",
-    		source: "(100:16) {#if !closeDistributionFlag && $settingsStore.viewDescriptionCards}",
+    		source: "(105:16) {#if !closeDistributionFlag && $settingsStore.viewDescriptionCards}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (79:0) <Layout>
+    // (84:0) <Layout>
     function create_default_slot$a(ctx) {
     	let div3;
     	let h1;
@@ -8696,19 +8791,19 @@ var app = (function () {
     			t7 = text("Осталось карт: ");
     			t8 = text(t8_value);
     			attr_dev(h1, "class", "svelte-1gmhmps");
-    			add_location(h1, file$g, 80, 8, 2889);
+    			add_location(h1, file$g, 85, 8, 2969);
     			attr_dev(div0, "class", div0_class_value = "cardFront" + (/*cardViewFlag*/ ctx[0] ? ' cardFrontHiddened' : '') + " svelte-1gmhmps");
-    			add_location(div0, file$g, 82, 12, 3027);
+    			add_location(div0, file$g, 87, 12, 3107);
     			attr_dev(span0, "class", "activeRoleName svelte-1gmhmps");
-    			add_location(span0, file$g, 92, 16, 3557);
+    			add_location(span0, file$g, 97, 16, 3637);
     			attr_dev(div1, "class", div1_class_value = "cardBack" + (/*cardViewFlag*/ ctx[0] ? ' cardBackOpened' : '') + " svelte-1gmhmps");
-    			add_location(div1, file$g, 83, 12, 3108);
+    			add_location(div1, file$g, 88, 12, 3188);
     			attr_dev(div2, "class", "card svelte-1gmhmps");
-    			add_location(div2, file$g, 81, 8, 2950);
+    			add_location(div2, file$g, 86, 8, 3030);
     			attr_dev(span1, "class", "cardsCounter svelte-1gmhmps");
-    			add_location(span1, file$g, 108, 8, 4310);
+    			add_location(span1, file$g, 113, 8, 4390);
     			attr_dev(div3, "class", "cardsArea svelte-1gmhmps");
-    			add_location(div3, file$g, 79, 4, 2856);
+    			add_location(div3, file$g, 84, 4, 2936);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div3, anchor);
@@ -8812,7 +8907,7 @@ var app = (function () {
     		block,
     		id: create_default_slot$a.name,
     		type: "slot",
-    		source: "(79:0) <Layout>",
+    		source: "(84:0) <Layout>",
     		ctx
     	});
 
@@ -8961,6 +9056,7 @@ var app = (function () {
 
     	onMount(() => {
     		mainStore.saveDistributionDate();
+    		reloadSavedIcons();
     	});
 
     	const writable_props = [];
@@ -8983,6 +9079,7 @@ var app = (function () {
     		onMount,
     		settingsStore,
     		allCardsList,
+    		reloadSavedIcons,
     		unknownCardIcon,
     		Image,
     		cardViewFlag,
@@ -10708,11 +10805,11 @@ var app = (function () {
 
     function get_each_context$1(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[9] = list[i];
+    	child_ctx[17] = list[i];
     	return child_ctx;
     }
 
-    // (94:4) {:else}
+    // (132:4) {:else}
     function create_else_block$1(ctx) {
     	let span;
 
@@ -10722,7 +10819,7 @@ var app = (function () {
     			span.textContent = "В приложение не добавлено ещё ни одной пользовательской роли";
     			set_style(span, "margin-top", "15px");
     			set_style(span, "margin-bottom", "10px");
-    			add_location(span, file$c, 94, 8, 3681);
+    			add_location(span, file$c, 132, 8, 5082);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -10739,14 +10836,14 @@ var app = (function () {
     		block,
     		id: create_else_block$1.name,
     		type: "else",
-    		source: "(94:4) {:else}",
+    		source: "(132:4) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (61:4) {#if customRoles.length > 0}
+    // (91:4) {#if customRoles.length > 0}
     function create_if_block$3(ctx) {
     	let table;
     	let current;
@@ -10754,7 +10851,7 @@ var app = (function () {
     	table = new Table({
     			props: {
     				style: "margin-top: 20px;",
-    				$$slots: { default: [create_default_slot_5$2] },
+    				$$slots: { default: [create_default_slot_9$1] },
     				$$scope: { ctx }
     			},
     			$$inline: true
@@ -10771,7 +10868,7 @@ var app = (function () {
     		p: function update(ctx, dirty) {
     			const table_changes = {};
 
-    			if (dirty & /*$$scope, customRoles*/ 4097) {
+    			if (dirty & /*$$scope, customRoles, changeIconParams*/ 1048581) {
     				table_changes.$$scope = { dirty, ctx };
     			}
 
@@ -10795,18 +10892,18 @@ var app = (function () {
     		block,
     		id: create_if_block$3.name,
     		type: "if",
-    		source: "(61:4) {#if customRoles.length > 0}",
+    		source: "(91:4) {#if customRoles.length > 0}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (67:12) {#each customRoles as role}
+    // (97:12) {#each customRoles as role}
     function create_each_block$1(ctx) {
     	let tr;
     	let td0;
-    	let t0_value = /*role*/ ctx[9][1].name + "";
+    	let t0_value = /*role*/ ctx[17][1].name + "";
     	let t0;
     	let t1;
     	let td1;
@@ -10823,11 +10920,15 @@ var app = (function () {
     	let dispose;
 
     	function click_handler() {
-    		return /*click_handler*/ ctx[5](/*role*/ ctx[9]);
+    		return /*click_handler*/ ctx[8](/*role*/ ctx[17]);
     	}
 
     	function click_handler_1() {
-    		return /*click_handler_1*/ ctx[6](/*role*/ ctx[9]);
+    		return /*click_handler_1*/ ctx[9](/*role*/ ctx[17]);
+    	}
+
+    	function click_handler_2() {
+    		return /*click_handler_2*/ ctx[10](/*role*/ ctx[17]);
     	}
 
     	const block = {
@@ -10847,20 +10948,20 @@ var app = (function () {
     			button2 = element("button");
     			button2.textContent = "Изменить иконку";
     			t7 = space();
-    			attr_dev(td0, "class", "cardName svelte-1qvc7ai");
-    			add_location(td0, file$c, 68, 20, 2555);
-    			attr_dev(button0, "class", "customRolesDeleteBtn svelte-1qvc7ai");
-    			add_location(button0, file$c, 71, 28, 2738);
-    			attr_dev(button1, "class", "customRolesChangeDescBtn svelte-1qvc7ai");
-    			add_location(button1, file$c, 77, 28, 3026);
-    			attr_dev(button2, "class", "customRolesChangeIconBtn svelte-1qvc7ai");
-    			add_location(button2, file$c, 85, 28, 3408);
-    			attr_dev(div, "class", "customRoleButtons svelte-1qvc7ai");
-    			add_location(div, file$c, 70, 24, 2677);
+    			attr_dev(td0, "class", "cardName svelte-1wtr3dv");
+    			add_location(td0, file$c, 98, 20, 3570);
+    			attr_dev(button0, "class", "customRolesDeleteBtn svelte-1wtr3dv");
+    			add_location(button0, file$c, 101, 28, 3753);
+    			attr_dev(button1, "class", "customRolesChangeDescBtn svelte-1wtr3dv");
+    			add_location(button1, file$c, 107, 28, 4041);
+    			attr_dev(button2, "class", "customRolesChangeIconBtn svelte-1wtr3dv");
+    			add_location(button2, file$c, 115, 28, 4423);
+    			attr_dev(div, "class", "customRoleButtons svelte-1wtr3dv");
+    			add_location(div, file$c, 100, 24, 3692);
     			attr_dev(td1, "align", "right");
-    			attr_dev(td1, "class", "actions svelte-1qvc7ai");
-    			add_location(td1, file$c, 69, 20, 2617);
-    			add_location(tr, file$c, 67, 16, 2486);
+    			attr_dev(td1, "class", "actions svelte-1wtr3dv");
+    			add_location(td1, file$c, 99, 20, 3632);
+    			add_location(tr, file$c, 97, 16, 3501);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, tr, anchor);
@@ -10880,7 +10981,8 @@ var app = (function () {
     			if (!mounted) {
     				dispose = [
     					listen_dev(button0, "click", click_handler, false, false, false),
-    					listen_dev(button1, "click", click_handler_1, false, false, false)
+    					listen_dev(button1, "click", click_handler_1, false, false, false),
+    					listen_dev(button2, "click", click_handler_2, false, false, false)
     				];
 
     				mounted = true;
@@ -10888,7 +10990,7 @@ var app = (function () {
     		},
     		p: function update(new_ctx, dirty) {
     			ctx = new_ctx;
-    			if ((!current || dirty & /*customRoles*/ 1) && t0_value !== (t0_value = /*role*/ ctx[9][1].name + "")) set_data_dev(t0, t0_value);
+    			if ((!current || dirty & /*customRoles*/ 1) && t0_value !== (t0_value = /*role*/ ctx[17][1].name + "")) set_data_dev(t0, t0_value);
     		},
     		i: function intro(local) {
     			if (current) return;
@@ -10917,15 +11019,15 @@ var app = (function () {
     		block,
     		id: create_each_block$1.name,
     		type: "each",
-    		source: "(67:12) {#each customRoles as role}",
+    		source: "(97:12) {#each customRoles as role}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (62:8) <Table style="margin-top: 20px;">
-    function create_default_slot_5$2(ctx) {
+    // (92:8) <Table style="margin-top: 20px;">
+    function create_default_slot_9$1(ctx) {
     	let thead;
     	let th0;
     	let t1;
@@ -10961,12 +11063,12 @@ var app = (function () {
 
     			each_1_anchor = empty();
     			attr_dev(th0, "align", "left");
-    			attr_dev(th0, "class", "svelte-1qvc7ai");
-    			add_location(th0, file$c, 63, 16, 2320);
+    			attr_dev(th0, "class", "svelte-1wtr3dv");
+    			add_location(th0, file$c, 93, 16, 3335);
     			attr_dev(th1, "align", "right");
-    			attr_dev(th1, "class", "svelte-1qvc7ai");
-    			add_location(th1, file$c, 64, 16, 2374);
-    			add_location(thead, file$c, 62, 12, 2295);
+    			attr_dev(th1, "class", "svelte-1wtr3dv");
+    			add_location(th1, file$c, 94, 16, 3389);
+    			add_location(thead, file$c, 92, 12, 3310);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, thead, anchor);
@@ -10983,7 +11085,7 @@ var app = (function () {
     			current = true;
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*onChangeDescriptionRole, customRoles, onDeleteCustomRole*/ 13) {
+    			if (dirty & /*changeIconParams, customRoles, onChangeDescriptionRole, onDeleteCustomRole*/ 53) {
     				each_value = /*customRoles*/ ctx[0];
     				validate_each_argument(each_value);
     				let i;
@@ -11039,17 +11141,17 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_default_slot_5$2.name,
+    		id: create_default_slot_9$1.name,
     		type: "slot",
-    		source: "(62:8) <Table style=\\\"margin-top: 20px;\\\">",
+    		source: "(92:8) <Table style=\\\"margin-top: 20px;\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (55:0) <Setting>
-    function create_default_slot_4$2(ctx) {
+    // (85:0) <Setting>
+    function create_default_slot_8$1(ctx) {
     	let h2;
     	let t1;
     	let p;
@@ -11079,8 +11181,8 @@ var app = (function () {
     			t3 = space();
     			if_block.c();
     			if_block_anchor = empty();
-    			add_location(h2, file$c, 55, 4, 2020);
-    			add_location(p, file$c, 56, 4, 2057);
+    			add_location(h2, file$c, 85, 4, 3035);
+    			add_location(p, file$c, 86, 4, 3072);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, h2, anchor);
@@ -11139,17 +11241,17 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_default_slot_4$2.name,
+    		id: create_default_slot_8$1.name,
     		type: "slot",
-    		source: "(55:0) <Setting>",
+    		source: "(85:0) <Setting>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (112:12) <Button clickEvent={onSaveDescription} style="font-size: 1rem;"                  >
-    function create_default_slot_3$3(ctx) {
+    // (150:12) <Button clickEvent={onSaveDescription} style="font-size: 1rem;"                  >
+    function create_default_slot_7$1(ctx) {
     	let t;
 
     	const block = {
@@ -11166,17 +11268,17 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_default_slot_3$3.name,
+    		id: create_default_slot_7$1.name,
     		type: "slot",
-    		source: "(112:12) <Button clickEvent={onSaveDescription} style=\\\"font-size: 1rem;\\\"                  >",
+    		source: "(150:12) <Button clickEvent={onSaveDescription} style=\\\"font-size: 1rem;\\\"                  >",
     		ctx
     	});
 
     	return block;
     }
 
-    // (115:12) <Button                  clickEvent={() => {                      changeDescriptionParams.viewFlag = false;                  }}                  style="font-size: 1rem;"                  color="secondary">
-    function create_default_slot_2$3(ctx) {
+    // (153:12) <Button                  clickEvent={() => {                      changeDescriptionParams.viewFlag = false;                  }}                  style="font-size: 1rem;"                  color="secondary">
+    function create_default_slot_6$1(ctx) {
     	let t;
 
     	const block = {
@@ -11193,17 +11295,17 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_default_slot_2$3.name,
+    		id: create_default_slot_6$1.name,
     		type: "slot",
-    		source: "(115:12) <Button                  clickEvent={() => {                      changeDescriptionParams.viewFlag = false;                  }}                  style=\\\"font-size: 1rem;\\\"                  color=\\\"secondary\\\">",
+    		source: "(153:12) <Button                  clickEvent={() => {                      changeDescriptionParams.viewFlag = false;                  }}                  style=\\\"font-size: 1rem;\\\"                  color=\\\"secondary\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (102:4) <ModalContainer customStyle="padding: 5px 30px 25px 30px;">
-    function create_default_slot_1$5(ctx) {
+    // (140:4) <ModalContainer customStyle="padding: 5px 30px 25px 30px;">
+    function create_default_slot_5$2(ctx) {
     	let div;
     	let h2;
     	let t1;
@@ -11222,7 +11324,7 @@ var app = (function () {
     			props: {
     				rows: "5",
     				value: /*changeDescriptionParams*/ ctx[1].inputValue,
-    				onChange: /*func*/ ctx[7],
+    				onChange: /*func*/ ctx[11],
     				style: "margin-bottom: 15px;"
     			},
     			$$inline: true
@@ -11230,9 +11332,9 @@ var app = (function () {
 
     	button0 = new Button({
     			props: {
-    				clickEvent: /*onSaveDescription*/ ctx[4],
+    				clickEvent: /*onSaveDescription*/ ctx[6],
     				style: "font-size: 1rem;",
-    				$$slots: { default: [create_default_slot_3$3] },
+    				$$slots: { default: [create_default_slot_7$1] },
     				$$scope: { ctx }
     			},
     			$$inline: true
@@ -11240,10 +11342,10 @@ var app = (function () {
 
     	button1 = new Button({
     			props: {
-    				clickEvent: /*func_1*/ ctx[8],
+    				clickEvent: /*func_1*/ ctx[12],
     				style: "font-size: 1rem;",
     				color: "secondary",
-    				$$slots: { default: [create_default_slot_2$3] },
+    				$$slots: { default: [create_default_slot_6$1] },
     				$$scope: { ctx }
     			},
     			$$inline: true
@@ -11263,12 +11365,12 @@ var app = (function () {
     			t4 = space();
     			span = element("span");
     			t5 = text("Описание должно иметь не менее 1 и не более 255 символов.");
-    			attr_dev(h2, "class", "settingTitle svelte-1qvc7ai");
-    			add_location(h2, file$c, 103, 12, 4021);
+    			attr_dev(h2, "class", "settingTitle svelte-1wtr3dv");
+    			add_location(h2, file$c, 141, 12, 5422);
     			attr_dev(div, "class", "modalArea buttons");
-    			add_location(div, file$c, 102, 8, 3976);
-    			attr_dev(span, "class", span_class_value = "modalError " + (/*changeDescriptionParams*/ ctx[1].inputValue.length === 0 && /*changeDescriptionParams*/ ctx[1].inputValue.length > 255 && 'modalShow') + " svelte-1qvc7ai");
-    			add_location(span, file$c, 122, 8, 4750);
+    			add_location(div, file$c, 140, 8, 5377);
+    			attr_dev(span, "class", span_class_value = "modalError " + (/*changeDescriptionParams*/ ctx[1].inputValue.length === 0 && /*changeDescriptionParams*/ ctx[1].inputValue.length > 255 && 'modalShow') + " svelte-1wtr3dv");
+    			add_location(span, file$c, 160, 8, 6151);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -11287,25 +11389,25 @@ var app = (function () {
     		p: function update(ctx, dirty) {
     			const textarea_changes = {};
     			if (dirty & /*changeDescriptionParams*/ 2) textarea_changes.value = /*changeDescriptionParams*/ ctx[1].inputValue;
-    			if (dirty & /*changeDescriptionParams*/ 2) textarea_changes.onChange = /*func*/ ctx[7];
+    			if (dirty & /*changeDescriptionParams*/ 2) textarea_changes.onChange = /*func*/ ctx[11];
     			textarea.$set(textarea_changes);
     			const button0_changes = {};
 
-    			if (dirty & /*$$scope*/ 4096) {
+    			if (dirty & /*$$scope*/ 1048576) {
     				button0_changes.$$scope = { dirty, ctx };
     			}
 
     			button0.$set(button0_changes);
     			const button1_changes = {};
-    			if (dirty & /*changeDescriptionParams*/ 2) button1_changes.clickEvent = /*func_1*/ ctx[8];
+    			if (dirty & /*changeDescriptionParams*/ 2) button1_changes.clickEvent = /*func_1*/ ctx[12];
 
-    			if (dirty & /*$$scope*/ 4096) {
+    			if (dirty & /*$$scope*/ 1048576) {
     				button1_changes.$$scope = { dirty, ctx };
     			}
 
     			button1.$set(button1_changes);
 
-    			if (!current || dirty & /*changeDescriptionParams*/ 2 && span_class_value !== (span_class_value = "modalError " + (/*changeDescriptionParams*/ ctx[1].inputValue.length === 0 && /*changeDescriptionParams*/ ctx[1].inputValue.length > 255 && 'modalShow') + " svelte-1qvc7ai")) {
+    			if (!current || dirty & /*changeDescriptionParams*/ 2 && span_class_value !== (span_class_value = "modalError " + (/*changeDescriptionParams*/ ctx[1].inputValue.length === 0 && /*changeDescriptionParams*/ ctx[1].inputValue.length > 255 && 'modalShow') + " svelte-1wtr3dv")) {
     				attr_dev(span, "class", span_class_value);
     			}
     		},
@@ -11334,16 +11436,304 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_default_slot_1$5.name,
+    		id: create_default_slot_5$2.name,
     		type: "slot",
-    		source: "(102:4) <ModalContainer customStyle=\\\"padding: 5px 30px 25px 30px;\\\">",
+    		source: "(140:4) <ModalContainer customStyle=\\\"padding: 5px 30px 25px 30px;\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (101:0) <Modal showFlag={changeDescriptionParams.viewFlag}>
+    // (139:0) <Modal showFlag={changeDescriptionParams.viewFlag}>
+    function create_default_slot_4$2(ctx) {
+    	let modalcontainer;
+    	let current;
+
+    	modalcontainer = new ModalContainer({
+    			props: {
+    				customStyle: "padding: 5px 30px 25px 30px;",
+    				$$slots: { default: [create_default_slot_5$2] },
+    				$$scope: { ctx }
+    			},
+    			$$inline: true
+    		});
+
+    	const block = {
+    		c: function create() {
+    			create_component(modalcontainer.$$.fragment);
+    		},
+    		m: function mount(target, anchor) {
+    			mount_component(modalcontainer, target, anchor);
+    			current = true;
+    		},
+    		p: function update(ctx, dirty) {
+    			const modalcontainer_changes = {};
+
+    			if (dirty & /*$$scope, changeDescriptionParams*/ 1048578) {
+    				modalcontainer_changes.$$scope = { dirty, ctx };
+    			}
+
+    			modalcontainer.$set(modalcontainer_changes);
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(modalcontainer.$$.fragment, local);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(modalcontainer.$$.fragment, local);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			destroy_component(modalcontainer, detaching);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_default_slot_4$2.name,
+    		type: "slot",
+    		source: "(139:0) <Modal showFlag={changeDescriptionParams.viewFlag}>",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (201:16) <Button clickEvent={onSaveIcon} style="font-size: 1rem;"                      >
+    function create_default_slot_3$3(ctx) {
+    	let t;
+
+    	const block = {
+    		c: function create() {
+    			t = text("Сохранить");
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, t, anchor);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(t);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_default_slot_3$3.name,
+    		type: "slot",
+    		source: "(201:16) <Button clickEvent={onSaveIcon} style=\\\"font-size: 1rem;\\\"                      >",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (204:16) <Button                      clickEvent={() => {                          changeIconParams.viewFlag = false;                      }}                      style="font-size: 1rem;"                      color="secondary">
+    function create_default_slot_2$3(ctx) {
+    	let t;
+
+    	const block = {
+    		c: function create() {
+    			t = text("Назад");
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, t, anchor);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(t);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_default_slot_2$3.name,
+    		type: "slot",
+    		source: "(204:16) <Button                      clickEvent={() => {                          changeIconParams.viewFlag = false;                      }}                      style=\\\"font-size: 1rem;\\\"                      color=\\\"secondary\\\">",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (173:4) <ModalContainer customStyle="padding: 5px 30px 25px 30px;">
+    function create_default_slot_1$5(ctx) {
+    	let div3;
+    	let h2;
+    	let t1;
+    	let div1;
+    	let input;
+    	let t2;
+    	let div0;
+    	let button0;
+    	let span0;
+    	let t4_value = (/*changeIconParams*/ ctx[2].file?.name || "Не выбран") + "";
+    	let t4;
+    	let t5;
+    	let div2;
+    	let button1;
+    	let t6;
+    	let button2;
+    	let t7;
+    	let span1;
+    	let t8;
+    	let span1_class_value;
+    	let current;
+    	let mounted;
+    	let dispose;
+
+    	button1 = new Button({
+    			props: {
+    				clickEvent: /*onSaveIcon*/ ctx[7],
+    				style: "font-size: 1rem;",
+    				$$slots: { default: [create_default_slot_3$3] },
+    				$$scope: { ctx }
+    			},
+    			$$inline: true
+    		});
+
+    	button2 = new Button({
+    			props: {
+    				clickEvent: /*func_2*/ ctx[16],
+    				style: "font-size: 1rem;",
+    				color: "secondary",
+    				$$slots: { default: [create_default_slot_2$3] },
+    				$$scope: { ctx }
+    			},
+    			$$inline: true
+    		});
+
+    	const block = {
+    		c: function create() {
+    			div3 = element("div");
+    			h2 = element("h2");
+    			h2.textContent = "Изменить иконку";
+    			t1 = space();
+    			div1 = element("div");
+    			input = element("input");
+    			t2 = space();
+    			div0 = element("div");
+    			button0 = element("button");
+    			button0.textContent = "Выбрать файл";
+    			span0 = element("span");
+    			t4 = text(t4_value);
+    			t5 = space();
+    			div2 = element("div");
+    			create_component(button1.$$.fragment);
+    			t6 = space();
+    			create_component(button2.$$.fragment);
+    			t7 = space();
+    			span1 = element("span");
+    			t8 = text("Картинка не выбрана или превышает размер в 3 мегабайта.");
+    			attr_dev(h2, "class", "settingTitle svelte-1wtr3dv");
+    			add_location(h2, file$c, 174, 12, 6662);
+    			set_style(input, "display", "none");
+    			set_style(input, "margin", "0");
+    			attr_dev(input, "type", "file");
+    			attr_dev(input, "accept", "image/*");
+    			add_location(input, file$c, 177, 16, 6746);
+    			attr_dev(button0, "class", "selectIconBtn svelte-1wtr3dv");
+    			add_location(button0, file$c, 190, 20, 7278);
+    			attr_dev(span0, "class", "selectedIconFilename svelte-1wtr3dv");
+    			add_location(span0, file$c, 194, 21, 7467);
+    			attr_dev(div0, "class", "fileInputArea svelte-1wtr3dv");
+    			add_location(div0, file$c, 189, 16, 7229);
+    			attr_dev(div1, "class", "svelte-1wtr3dv");
+    			add_location(div1, file$c, 176, 12, 6723);
+    			attr_dev(div2, "class", "buttons svelte-1wtr3dv");
+    			add_location(div2, file$c, 199, 12, 7659);
+    			attr_dev(div3, "class", "modalArea changeIconArea svelte-1wtr3dv");
+    			add_location(div3, file$c, 173, 8, 6610);
+    			attr_dev(span1, "class", span1_class_value = "modalError " + (/*changeIconParams*/ ctx[2].errorFlag && 'modalShow') + " svelte-1wtr3dv");
+    			add_location(span1, file$c, 212, 8, 8127);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div3, anchor);
+    			append_dev(div3, h2);
+    			append_dev(div3, t1);
+    			append_dev(div3, div1);
+    			append_dev(div1, input);
+    			/*input_binding*/ ctx[13](input);
+    			append_dev(div1, t2);
+    			append_dev(div1, div0);
+    			append_dev(div0, button0);
+    			append_dev(div0, span0);
+    			append_dev(span0, t4);
+    			append_dev(div3, t5);
+    			append_dev(div3, div2);
+    			mount_component(button1, div2, null);
+    			append_dev(div2, t6);
+    			mount_component(button2, div2, null);
+    			insert_dev(target, t7, anchor);
+    			insert_dev(target, span1, anchor);
+    			append_dev(span1, t8);
+    			current = true;
+
+    			if (!mounted) {
+    				dispose = [
+    					listen_dev(input, "input", /*input_handler*/ ctx[14], false, false, false),
+    					listen_dev(button0, "click", /*click_handler_3*/ ctx[15], false, false, false)
+    				];
+
+    				mounted = true;
+    			}
+    		},
+    		p: function update(ctx, dirty) {
+    			if ((!current || dirty & /*changeIconParams*/ 4) && t4_value !== (t4_value = (/*changeIconParams*/ ctx[2].file?.name || "Не выбран") + "")) set_data_dev(t4, t4_value);
+    			const button1_changes = {};
+
+    			if (dirty & /*$$scope*/ 1048576) {
+    				button1_changes.$$scope = { dirty, ctx };
+    			}
+
+    			button1.$set(button1_changes);
+    			const button2_changes = {};
+    			if (dirty & /*changeIconParams*/ 4) button2_changes.clickEvent = /*func_2*/ ctx[16];
+
+    			if (dirty & /*$$scope*/ 1048576) {
+    				button2_changes.$$scope = { dirty, ctx };
+    			}
+
+    			button2.$set(button2_changes);
+
+    			if (!current || dirty & /*changeIconParams*/ 4 && span1_class_value !== (span1_class_value = "modalError " + (/*changeIconParams*/ ctx[2].errorFlag && 'modalShow') + " svelte-1wtr3dv")) {
+    				attr_dev(span1, "class", span1_class_value);
+    			}
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(button1.$$.fragment, local);
+    			transition_in(button2.$$.fragment, local);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(button1.$$.fragment, local);
+    			transition_out(button2.$$.fragment, local);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div3);
+    			/*input_binding*/ ctx[13](null);
+    			destroy_component(button1);
+    			destroy_component(button2);
+    			if (detaching) detach_dev(t7);
+    			if (detaching) detach_dev(span1);
+    			mounted = false;
+    			run_all(dispose);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_default_slot_1$5.name,
+    		type: "slot",
+    		source: "(173:4) <ModalContainer customStyle=\\\"padding: 5px 30px 25px 30px;\\\">",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (172:0) <Modal showFlag={changeIconParams.viewFlag}>
     function create_default_slot$8(ctx) {
     	let modalcontainer;
     	let current;
@@ -11368,7 +11758,7 @@ var app = (function () {
     		p: function update(ctx, dirty) {
     			const modalcontainer_changes = {};
 
-    			if (dirty & /*$$scope, changeDescriptionParams*/ 4098) {
+    			if (dirty & /*$$scope, changeIconParams, selectIconNode*/ 1048588) {
     				modalcontainer_changes.$$scope = { dirty, ctx };
     			}
 
@@ -11392,7 +11782,7 @@ var app = (function () {
     		block,
     		id: create_default_slot$8.name,
     		type: "slot",
-    		source: "(101:0) <Modal showFlag={changeDescriptionParams.viewFlag}>",
+    		source: "(172:0) <Modal showFlag={changeIconParams.viewFlag}>",
     		ctx
     	});
 
@@ -11401,21 +11791,32 @@ var app = (function () {
 
     function create_fragment$d(ctx) {
     	let setting;
-    	let t;
-    	let modal;
+    	let t0;
+    	let modal0;
+    	let t1;
+    	let modal1;
     	let current;
 
     	setting = new Setting({
     			props: {
+    				$$slots: { default: [create_default_slot_8$1] },
+    				$$scope: { ctx }
+    			},
+    			$$inline: true
+    		});
+
+    	modal0 = new Modal({
+    			props: {
+    				showFlag: /*changeDescriptionParams*/ ctx[1].viewFlag,
     				$$slots: { default: [create_default_slot_4$2] },
     				$$scope: { ctx }
     			},
     			$$inline: true
     		});
 
-    	modal = new Modal({
+    	modal1 = new Modal({
     			props: {
-    				showFlag: /*changeDescriptionParams*/ ctx[1].viewFlag,
+    				showFlag: /*changeIconParams*/ ctx[2].viewFlag,
     				$$slots: { default: [create_default_slot$8] },
     				$$scope: { ctx }
     			},
@@ -11425,50 +11826,66 @@ var app = (function () {
     	const block = {
     		c: function create() {
     			create_component(setting.$$.fragment);
-    			t = space();
-    			create_component(modal.$$.fragment);
+    			t0 = space();
+    			create_component(modal0.$$.fragment);
+    			t1 = space();
+    			create_component(modal1.$$.fragment);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
     			mount_component(setting, target, anchor);
-    			insert_dev(target, t, anchor);
-    			mount_component(modal, target, anchor);
+    			insert_dev(target, t0, anchor);
+    			mount_component(modal0, target, anchor);
+    			insert_dev(target, t1, anchor);
+    			mount_component(modal1, target, anchor);
     			current = true;
     		},
     		p: function update(ctx, [dirty]) {
     			const setting_changes = {};
 
-    			if (dirty & /*$$scope, customRoles*/ 4097) {
+    			if (dirty & /*$$scope, customRoles, changeIconParams*/ 1048581) {
     				setting_changes.$$scope = { dirty, ctx };
     			}
 
     			setting.$set(setting_changes);
-    			const modal_changes = {};
-    			if (dirty & /*changeDescriptionParams*/ 2) modal_changes.showFlag = /*changeDescriptionParams*/ ctx[1].viewFlag;
+    			const modal0_changes = {};
+    			if (dirty & /*changeDescriptionParams*/ 2) modal0_changes.showFlag = /*changeDescriptionParams*/ ctx[1].viewFlag;
 
-    			if (dirty & /*$$scope, changeDescriptionParams*/ 4098) {
-    				modal_changes.$$scope = { dirty, ctx };
+    			if (dirty & /*$$scope, changeDescriptionParams*/ 1048578) {
+    				modal0_changes.$$scope = { dirty, ctx };
     			}
 
-    			modal.$set(modal_changes);
+    			modal0.$set(modal0_changes);
+    			const modal1_changes = {};
+    			if (dirty & /*changeIconParams*/ 4) modal1_changes.showFlag = /*changeIconParams*/ ctx[2].viewFlag;
+
+    			if (dirty & /*$$scope, changeIconParams, selectIconNode*/ 1048588) {
+    				modal1_changes.$$scope = { dirty, ctx };
+    			}
+
+    			modal1.$set(modal1_changes);
     		},
     		i: function intro(local) {
     			if (current) return;
     			transition_in(setting.$$.fragment, local);
-    			transition_in(modal.$$.fragment, local);
+    			transition_in(modal0.$$.fragment, local);
+    			transition_in(modal1.$$.fragment, local);
     			current = true;
     		},
     		o: function outro(local) {
     			transition_out(setting.$$.fragment, local);
-    			transition_out(modal.$$.fragment, local);
+    			transition_out(modal0.$$.fragment, local);
+    			transition_out(modal1.$$.fragment, local);
     			current = false;
     		},
     		d: function destroy(detaching) {
     			destroy_component(setting, detaching);
-    			if (detaching) detach_dev(t);
-    			destroy_component(modal, detaching);
+    			if (detaching) detach_dev(t0);
+    			destroy_component(modal0, detaching);
+    			if (detaching) detach_dev(t1);
+    			destroy_component(modal1, detaching);
     		}
     	};
 
@@ -11487,7 +11904,16 @@ var app = (function () {
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('CustomRoles', slots, []);
     	let customRoles = [];
-    	let changeDescriptionParams = { viewFlag: false, inputValue: "", key: "" };
+    	let changeDescriptionParams = { viewFlag: false, inputValue: "", key: "" }; // Модалка изменения описания кастом роли (флаг показа, строка с описанием роли, ключ роли)
+
+    	let changeIconParams = {
+    		viewFlag: false,
+    		file: null,
+    		key: "",
+    		errorFlag: false
+    	}; // Модалка изменения иконки кастом роли (флаг показа, файл иконки, ключ роли)
+
+    	let selectIconNode = null; //DOM элемент с нодой input file для выбора иконки роли
 
     	onMount(() => {
     		if (localStorage.getItem("customRoles") !== null) {
@@ -11526,6 +11952,21 @@ var app = (function () {
     		$$invalidate(1, changeDescriptionParams.viewFlag = false, changeDescriptionParams);
     	}
 
+    	function onSaveIcon() {
+    		if (changeIconParams.file === null || changeIconParams?.file?.size / 1024 ** 2 > 3) {
+    			$$invalidate(2, changeIconParams.errorFlag = true, changeIconParams);
+    		} else {
+    			settingsStore.saveCustomIcon(changeIconParams.key, changeIconParams.file);
+
+    			$$invalidate(2, changeIconParams = {
+    				viewFlag: false,
+    				file: null,
+    				key: "",
+    				errorFlag: false
+    			});
+    		}
+    	}
+
     	const writable_props = [];
 
     	Object_1$1.keys($$props).forEach(key => {
@@ -11538,10 +11979,35 @@ var app = (function () {
     		onChangeDescriptionRole(role[0]);
     	};
 
+    	const click_handler_2 = role => $$invalidate(2, changeIconParams = {
+    		...changeIconParams,
+    		key: role[0],
+    		viewFlag: true
+    	});
+
     	const func = e => $$invalidate(1, changeDescriptionParams.inputValue = e.target.value, changeDescriptionParams);
 
     	const func_1 = () => {
     		$$invalidate(1, changeDescriptionParams.viewFlag = false, changeDescriptionParams);
+    	};
+
+    	function input_binding($$value) {
+    		binding_callbacks[$$value ? 'unshift' : 'push'](() => {
+    			selectIconNode = $$value;
+    			$$invalidate(3, selectIconNode);
+    		});
+    	}
+
+    	const input_handler = e => $$invalidate(2, changeIconParams = {
+    		...changeIconParams,
+    		file: e.target.files[0],
+    		errorFlag: false
+    	});
+
+    	const click_handler_3 = () => selectIconNode.click();
+
+    	const func_2 = () => {
+    		$$invalidate(2, changeIconParams.viewFlag = false, changeIconParams);
     	};
 
     	$$self.$capture_state = () => ({
@@ -11553,16 +12019,22 @@ var app = (function () {
     		ModalContainer,
     		Button,
     		Textarea,
+    		settingsStore,
     		customRoles,
     		changeDescriptionParams,
+    		changeIconParams,
+    		selectIconNode,
     		onDeleteCustomRole,
     		onChangeDescriptionRole,
-    		onSaveDescription
+    		onSaveDescription,
+    		onSaveIcon
     	});
 
     	$$self.$inject_state = $$props => {
     		if ('customRoles' in $$props) $$invalidate(0, customRoles = $$props.customRoles);
     		if ('changeDescriptionParams' in $$props) $$invalidate(1, changeDescriptionParams = $$props.changeDescriptionParams);
+    		if ('changeIconParams' in $$props) $$invalidate(2, changeIconParams = $$props.changeIconParams);
+    		if ('selectIconNode' in $$props) $$invalidate(3, selectIconNode = $$props.selectIconNode);
     	};
 
     	if ($$props && "$$inject" in $$props) {
@@ -11572,13 +12044,21 @@ var app = (function () {
     	return [
     		customRoles,
     		changeDescriptionParams,
+    		changeIconParams,
+    		selectIconNode,
     		onDeleteCustomRole,
     		onChangeDescriptionRole,
     		onSaveDescription,
+    		onSaveIcon,
     		click_handler,
     		click_handler_1,
+    		click_handler_2,
     		func,
-    		func_1
+    		func_1,
+    		input_binding,
+    		input_handler,
+    		click_handler_3,
+    		func_2
     	];
     }
 
