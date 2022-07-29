@@ -1,5 +1,6 @@
 import { get, writable } from "svelte/store";
 import * as idb from "../utils/indexeddb.js";
+import { notificationStore } from "./notification";
 
 function initStore() {
     const initialStore = {
@@ -107,10 +108,16 @@ function createStore() {
                     fileData,
                     "roles",
                     () => {
-                        console.log("Картинка успешно загружена");
+                        notificationStore.createNotification(
+                            "Оповещение",
+                            "Новая иконка для роли успешно сохранена"
+                        );
                     },
                     (e) => {
-                        console.error(e);
+                        notificationStore.createNotification(
+                            "Внимание",
+                            "Не удалось сохранить иконку для роли из-за непредвиденной ошибки. Попробуйте перезапустить приложение."
+                        );
                     }
                 );
             });

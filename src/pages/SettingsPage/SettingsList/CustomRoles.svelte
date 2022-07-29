@@ -8,6 +8,7 @@
     import Button from "../../../components/Button.svelte";
     import Textarea from "../../../components/Textarea.svelte";
     import { settingsStore } from "../../../store/settings.js";
+    import { notificationStore } from "../../../store/notification";
 
     let customRoles = [];
     let changeDescriptionParams = {
@@ -55,10 +56,21 @@
     }
     function onSaveDescription() {
         let roles = JSON.parse(localStorage.getItem("customRoles"));
-        roles[changeDescriptionParams.key].description =
-            changeDescriptionParams.inputValue;
-        localStorage.setItem("customRoles", JSON.stringify(roles));
-        changeDescriptionParams.viewFlag = false;
+        if (
+            roles[changeDescriptionParams.key].description !==
+            changeDescriptionParams.inputValue
+        ) {
+            roles[changeDescriptionParams.key].description =
+                changeDescriptionParams.inputValue;
+            localStorage.setItem("customRoles", JSON.stringify(roles));
+            changeDescriptionParams.viewFlag = false;
+            notificationStore.createNotification(
+                "Оповещение",
+                "Описание для роли успешно изменено"
+            );
+        } else {
+            changeDescriptionParams.viewFlag = false;
+        }
     }
 
     function onSaveIcon() {

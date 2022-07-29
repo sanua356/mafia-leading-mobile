@@ -23,8 +23,8 @@
         overflow-y: auto;
     }
     .email {
-        word-break: break-all;
-        display: block;
+        display: flex;
+        align-items: center;
         margin: 20px 0;
         font-size: 1.5rem;
         opacity: 0.7;
@@ -33,6 +33,7 @@
         display: inline-block;
         max-width: 25px;
         height: auto;
+        margin-left: 10px;
     }
     .email:active {
         opacity: 1;

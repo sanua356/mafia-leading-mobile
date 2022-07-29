@@ -13,6 +13,7 @@
     import { presetsStore } from "../store/presets.js";
     import { store } from "../store/autodistrib.js";
     import { navigateTo } from "svelte-router-spa";
+    import { notificationStore } from "../store/notification";
 
     let createPresetFlag = false; //Флаг создания пресета (чтобы переключить окно со списка пресетов на селектор ролей)
     let presetNameModalFlag = false,
@@ -46,6 +47,7 @@
         presetName = "";
         manualStore.reinit();
         updateSavedPresets();
+        notificationStore.createNotification("Оповещение", "Пресет создан");
     }
 
     //Удалить пресет по клику на кнопку внутри модалки
@@ -188,7 +190,7 @@
 
 <Modal showFlag={deletePreset.viewFlag}>
     <ModalContainer>
-        <div class="modalArea buttons">
+        <div class="modalArea buttons deletePresetModalArea">
             <h2>Вы точно хотите удалить пресет?</h2>
             <Button clickEvent={onDeletePreset} style="font-size: 1rem;"
                 >Удалить</Button
@@ -253,5 +255,10 @@
         list-style-type: none;
         content: "●";
         margin-right: 10px;
+    }
+
+    .deletePresetModalArea {
+        margin: 0;
+        padding: 5%;
     }
 </style>

@@ -1,4 +1,5 @@
 import { get, writable } from "svelte/store";
+import { notificationStore } from "./notification";
 
 function createStore() {
     const { set, subscribe, update } = writable({
@@ -65,6 +66,10 @@ function createStore() {
                 };
             });
             mainStore.saveDistributionInLocalStorage();
+            notificationStore.createNotification(
+                "Оповещение",
+                "Карта возвращена в ротацию на выдачу"
+            );
         },
         //Сохранить дату проведения раздачи (нужно для корректной работы "истории раздач")
         saveDistributionDate: () => {
