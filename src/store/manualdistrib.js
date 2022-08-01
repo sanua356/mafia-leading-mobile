@@ -38,6 +38,9 @@ function createStore() {
             let storageRoleName = cyrillicToTranslit
                 .transform(newRoleName, "_")
                 .toLowerCase();
+            if (Number(storageRoleName) !== NaN) {
+                storageRoleName = "role_" + storageRoleName;
+            }
             if (localStorage.getItem("customRoles") !== null) {
                 let savedCustomRoles = JSON.parse(
                     localStorage.getItem("customRoles")

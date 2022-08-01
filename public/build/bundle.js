@@ -5269,7 +5269,7 @@ var app = (function () {
             JSON.parse(localStorage.getItem("customRoles"))
         );
         Object.keys(savedIcons).forEach((key) => {
-            allCards[key].icon = savedIcons[key].icon;
+            allCards[key].icon = savedIcons[key]?.icon;
         });
         return allCards;
     }
@@ -7523,6 +7523,9 @@ var app = (function () {
                 let storageRoleName = cyrillicToTranslit
                     .transform(newRoleName, "_")
                     .toLowerCase();
+                if (Number(storageRoleName) !== NaN) {
+                    storageRoleName = "role_" + storageRoleName;
+                }
                 if (localStorage.getItem("customRoles") !== null) {
                     let savedCustomRoles = JSON.parse(
                         localStorage.getItem("customRoles")

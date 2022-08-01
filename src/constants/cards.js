@@ -91,7 +91,7 @@ export function allCardsList() {
         JSON.parse(localStorage.getItem("customRoles"))
     );
     Object.keys(savedIcons).forEach((key) => {
-        allCards[key].icon = savedIcons[key].icon;
+        allCards[key].icon = savedIcons[key]?.icon;
     });
     return allCards;
 }
