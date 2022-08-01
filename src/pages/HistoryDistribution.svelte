@@ -2,12 +2,17 @@
     import Container from "../components/Container.svelte";
     import Layout from "../components/Layout.svelte";
     import Table from "../components/Table.svelte";
-    import { fade, fly } from "svelte/transition";
+    import { fly } from "svelte/transition";
     import Button from "../components/Button.svelte";
     import { navigateTo } from "svelte-router-spa";
     import Modal from "../components/Modal.svelte";
     import ModalContainer from "../components/ModalContainer.svelte";
     import { allCardsList } from "../constants/cards";
+    import { onMount } from "svelte";
+
+    onMount(() => {
+        window.scrollTo(0, 0);
+    });
 
     //Хранилище всех (100 последних) раздач
     let history = JSON.parse(localStorage.getItem("history")) || [];

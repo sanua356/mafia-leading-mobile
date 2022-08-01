@@ -129,7 +129,7 @@
     .swipeMenu li > span {
         margin-top: 5px;
         display: block;
-        font-size: 0.8rem;
+        font-size: 0.9rem;
         color: gray;
     }
     .disabled {

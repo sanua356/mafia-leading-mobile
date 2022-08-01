@@ -54,7 +54,7 @@
     }
     .notification p {
         opacity: 0.7;
-        text-align: justify;
+        text-align: left;
         line-height: 1.2rem;
         font-size: 1rem;
     }
