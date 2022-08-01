@@ -9,11 +9,10 @@
     import Table from "../components/Table.svelte";
     import { allCardsList } from "../constants/cards";
     import ManualDistribution from "../pages/ManualDistribution.svelte";
-    import { manualStore } from "../store/manualdistrib.js";
     import { presetsStore } from "../store/presets.js";
-    import { store } from "../store/autodistrib.js";
     import { navigateTo } from "svelte-router-spa";
     import { notificationStore } from "../store/notification";
+    import { selectedCardsStore } from "../store/selectedCards";
 
     let createPresetFlag = false; //Флаг создания пресета (чтобы переключить окно со списка пресетов на селектор ролей)
     let presetNameModalFlag = false,
@@ -42,10 +41,10 @@
 
     //Сохранение пресета в хранилище
     function onSavePreset() {
-        presetsStore.createPreset(presetName, $manualStore.cards);
+        presetsStore.createPreset(presetName, $selectedCardsStore.cards);
         createPresetFlag = false;
         presetName = "";
-        manualStore.reinit();
+        selectedCardsStore.reinit();
         updateSavedPresets();
         notificationStore.createNotification("Оповещение", "Пресет создан");
     }
@@ -70,8 +69,7 @@
 
     //Загрузить пресет на выдачу
     function onLoadPreset(idx) {
-        store.loadCardsManual(savedPresets[idx].cards);
-        store.calculateCardsCount();
+        selectedCardsStore.loadCustomCardsList(savedPresets[idx].cards);
         navigateTo("preview-distribution");
     }
 </script>

@@ -9,6 +9,7 @@
         reloadSavedIcons,
         unknownCardIcon,
     } from "../constants/cards.js";
+    import { selectedCardsStore } from "../store/selectedCards.js";
     import Image from "../components/Image.svelte";
 
     //Статус показа карты (рубашка - false, название карты - true)

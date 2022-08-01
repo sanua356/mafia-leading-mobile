@@ -1,93 +1,17 @@
 import { writable, get } from "svelte/store";
-import { allCardsList, cards } from "./../constants/cards";
 import CyrillicToTranslit from "cyrillic-to-translit-js";
 
 //Подгрузка библиотеки транслитерации (для добавления кастом ролей)
 const cyrillicToTranslit = new CyrillicToTranslit();
 
-//Инициализация store с дефолными и пользовательскими картами
-function initStore() {
-    let initialStore = {};
-    Object.keys(allCardsList()).forEach((card) => {
-        initialStore[card] = 0;
-    });
-
-    return initialStore;
-}
-
 function createStore() {
     const { update, subscribe } = writable({
-        cards: initStore(),
         newRoleName: "",
     });
 
     return {
         subscribe,
         update,
-        //Переинициализация списка карт в store (нужно, когда пользователь добавил новую роль для обновления state)
-        reinit: () => {
-            update((prev) => {
-                return {
-                    ...prev,
-                    cards: initStore(),
-                };
-            });
-        },
-        //onChange на Inputы, где пользователь выбирает количество карт конкретной роли
-        onCardCountChanged: (cardName, event) => {
-            let prevStore = get(manualStore).cards;
-
-            if (
-                event.target.value.toString().length > 0 &&
-                Number(event.target.value) > 0 &&
-                Number(event.target.value) <= 100
-            ) {
-                prevStore[cardName] = Number(event.target.value);
-            } else {
-                prevStore[cardName] = 0;
-            }
-            update((prev) => {
-                return {
-                    ...prev,
-                    cards: prevStore,
-                };
-            });
-        },
-        //Добавляет единичку к Input с картой роли. Например количество мафий: 2(1 была + 1 добавится сейчас)
-        incrementCardCount: (cardName) => {
-            let prevStore = get(manualStore).cards;
-            prevStore[cardName] = Number(prevStore[cardName]) + 1;
-            update((prev) => {
-                return {
-                    ...prev,
-                    cards: prevStore,
-                };
-            });
-        },
-        //Удаляет единичку к Input с картой роли. Например количество мафий: 2(1 была - 1 удалится сейчас)
-        decrementCardCount: (cardName) => {
-            let prevStore = get(manualStore).cards;
-            if (prevStore[cardName] > 0) {
-                prevStore[cardName] = Number(prevStore[cardName]) - 1;
-                update((prev) => {
-                    return {
-                        ...prev,
-                        cards: prevStore,
-                    };
-                });
-            }
-        },
-        //Загрузка карт из ручного режима, если пользователь захотел изменить пак автонабора
-        loadCardsFromAutoDistribution: (autoCards) => {
-            manualStore.reinit();
-            let prevStore = { ...get(manualStore).cards, ...autoCards };
-            update((prev) => {
-                return {
-                    ...prev,
-                    cards: prevStore,
-                };
-            });
-        },
         //Очистка поля "имени" при добавлении кастом роли на модалке
         clearCustomRoleField: () => {
             update((prev) => {

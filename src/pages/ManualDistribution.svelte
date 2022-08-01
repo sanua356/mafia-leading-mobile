@@ -6,7 +6,7 @@
     import Table from "../components/Table.svelte";
     import { allCardsList } from "../constants/cards.js";
     import { manualStore } from "../store/manualdistrib.js";
-    import { store } from "../store/autodistrib.js";
+    import { selectedCardsStore } from "../store/selectedCards.js";
     import Modal from "../components/Modal.svelte";
     import ModalContainer from "../components/ModalContainer.svelte";
     import Input from "../components/Input.svelte";
@@ -23,11 +23,9 @@
     });
 
     function onDistributionComplieted() {
-        const cardsList = Object.values($manualStore.cards);
+        const cardsList = Object.values($selectedCardsStore.cards);
         for (let i = 0; i < cardsList.length; i++) {
             if (cardsList[i] !== 0) {
-                store.loadCardsManual($manualStore.cards);
-                store.calculateCardsCount();
                 navigateTo("preview-distribution");
                 break;
             }
@@ -40,9 +38,9 @@
             if (!manualStore.createCustomRole()) {
                 errorFlag = true;
             } else {
-                manualStore.reinit();
                 modalCustomRoleFlag = false;
                 manualStore.clearCustomRoleField();
+                selectedCardsStore.reinit();
             }
         } else {
             errorFlag = true;
@@ -68,34 +66,39 @@
                         <td align="right" class="cardCounterColumn">
                             <button
                                 class="changeCardCountBtn 
-                                {$manualStore.cards[cardName] >= 100
+                                {$selectedCardsStore.cards[cardName] >= 100
                                     ? 'disabledBtn'
                                     : ''}"
                                 on:click={() =>
-                                    manualStore.incrementCardCount(cardName)}
-                                >+</button
+                                    selectedCardsStore.incrementCardCount(
+                                        cardName
+                                    )}>+</button
                             >
                             <input
                                 type="number"
                                 min="0"
                                 max="100"
                                 name={cardName}
-                                value={$manualStore.cards[cardName]}
+                                value={$selectedCardsStore.cards[cardName]}
                                 class="cardCountInput 
-                                {$manualStore.cards[cardName] !== 0
+                                {$selectedCardsStore.cards[cardName] !== 0
                                     ? 'activeCard'
                                     : ''}"
                                 on:input={(e) =>
-                                    manualStore.onCardCountChanged(cardName, e)}
+                                    selectedCardsStore.onCardCountChanged(
+                                        cardName,
+                                        e
+                                    )}
                             />
                             <button
                                 class="changeCardCountBtn 
-                                {$manualStore.cards[cardName] <= 0
+                                {$selectedCardsStore.cards[cardName] <= 0
                                     ? 'disabledBtn'
                                     : ''}"
                                 on:click={() =>
-                                    manualStore.decrementCardCount(cardName)}
-                                >-</button
+                                    selectedCardsStore.decrementCardCount(
+                                        cardName
+                                    )}>-</button
                             >
                         </td>
                     </tr>
@@ -105,15 +108,14 @@
         <span
             class="addCustomRole"
             class:active={modalCustomRoleFlag}
-            on:click={() => (modalCustomRoleFlag = !modalCustomRoleFlag)}
+            on:click={() => (modalCustomRoleFlag = true)}
         >
             Добавить свою роль
         </span>
         <h2 class="cardCounterIndicator">
-            Количество игроков: {Object.values($manualStore.cards).reduce(
-                (partialSum, a) => partialSum + a,
-                0
-            )}
+            Количество игроков: {Object.values(
+                $selectedCardsStore.cards
+            ).reduce((sum, a) => sum + a, 0)}
         </h2>
         <div class="buttons">
             <Button clickEvent={confirmBtnEvent}>{confirmBtnText}</Button>

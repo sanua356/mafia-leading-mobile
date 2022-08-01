@@ -120,7 +120,8 @@
                     {#if history[selectedHistoryGameID].cardsOpened.length > 0}
                         {#each history[selectedHistoryGameID].cardsOpened as card, idx}
                             <span>
-                                {idx + 1}. {allCardsList()[card].name}
+                                {idx + 1}. {allCardsList()[card]?.name ||
+                                    "Неизвестная роль"}
                             </span>
                         {/each}
                     {:else}
@@ -138,7 +139,8 @@
                     {#if history[selectedHistoryGameID].cardsHiddened.length > 0}
                         {#each history[selectedHistoryGameID].cardsHiddened as card, idx}
                             <span>
-                                {idx + 1}. {allCardsList()[card].name}
+                                {idx + 1}. {allCardsList()[card]?.name ||
+                                    "Неизвестная роль"}
                             </span>
                         {/each}
                     {:else}
