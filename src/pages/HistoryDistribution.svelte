@@ -110,6 +110,7 @@
         {/if}
     </Container>
 </Layout>
+
 <Modal
     showFlag={viewDetailsModalFlag}
     clickEvent={() => (viewDetailsModalFlag = false)}

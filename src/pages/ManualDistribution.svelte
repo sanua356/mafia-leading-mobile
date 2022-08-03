@@ -7,14 +7,10 @@
     import { allCardsList } from "../constants/cards.js";
     import { manualStore } from "../store/manualdistrib.js";
     import { selectedCardsStore } from "../store/selectedCards.js";
-    import Modal from "../components/Modal.svelte";
-    import ModalContainer from "../components/ModalContainer.svelte";
-    import Input from "../components/Input.svelte";
     import { onMount } from "svelte";
+    import TextInputModal from "../components/modals/TextInputModal.svelte";
 
-    let modalCustomRoleFlag = false; //Флаг модалки добавления своей роли
-    let errorFlag = false; //Флаг ошибки модалки (если поле ввода кастом роли пусто)
-
+    //Пропсы для кнопки подтверждения окончания выбора карт (по умолчанию перекидывает на страницу превью, но также используется для создания пресетов)
     export let confirmBtnText = "Подтвердить",
         confirmBtnEvent = onDistributionComplieted;
 
@@ -22,6 +18,7 @@
         manualStore.clearCustomRoleField();
     });
 
+    //Функция подтверждения завершения выбора карт для раздачи
     function onDistributionComplieted() {
         const cardsList = Object.values($selectedCardsStore.cards);
         for (let i = 0; i < cardsList.length; i++) {
@@ -32,18 +29,31 @@
         }
     }
 
+    //Параметры модалки добавления кастом роли
+    let modalParams = {
+        showFlag: false,
+        labelName: "Название новой роли",
+        inputValue: $manualStore.newRoleName,
+        changeInputEvent: manualStore.onChangeNameCustomRole,
+        confirmBtnText: "Сохранить",
+        confirmBtnEvent: onCreateCustomRole,
+        backBtnEvent: () => navigateTo("/home"),
+        errorFlag: false,
+        errorText: "Недопустимое название роли. Введите корректное название.",
+    };
+
     function onCreateCustomRole() {
-        errorFlag = false;
+        modalParams.errorFlag = false;
         if ($manualStore.newRoleName.length > 0) {
             if (!manualStore.createCustomRole()) {
-                errorFlag = true;
+                modalParams.errorFlag = true;
             } else {
-                modalCustomRoleFlag = false;
+                modalParams.showFlag = false;
                 manualStore.clearCustomRoleField();
                 selectedCardsStore.reinit();
             }
         } else {
-            errorFlag = true;
+            modalParams.errorFlag = true;
         }
     }
 </script>
@@ -107,8 +117,8 @@
         </div>
         <span
             class="addCustomRole"
-            class:active={modalCustomRoleFlag}
-            on:click={() => (modalCustomRoleFlag = true)}
+            class:active={modalParams.showFlag}
+            on:click={() => (modalParams.showFlag = true)}
         >
             Добавить свою роль
         </span>
@@ -126,31 +136,7 @@
     </Container>
 </Layout>
 
-<Modal showFlag={modalCustomRoleFlag}>
-    <ModalContainer customStyle="padding: 5px 30px 25px 30px;">
-        <div class="modalArea buttons">
-            <label for="roleName">Название новой роли</label>
-            <Input
-                id="roleName"
-                type="text"
-                value={$manualStore.newRoleName}
-                onChange={manualStore.onChangeNameCustomRole}
-                style="margin-bottom: 15px;"
-            />
-            <Button clickEvent={onCreateCustomRole} style="font-size: 1rem;"
-                >Сохранить</Button
-            >
-            <Button
-                clickEvent={() => (modalCustomRoleFlag = false)}
-                style="font-size: 1rem;"
-                color="secondary">Назад</Button
-            >
-        </div>
-        <span class="modalError {errorFlag && 'modalShow'}">
-            Недопустимое название роли. Введите корректное название.
-        </span>
-    </ModalContainer>
-</Modal>
+<TextInputModal {...modalParams} />
 
 <style>
     .roles {

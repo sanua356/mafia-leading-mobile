@@ -3,15 +3,27 @@
     import Layout from "../components/Layout.svelte";
     import Container from "../components/Container.svelte";
     import Textarea from "../components/Textarea.svelte";
-    import Modal from "../components/Modal.svelte";
-    import ModalContainer from "../components/ModalContainer.svelte";
-    import Button from "../components/Button.svelte";
+    import { notificationStore } from "../store/notification.js";
+    import ConfirmActionModal from "../components/modals/ConfirmActionModal.svelte";
 
-    let clearFieldsModalFlag = false;
+    //Параметры модалки для подтверджения очистки всех полей ввода заметок
+    let modalParams = {
+        showFlag: false,
+        title: "Вы точно хотите очистить все поля?",
+        confirmBtnText: "Очистить",
+        confirmBtnEvent: onClearFields,
+        backBtnEvent: () => {
+            modalParams.showFlag = false;
+        },
+    };
 
     function onClearFields() {
         notesStore.clearAllNotes();
-        clearFieldsModalFlag = false;
+        modalParams.showFlag = false;
+        notificationStore.createNotification(
+            "Оповещение",
+            "Все текстовые поля успешно очищены"
+        );
     }
 </script>
 
@@ -76,7 +88,7 @@
                 </button>
                 <button
                     class="clearAllFields"
-                    on:click={() => (clearFieldsModalFlag = true)}
+                    on:click={() => (modalParams.showFlag = true)}
                     >Очистить все поля</button
                 >
                 <button
@@ -94,21 +106,7 @@
     </Container>
 </Layout>
 
-<Modal showFlag={clearFieldsModalFlag}>
-    <ModalContainer>
-        <div class="modalArea buttons">
-            <h2>Вы точно хотите очистить все поля?</h2>
-            <Button clickEvent={onClearFields} style="font-size: 1rem;"
-                >Очистить</Button
-            >
-            <Button
-                clickEvent={() => (clearFieldsModalFlag = false)}
-                style="font-size: 1rem;"
-                color="secondary">Назад</Button
-            >
-        </div>
-    </ModalContainer>
-</Modal>
+<ConfirmActionModal {...modalParams} />
 
 <style>
     .disabled {
@@ -165,14 +163,5 @@
         border: none;
         border-radius: 5px;
         color: white;
-    }
-
-    .modalArea {
-        margin: 0;
-        padding: 7%;
-    }
-    .modalArea h2 {
-        text-align: center;
-        margin-bottom: 20px;
     }
 </style>

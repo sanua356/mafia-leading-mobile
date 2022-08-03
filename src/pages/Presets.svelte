@@ -1,11 +1,7 @@
 <script>
     import { fly } from "svelte/transition";
-    import Button from "../components/Button.svelte";
     import Container from "../components/Container.svelte";
-    import Input from "../components/Input.svelte";
     import Layout from "../components/Layout.svelte";
-    import Modal from "../components/Modal.svelte";
-    import ModalContainer from "../components/ModalContainer.svelte";
     import Table from "../components/Table.svelte";
     import { allCardsList } from "../constants/cards";
     import ManualDistribution from "../pages/ManualDistribution.svelte";
@@ -13,64 +9,99 @@
     import { navigateTo } from "svelte-router-spa";
     import { notificationStore } from "../store/notification";
     import { selectedCardsStore } from "../store/selectedCards";
-
-    let createPresetFlag = false; //Флаг создания пресета (чтобы переключить окно со списка пресетов на селектор ролей)
-    let presetNameModalFlag = false,
-        presetName = "",
-        errorFlag = false; //Флаг модалки ввода названия пресета
-
-    let presetDetails = { viewFlag: false, idxPreset: 0 }; //Переменная модалки с инфо о пресете (кол-во ролей)
-    let deletePreset = { viewFlag: false, idxPreset: 0 }; //Переменная модалки с подтверждением удаления пресета
+    import TextInputModal from "../components/modals/TextInputModal.svelte";
+    import Modal from "../components/Modal.svelte";
+    import ModalContainer from "../components/ModalContainer.svelte";
+    import ConfirmActionModal from "../components/modals/ConfirmActionModal.svelte";
 
     //Загрузить список уже существующих пресетов
     let savedPresets = JSON.parse(localStorage.getItem("presets")) || [];
     function updateSavedPresets() {
         savedPresets = JSON.parse(localStorage.getItem("presets")) || [];
     }
+    //Загрузить пресет на выдачу
+    function onLoadPreset(idx) {
+        selectedCardsStore.loadCustomCardsList(savedPresets[idx].cards);
+        navigateTo("preview-distribution");
+    }
+
+    let createPresetFlag = false; //Флаг состояния создания пресета (если true - пользователь попадает на страницу выбора ролей для пресета)
+    //Параметры модалки создания нового пресета
+    let modalParamsCreatePreset = {
+        showFlag: false,
+        labelName: "Название пресета",
+        inputValue: "",
+        changeInputEvent: (e) =>
+            (modalParamsCreatePreset.inputValue = e.target.value),
+        confirmBtnText: "Сохранить",
+        confirmBtnEvent: onCreatePreset,
+        backBtnEvent: () => (modalParamsCreatePreset.showFlag = false),
+        errorFlag: false,
+        errorText:
+            "Название пресета должно содержать минимум 1 и максимум 255 символов. Также нельзя создать два пресета с одинаковыми названиями",
+    };
 
     //Вызов селектора выбора ролей для создания пресета
     function onCreatePreset() {
-        errorFlag = false;
-        if (presetName.length > 0 && presetName.length < 255) {
-            presetNameModalFlag = false;
+        let checkSamePresets = savedPresets.filter(
+            (item) => item.name !== modalParamsCreatePreset.inputValue
+        );
+        modalParamsCreatePreset.errorFlag = false;
+        if (
+            modalParamsCreatePreset.inputValue.length > 0 &&
+            modalParamsCreatePreset.inputValue.length < 255 &&
+            checkSamePresets.length === savedPresets.length
+        ) {
+            modalParamsCreatePreset.showFlag = false;
             createPresetFlag = true;
         } else {
-            errorFlag = true;
+            modalParamsCreatePreset.errorFlag = true;
         }
     }
 
     //Сохранение пресета в хранилище
     function onSavePreset() {
-        presetsStore.createPreset(presetName, $selectedCardsStore.cards);
+        presetsStore.createPreset(
+            modalParamsCreatePreset.inputValue,
+            $selectedCardsStore.cards
+        );
         createPresetFlag = false;
-        presetName = "";
+        modalParamsCreatePreset.inputValue = "";
         selectedCardsStore.reinit();
         updateSavedPresets();
         notificationStore.createNotification("Оповещение", "Пресет создан");
     }
 
+    //Параметры показа модалки удаления пресета
+    let modalParamsDeletePreset = {
+        showFlag: false,
+        title: "Вы точно хотите удалить пресет?",
+        confirmBtnText: "Удалить",
+        confirmBtnEvent: onDeletePreset,
+        backBtnEvent: () => {
+            modalParamsDeletePreset.showFlag = false;
+        },
+        idxPreset: 0,
+    };
+
     //Удалить пресет по клику на кнопку внутри модалки
     function onDeletePreset() {
-        presetsStore.deletePreset(deletePreset.idxPreset);
-        deletePreset.viewFlag = false;
-        deletePreset.idxPreset = 0;
+        presetsStore.deletePreset(modalParamsDeletePreset.idxPreset);
+        modalParamsDeletePreset.showFlag = false;
+        modalParamsDeletePreset.idxPreset = 0;
         updateSavedPresets();
     }
 
     function viewModalDeletePreset(idx) {
-        deletePreset.viewFlag = true;
-        deletePreset.idxPreset = idx;
+        modalParamsDeletePreset.showFlag = true;
+        modalParamsDeletePreset.idxPreset = idx;
     }
+
+    let presetDetails = { showFlag: false, idxPreset: 0 }; //Переменная модалки с инфо о пресете (кол-во ролей)
 
     function viewModalInfoPreset(idx) {
-        presetDetails.viewFlag = true;
+        presetDetails.showFlag = true;
         presetDetails.idxPreset = idx;
-    }
-
-    //Загрузить пресет на выдачу
-    function onLoadPreset(idx) {
-        selectedCardsStore.loadCustomCardsList(savedPresets[idx].cards);
-        navigateTo("preview-distribution");
     }
 </script>
 
@@ -118,7 +149,8 @@
                     {/if}
                     <div
                         class="addPresetBtn"
-                        on:click={() => (presetNameModalFlag = true)}
+                        on:click={() =>
+                            (modalParamsCreatePreset.showFlag = true)}
                     >
                         Добавить новый пресет
                     </div>
@@ -133,35 +165,11 @@
     />
 {/if}
 
-<Modal showFlag={presetNameModalFlag}>
-    <ModalContainer customStyle="padding: 5px 30px 25px 30px;">
-        <div class="modalArea buttons">
-            <label for="presetName">Название пресета</label>
-            <Input
-                id="presetName"
-                type="text"
-                value={presetName}
-                onChange={(e) => (presetName = e.target.value)}
-                style="margin-bottom: 15px;"
-            />
-            <Button clickEvent={onCreatePreset} style="font-size: 1rem;">
-                Создать
-            </Button>
-            <Button
-                clickEvent={() => (presetNameModalFlag = false)}
-                style="font-size: 1rem;"
-                color="secondary">Назад</Button
-            >
-        </div>
-        <span class="modalError {errorFlag && 'modalShow'}">
-            Название пресета должно содержать минимум 1 и максимум 255 символов.
-        </span>
-    </ModalContainer>
-</Modal>
-
+<TextInputModal {...modalParamsCreatePreset} />
+<ConfirmActionModal {...modalParamsDeletePreset} />
 <Modal
-    showFlag={presetDetails.viewFlag}
-    clickEvent={() => (presetDetails.viewFlag = false)}
+    showFlag={presetDetails.showFlag}
+    clickEvent={() => (presetDetails.showFlag = false)}
 >
     <ModalContainer customStyle="padding: 5px 30px 25px 30px;">
         <div class="modalArea">
@@ -182,22 +190,6 @@
                     {/each}
                 </ul>
             </nav>
-        </div>
-    </ModalContainer>
-</Modal>
-
-<Modal showFlag={deletePreset.viewFlag}>
-    <ModalContainer>
-        <div class="modalArea buttons deletePresetModalArea">
-            <h2>Вы точно хотите удалить пресет?</h2>
-            <Button clickEvent={onDeletePreset} style="font-size: 1rem;"
-                >Удалить</Button
-            >
-            <Button
-                clickEvent={() => (deletePreset.viewFlag = false)}
-                style="font-size: 1rem;"
-                color="secondary">Назад</Button
-            >
         </div>
     </ModalContainer>
 </Modal>
@@ -253,10 +245,5 @@
         list-style-type: none;
         content: "●";
         margin-right: 10px;
-    }
-
-    .deletePresetModalArea {
-        margin: 0;
-        padding: 5%;
     }
 </style>
