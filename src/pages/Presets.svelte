@@ -97,7 +97,8 @@
         modalParamsDeletePreset.idxPreset = idx;
     }
 
-    let presetDetails = { showFlag: false, idxPreset: 0 }; //Переменная модалки с инфо о пресете (кол-во ролей)
+    //Переменная модалки с инфо о пресете (кол-во ролей)
+    let presetDetails = { showFlag: false, idxPreset: 0 }; 
 
     function viewModalInfoPreset(idx) {
         presetDetails.showFlag = true;

@@ -9,6 +9,7 @@
     import Textarea from "../../../components/Textarea.svelte";
     import { settingsStore } from "../../../store/settings.js";
     import { notificationStore } from "../../../store/notification";
+    import Dropdown from "../../../components/Dropdown.svelte";
 
     let customRoles = [];
     let changeDescriptionParams = {
@@ -106,41 +107,38 @@
                 <th align="left">Название карты</th>
                 <th align="right">Действия</th>
             </thead>
-            {#each customRoles as role}
-                <tr transition:fly={{ y: 100, duration: 200 }}>
-                    <td class="cardName">{role[1].name}</td>
-                    <td align="right" class="actions">
-                        <div class="customRoleButtons">
-                            <button
-                                class="customRolesDeleteBtn"
-                                on:click={() => onDeleteCustomRole(role[0])}
-                            >
-                                Удалить
-                            </button>
-                            <button
-                                class="customRolesChangeDescBtn"
-                                on:click={() => {
-                                    onChangeDescriptionRole(role[0]);
-                                }}
-                            >
-                                Изменить описание
-                            </button>
-                            <button
-                                class="customRolesChangeIconBtn"
-                                on:click={() =>
-                                    (changeIconParams = {
-                                        ...changeIconParams,
-                                        key: role[0],
-                                        viewFlag: true,
-                                    })}
-                            >
-                                Изменить иконку
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            {/each}
         </Table>
+        {#each customRoles as role, idx (role[0])}
+            <Dropdown title={role[1].name}>
+                <div class="customRoleButtons">
+                    <button
+                        class="customRolesDeleteBtn"
+                        on:click={() => onDeleteCustomRole(role[0])}
+                    >
+                        Удалить
+                    </button>
+                    <button
+                        class="customRolesChangeDescBtn"
+                        on:click={() => {
+                            onChangeDescriptionRole(role[0]);
+                        }}
+                    >
+                        Изменить описание
+                    </button>
+                    <button
+                        class="customRolesChangeIconBtn"
+                        on:click={() =>
+                            (changeIconParams = {
+                                ...changeIconParams,
+                                key: role[0],
+                                viewFlag: true,
+                            })}
+                    >
+                        Изменить иконку
+                    </button>
+                </div>
+            </Dropdown>
+        {/each}
     {:else}
         <span style="margin-top:15px; margin-bottom:10px;">
             В приложение не добавлено ещё ни одной пользовательской роли
@@ -238,42 +236,34 @@
         margin: 0 auto;
         margin-bottom: 15px;
     }
-    th {
-        font-size: 1.1rem;
-    }
-    td {
-        font-size: 1.1rem;
-    }
 
-    .actions button {
+    th {
+        font-size: 1.3rem;
+    }
+    .customRoleButtons {
+        display: flex;
+        max-width: fit-content;
+        justify-content: space-between;
+        float: right;
+    }
+    @media screen and (max-width: 599px) {
+        .customRoleButtons {
+            max-width: 100%;
+        }
+    }
+    .customRoleButtons button {
         color: #eeeef5;
         border: none;
         border-radius: 5px;
         padding: 5px 8px;
         margin-bottom: 10px;
+        margin-left: 5px;
+        margin-right: 5px;
     }
     @media screen and (min-width: 600px) and (max-width: 1440px) {
-        .actions button {
+        .customRoleButtons button {
             padding: 5px 15px;
             font-size: 1rem;
-        }
-    }
-    .customRoleButtons {
-        display: flex;
-        flex-direction: column;
-        max-width: fit-content;
-    }
-
-    .customRoleButtons button {
-        padding: 8px;
-        margin-bottom: 8px;
-    }
-    @media screen and (min-width: 600px) and (max-width: 1440px) {
-        .customRoleButtons {
-            flex-direction: row;
-        }
-        .customRoleButtons button {
-            margin-right: 10px;
         }
     }
     .customRolesDeleteBtn {
