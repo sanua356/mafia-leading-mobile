@@ -9,6 +9,7 @@
     import ModalContainer from "../components/ModalContainer.svelte";
     import { allCardsList } from "../constants/cards";
     import { onMount } from "svelte";
+    import { notificationStore } from "../store/notification";
 
     onMount(() => {
         window.scrollTo(0, 0);
@@ -42,6 +43,10 @@
 
     //Удалить игру из истории раздач по её индексу
     function onDeleteGame(idx) {
+        let deleteGameInfo =
+            createCurrentDate(history[idx].dateID) +
+            " " +
+            createCurrentTime(history[idx].dateID);
         history.splice(idx, 1);
         localStorage.setItem("history", JSON.stringify(history));
         if (history.length === 0) {
@@ -50,6 +55,10 @@
         } else {
             history = JSON.parse(localStorage.getItem("history"));
         }
+        notificationStore.createNotification(
+            "Оповещение",
+            `Информация о раздаче с датой и временем: '${deleteGameInfo}' успешно удалена.`
+        );
     }
 
     //Переменная, хранящяя ID текущей игры (нужно, чтобы модалка по клику на "подробнее" знала, у какой игры брать данные)
@@ -74,7 +83,7 @@
                     <th align="center">Карты (шт)</th>
                     <th align="right">Действия</th>
                 </thead>
-                {#each history as game, idx}
+                {#each history as game, idx (game.dateID)}
                     <tr transition:fly={{ y: 100, duration: 200 }}>
                         <td class="dateAndTime">
                             <span>{createCurrentDate(game.dateID)}</span>

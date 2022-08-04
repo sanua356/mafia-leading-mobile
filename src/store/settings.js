@@ -10,6 +10,7 @@ function initStore() {
         deathZoneSwipe: 25, //Мертвая зопа свайпов (в процентах ширины экрана)
         viewIconsCards: true, //Флаг показа/скрытия иконок ролей при выдаче карт
         viewDescriptionCards: true, //Флаг показа/скрытия описания ролей при выдаче карт
+        disableAnimationsFlag: false, //Флаг отключения анимаций и переходов в приложении
     };
     if (localStorage.getItem("settings") !== null) {
         return {
@@ -54,6 +55,7 @@ function createStore() {
             });
             settingsStore.saveSettingsInLocalStorage();
         },
+        //Изменить значение таймера, после которого будут скрываться карты во время выдачи
         onChangeHiddeningCardsTimer: (e) => {
             if (Number(e.target.value) !== NaN) {
                 update((prev) => {
@@ -74,6 +76,7 @@ function createStore() {
                 };
             });
         },
+        //Изменить мертвую зону свайпов (значение то 10 до 90% ширины экрана)
         onChangeDeathZoneSwipe: (event) => {
             update((prev) => {
                 return {
@@ -83,6 +86,7 @@ function createStore() {
             });
             settingsStore.saveSettingsInLocalStorage();
         },
+        //Изменить флаг отображения картинок ролей во время выдачи
         onChangeViewIconsFlag: (e) => {
             update((prev) => {
                 return {
@@ -92,6 +96,17 @@ function createStore() {
             });
             settingsStore.saveSettingsInLocalStorage();
         },
+        //Изменить флаг отображения картинок ролей во время выдачи
+        onChangeDisableAnimationsFlag: (e) => {
+            update((prev) => {
+                return {
+                    ...prev,
+                    disableAnimationsFlag: e.target.checked,
+                };
+            });
+            settingsStore.saveSettingsInLocalStorage();
+        },
+        //Изменить флаг отображения описания ролей во время выдачи
         onChangeViewDescriptionsFlag: (e) => {
             update((prev) => {
                 return {
@@ -101,6 +116,7 @@ function createStore() {
             });
             settingsStore.saveSettingsInLocalStorage();
         },
+        //Сохранение кастом иконки для роли (key - название роли)
         saveCustomIcon: (key, file) => {
             idb.convertImageToBase64(file, (fileData) => {
                 idb.setValue(

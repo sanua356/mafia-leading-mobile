@@ -5,6 +5,7 @@
     import Textarea from "../components/Textarea.svelte";
     import { notificationStore } from "../store/notification.js";
     import ConfirmActionModal from "../components/modals/ConfirmActionModal.svelte";
+    import Transition from "../components/Transition.svelte";
 
     //Параметры модалки для подтверджения очистки всех полей ввода заметок
     let modalParams = {
@@ -25,6 +26,18 @@
             "Все текстовые поля успешно очищены"
         );
     }
+
+    //Флаг анимации перелистывания заметок
+    let showFlag = true;
+
+    $: {
+        if ($notesStore.activeNight + 1) {
+            showFlag = false;
+            setTimeout(() => {
+                showFlag = true;
+            }, 300);
+        }
+    }
 </script>
 
 <Layout>
@@ -33,76 +46,101 @@
             <h1>Заметки</h1>
             <hr />
         </div>
-        <div class="notes">
-            <div class="note">
-                <h3>Мафия убила:</h3>
-                <Textarea
-                    value={$notesStore.notesList[$notesStore.activeNight]
-                        ?.kills || ""}
-                    onChange={(e) =>
-                        notesStore.onChangeNote("kills", e.target.value)}
-                />
+        <Transition
+            {showFlag}
+            mountClass={"noteMounted"}
+            unmountClass={"noteUnmounted"}
+            unmountDuration={200}
+        >
+            <div class="notesContainer">
+                <div class="notes">
+                    <div class="note">
+                        <h3>Мафия убила:</h3>
+                        <Textarea
+                            value={$notesStore.notesList[
+                                $notesStore.activeNight
+                            ]?.kills || ""}
+                            onChange={(e) =>
+                                notesStore.onChangeNote(
+                                    "kills",
+                                    e.target.value
+                                )}
+                        />
+                    </div>
+                    <div class="note">
+                        <h3>Коммиссар проверил:</h3>
+                        <Textarea
+                            value={$notesStore.notesList[
+                                $notesStore.activeNight
+                            ]?.checks || ""}
+                            onChange={(e) =>
+                                notesStore.onChangeNote(
+                                    "checks",
+                                    e.target.value
+                                )}
+                        />
+                    </div>
+                    <div class="note">
+                        <h3>Доктор вылечил:</h3>
+                        <Textarea
+                            value={$notesStore.notesList[
+                                $notesStore.activeNight
+                            ]?.hills || ""}
+                            onChange={(e) =>
+                                notesStore.onChangeNote(
+                                    "hills",
+                                    e.target.value
+                                )}
+                        />
+                    </div>
+                    <div class="note">
+                        <h3>Другое:</h3>
+                        <Textarea
+                            value={$notesStore.notesList[
+                                $notesStore.activeNight
+                            ]?.other || ""}
+                            onChange={(e) =>
+                                notesStore.onChangeNote(
+                                    "other",
+                                    e.target.value
+                                )}
+                        />
+                    </div>
+                </div>
+                <div class="actions">
+                    <span class="activeNight"
+                        >Текущая ночь: {$notesStore.activeNight}</span
+                    >
+                    <div class="prevNextButtons">
+                        <button
+                            class="prevBtn"
+                            class:disabled={$notesStore.activeNight === 0}
+                            on:click={() =>
+                                notesStore.changeActiveNight(
+                                    $notesStore.activeNight - 1
+                                )}
+                        >
+                            {`<`}
+                        </button>
+                        <button
+                            class="clearAllFields"
+                            on:click={() => (modalParams.showFlag = true)}
+                            >Очистить все поля</button
+                        >
+                        <button
+                            class="nextBtn"
+                            class:disabled={$notesStore.activeNight >= 100}
+                            on:click={() =>
+                                notesStore.changeActiveNight(
+                                    $notesStore.activeNight + 1
+                                )}
+                        >
+                            {`>`}
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div class="note">
-                <h3>Коммиссар проверил:</h3>
-                <Textarea
-                    value={$notesStore.notesList[$notesStore.activeNight]
-                        ?.checks || ""}
-                    onChange={(e) =>
-                        notesStore.onChangeNote("checks", e.target.value)}
-                />
-            </div>
-            <div class="note">
-                <h3>Доктор вылечил:</h3>
-                <Textarea
-                    value={$notesStore.notesList[$notesStore.activeNight]
-                        ?.hills || ""}
-                    onChange={(e) =>
-                        notesStore.onChangeNote("hills", e.target.value)}
-                />
-            </div>
-            <div class="note">
-                <h3>Другое:</h3>
-                <Textarea
-                    value={$notesStore.notesList[$notesStore.activeNight]
-                        ?.other || ""}
-                    onChange={(e) =>
-                        notesStore.onChangeNote("other", e.target.value)}
-                />
-            </div>
-        </div>
-        <div class="actions">
-            <span class="activeNight"
-                >Текущая ночь: {$notesStore.activeNight}</span
-            >
-            <div class="prevNextButtons">
-                <button
-                    class="prevBtn"
-                    class:disabled={$notesStore.activeNight === 0}
-                    on:click={() =>
-                        notesStore.changeActiveNight(
-                            $notesStore.activeNight - 1
-                        )}
-                >
-                    {`<`}
-                </button>
-                <button
-                    class="clearAllFields"
-                    on:click={() => (modalParams.showFlag = true)}
-                    >Очистить все поля</button
-                >
-                <button
-                    class="nextBtn"
-                    class:disabled={$notesStore.activeNight >= 100}
-                    on:click={() =>
-                        notesStore.changeActiveNight(
-                            $notesStore.activeNight + 1
-                        )}
-                >
-                    {`>`}
-                </button>
-            </div>
-        </div>
+        </Transition>
     </Container>
 </Layout>
 
@@ -112,6 +150,19 @@
     .disabled {
         pointer-events: none;
         opacity: 0.5;
+    }
+    .notesContainer {
+        transition: 0.2s ease-in-out all;
+        transform: translateX(20%);
+        opacity: 0;
+    }
+    :global(.noteMounted) {
+        transform: translateX(0) !important;
+        opacity: 1 !important;
+    }
+    :global(.noteUnmounted) {
+        transform: translateX(-20%) !important;
+        opacity: 0 !important;
     }
     .notes {
         flex: 1 1 auto;

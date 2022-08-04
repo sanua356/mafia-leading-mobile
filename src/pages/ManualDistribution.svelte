@@ -37,7 +37,9 @@
         changeInputEvent: manualStore.onChangeNameCustomRole,
         confirmBtnText: "Сохранить",
         confirmBtnEvent: onCreateCustomRole,
-        backBtnEvent: () => navigateTo("/home"),
+        backBtnEvent: () => {
+            modalParams.showFlag = false;
+        },
         errorFlag: false,
         errorText: "Недопустимое название роли. Введите корректное название.",
     };

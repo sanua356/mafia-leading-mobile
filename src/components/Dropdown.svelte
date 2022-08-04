@@ -1,16 +1,10 @@
 <script>
     import { onDestroy } from "svelte";
-
     import Transition from "./Transition.svelte";
-    export let title = "Дедос",
+    export let title = "",
         style = "";
 
     let showFlag = false;
-
-    onDestroy(() => {
-        console.log("destroying");
-        showFlag = false;
-    });
 </script>
 
 <div class="dropdown" {style}>

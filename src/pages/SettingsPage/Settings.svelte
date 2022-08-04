@@ -3,6 +3,7 @@
     import Layout from "../../components/Layout.svelte";
     import CustomRoles from "./SettingsList/CustomRoles.svelte";
     import DeathZoneSwipe from "./SettingsList/DeathZoneSwipes.svelte";
+    import DisableTransitions from "./SettingsList/DisableTransitions.svelte";
     import HiddeningDistributionCards from "./SettingsList/HiddeningDistributionCards.svelte";
     import RoleDetailsDistribution from "./SettingsList/RoleDetailsDistribution.svelte";
 </script>
@@ -14,6 +15,7 @@
         <div class="settingsArea">
             <DeathZoneSwipe />
             <HiddeningDistributionCards />
+            <DisableTransitions />
             <RoleDetailsDistribution />
             <CustomRoles />
         </div>

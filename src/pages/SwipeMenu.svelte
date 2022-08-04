@@ -62,6 +62,7 @@
     <div
         class="swipeMenu"
         class:enabled={animationFlag}
+        style={$settingsStore.disableAnimationsFlag ? "transition: none;" : ""}
         on:click={(e) => e.stopPropagation()}
     >
         <h1>Меню</h1>
