@@ -2,20 +2,23 @@ import { get, writable } from "svelte/store";
 import * as idb from "../utils/indexeddb.js";
 import { notificationStore } from "./notification";
 
+const initialStore = {
+    initialSetupFlag: false, //Флаг "первоначальной настройки" приложения (нужен для показа меню первой настройки)
+    hiddeningCardsFlag: false, //Флаг скрытия карт с экрана (false - по клику, true - по таймеру)
+    hiddeningCardsFlagTimer: 5, //Количество секунд, после которых карта при выдаче автоматически скроется (только при hiddeningCardsFlag = true)
+    menuViewFlag: false, //Флаг показа/скрытия меню по свайпу
+    deathZoneSwipe: 25, //Мертвая зопа свайпов (в процентах ширины экрана)
+    viewIconsCards: true, //Флаг показа/скрытия иконок ролей при выдаче карт
+    viewDescriptionCards: true, //Флаг показа/скрытия описания ролей при выдаче карт
+    disableAnimationsFlag: false, //Флаг отключения анимаций и переходов в приложении
+};
+
 function initStore() {
-    const initialStore = {
-        hiddeningCardsFlag: false, //Флаг скрытия карт с экрана (false - по клику, true - по таймеру)
-        hiddeningCardsFlagTimer: 5, //Количество секунд, после которых карта при выдаче автоматически скроется (только при hiddeningCardsFlag = true)
-        menuViewFlag: false, //Флаг показа/скрытия меню по свайпу
-        deathZoneSwipe: 25, //Мертвая зопа свайпов (в процентах ширины экрана)
-        viewIconsCards: true, //Флаг показа/скрытия иконок ролей при выдаче карт
-        viewDescriptionCards: true, //Флаг показа/скрытия описания ролей при выдаче карт
-        disableAnimationsFlag: false, //Флаг отключения анимаций и переходов в приложении
-    };
     if (localStorage.getItem("settings") !== null) {
         return {
             ...initialStore,
             ...JSON.parse(localStorage.getItem("settings")),
+            menuViewFlag: false,
         };
     } else {
         return initialStore;
@@ -23,11 +26,19 @@ function initStore() {
 }
 
 function createStore() {
-    const { update, subscribe } = writable(initStore());
+    const { set, update, subscribe } = writable(initStore());
 
     return {
         update,
         subscribe,
+        //Сбросить все настройки к заводским
+        resetAllSettings: () => {
+            set({ ...initialStore });
+            settingsStore.saveSettingsInLocalStorage();
+            localStorage.removeItem("history");
+            localStorage.removeItem("customRoles");
+            localStorage.removeItem("presets");
+        },
         //Сохранение всех настроек в хранилище
         saveSettingsInLocalStorage: () => {
             if (localStorage.getItem("settings") !== null) {
@@ -75,6 +86,16 @@ function createStore() {
                     menuViewFlag: value,
                 };
             });
+        },
+        //Изменить флаг "первого запуска" приложения
+        changeInitialSetupFlag: (value) => {
+            update((prev) => {
+                return {
+                    ...prev,
+                    initialSetupFlag: value,
+                };
+            });
+            settingsStore.saveSettingsInLocalStorage();
         },
         //Изменить мертвую зону свайпов (значение то 10 до 90% ширины экрана)
         onChangeDeathZoneSwipe: (event) => {

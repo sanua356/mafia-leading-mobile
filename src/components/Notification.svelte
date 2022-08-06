@@ -3,15 +3,17 @@
     import Transition from "./Transition.svelte";
 
     let showFlag = false;
-
+    let timer = null;
     $: {
         if (
             $notificationStore.title.length > 0 &&
             $notificationStore.message.length > 0
         ) {
             showFlag = true;
-            setTimeout(() => {
+            clearTimeout(timer);
+            timer = setTimeout(() => {
                 showFlag = false;
+                clearTimeout(timer);
             }, 3000);
         }
     }

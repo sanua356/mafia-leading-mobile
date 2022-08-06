@@ -13,7 +13,7 @@
         if (showFlag && !viewFlag) {
             viewFlag = true;
             await tick();
-            if (animationNode.children.length > 0) {
+            if (animationNode?.children?.length > 0) {
                 const timer = setTimeout(() => {
                     animationNode.firstChild.classList.add(mountClass);
                     if ($settingsStore.disableAnimationsFlag) {
@@ -24,7 +24,7 @@
             }
         }
 
-        if (animationNode.children.length > 0 && !showFlag) {
+        if (animationNode?.children?.length > 0 && !showFlag) {
             animationNode.firstChild.classList.add(unmountClass);
             if ($settingsStore.disableAnimationsFlag) {
                 animationNode.firstChild.style.transition = "none";

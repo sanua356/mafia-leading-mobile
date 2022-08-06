@@ -2,7 +2,6 @@
     import { onDestroy, onMount } from "svelte";
     import { navigateTo, routeIsActive } from "svelte-router-spa";
     import Modal from "../components/Modal.svelte";
-    import Transition from "../components/Transition.svelte";
     import { settingsStore } from "../store/settings.js";
     import { mainStore } from "../store/showdistrib.js";
 

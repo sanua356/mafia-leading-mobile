@@ -1,7 +1,6 @@
 <script>
     import Table from "../../../components/Table.svelte";
     import Setting from "../Setting.svelte";
-    import { fly } from "svelte/transition";
     import { onMount } from "svelte";
     import Modal from "../../../components/Modal.svelte";
     import ModalContainer from "../../../components/ModalContainer.svelte";

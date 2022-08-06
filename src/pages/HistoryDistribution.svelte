@@ -10,6 +10,7 @@
     import { allCardsList } from "../constants/cards";
     import { onMount } from "svelte";
     import { notificationStore } from "../store/notification";
+    import ConfirmActionModal from "../components/modals/ConfirmActionModal.svelte";
 
     onMount(() => {
         window.scrollTo(0, 0);
@@ -61,6 +62,26 @@
         );
     }
 
+    let deleteAllGamesModalParams = {
+        showFlag: false,
+        title: "Вы точно хотите удалить все раздачи из истории?",
+        confirmBtnText: "Подтвердить",
+        confirmBtnEvent: clearAllGames,
+        backBtnEvent: () => {
+            deleteAllGamesModalParams.showFlag = false;
+        },
+    };
+
+    function clearAllGames() {
+        localStorage.removeItem("history");
+        history = [];
+        deleteAllGamesModalParams.showFlag = false;
+        notificationStore.createNotification(
+            "Оповещение",
+            "Вся история раздач очищена"
+        );
+    }
+
     //Переменная, хранящяя ID текущей игры (нужно, чтобы модалка по клику на "подробнее" знала, у какой игры брать данные)
     let selectedHistoryGameID = 0;
 
@@ -74,8 +95,22 @@
 
 <Layout>
     <Container>
-        <h1>История игр</h1>
-        <hr />
+        <div class="titleAndDesc">
+            <div class="titleAndDesc-info">
+                <h1>История игр</h1>
+                <hr />
+            </div>
+            <div class="clearAllGames">
+                <img
+                    src="../assets/trash.png"
+                    alt="Удалить все раздачи"
+                    on:click={() => {
+                        deleteAllGamesModalParams.showFlag = true;
+                    }}
+                />
+            </div>
+        </div>
+
         {#if history.length > 0}
             <Table>
                 <thead>
@@ -112,6 +147,14 @@
             <div class="noGamesArea">
                 <img src="assets/nogames.png" alt="Грусный смайлик :(" />
                 <span>Вы не провели ни одной игры</span>
+                <button
+                    on:click={() => {
+                        notificationStore.createNotification(
+                            "fasfasfas",
+                            String(window.Math.random())
+                        );
+                    }}>fgasfasfas</button
+                >
                 <Button clickEvent={() => navigateTo("home")}
                     >Начать игру</Button
                 >
@@ -119,6 +162,8 @@
         {/if}
     </Container>
 </Layout>
+
+<ConfirmActionModal {...deleteAllGamesModalParams} />
 
 <Modal
     showFlag={viewDetailsModalFlag}
@@ -173,6 +218,16 @@
 </Modal>
 
 <style>
+    .titleAndDesc {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+    }
+    .titleAndDesc img {
+        transform: translateY(5px);
+        max-width: 25px;
+        height: auto;
+    }
     th {
         font-size: 1rem;
     }

@@ -6,7 +6,7 @@
 <Setting>
     <h2>Отключение анимаций:</h2>
     <div class="roleDetailsSetting">
-        <span class:disabled={!$settingsStore.viewIconsCards}>
+        <span class:disabled={!$settingsStore.disableAnimationsFlag}>
             Отключить отображение анимаций и переходов
         </span>
         <div>
