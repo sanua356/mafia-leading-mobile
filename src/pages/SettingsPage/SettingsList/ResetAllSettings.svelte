@@ -34,16 +34,14 @@
         Обратите внимание, во время использования этой настройки удаляются также
         все пользовательские роли и очищается история игр.
     </p>
-    <div class="buttons">
-        <Button
-            style={"width:100%;"}
-            clickEvent={() => {
-                modalParams.showFlag = true;
-            }}
-        >
-            Сброс всех настроек
-        </Button>
-    </div>
+    <Button
+        style={"max-width: 100%; width:100%; margin-top: 15px;"}
+        clickEvent={() => {
+            modalParams.showFlag = true;
+        }}
+    >
+        Сброс всех настроек
+    </Button>
 </Setting>
 
 <ConfirmActionModal {...modalParams} />

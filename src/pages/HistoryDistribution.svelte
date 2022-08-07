@@ -147,14 +147,6 @@
             <div class="noGamesArea">
                 <img src="assets/nogames.png" alt="Грусный смайлик :(" />
                 <span>Вы не провели ни одной игры</span>
-                <button
-                    on:click={() => {
-                        notificationStore.createNotification(
-                            "fasfasfas",
-                            String(window.Math.random())
-                        );
-                    }}>fgasfasfas</button
-                >
                 <Button clickEvent={() => navigateTo("home")}
                     >Начать игру</Button
                 >

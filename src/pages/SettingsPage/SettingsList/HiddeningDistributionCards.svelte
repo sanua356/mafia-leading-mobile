@@ -1,6 +1,7 @@
 <script>
     import Setting from "../Setting.svelte";
     import { settingsStore } from "../../../store/settings.js";
+    import SwitchButton from "../../../components/SwitchButton.svelte";
 </script>
 
 <Setting>
@@ -9,18 +10,11 @@
         <span class:disabled={$settingsStore.hiddeningCardsFlag}>
             По клику на карту
         </span>
-        <div>
-            <input
-                id="switchBtn"
-                class="switchBtn"
-                type="checkbox"
-                max="90"
-                min="5"
-                checked={$settingsStore.hiddeningCardsFlag}
-                on:input={settingsStore.onChangeFlagHiddeningCards}
-            />
-            <label for="switchBtn" class="switchBtnLabel">Toggle</label>
-        </div>
+        <SwitchButton
+            labelName={"changeHiddeningCardsType"}
+            checked={$settingsStore.hiddeningCardsFlag}
+            onChange={settingsStore.onChangeFlagHiddeningCards}
+        />
         <span
             style="text-align: right;"
             class:disabled={!$settingsStore.hiddeningCardsFlag}
@@ -55,49 +49,6 @@
         align-items: flex-end;
         justify-content: space-between;
     }
-    .switchBtn {
-        height: 0;
-        width: 0;
-        visibility: hidden;
-    }
-
-    .switchBtnLabel {
-        cursor: pointer;
-        text-indent: -9999px;
-        width: 10vh;
-        height: 4vh;
-        background: #3f3d5e;
-        display: block;
-        border-radius: 30px;
-        position: relative;
-        box-shadow: inset 0 0 5px rgb(0 0 0);
-    }
-
-    .switchBtnLabel:after {
-        content: "";
-        position: absolute;
-        top: 4px;
-        left: 5px;
-        width: 3vh;
-        height: 3vh;
-        background: #fff;
-        border-radius: 30px;
-        transition: 0.3s;
-    }
-
-    .switchBtn:checked + label {
-        background: #ff002f;
-    }
-
-    .switchBtn:checked + label:after {
-        left: calc(100% - 5px);
-        transform: translateX(-100%);
-    }
-
-    .switchBtn:active:after {
-        width: 130px;
-    }
-
     .timer {
         display: flex;
         align-items: center;
