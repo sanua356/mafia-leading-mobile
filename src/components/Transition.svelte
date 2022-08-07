@@ -38,11 +38,11 @@
     });
 </script>
 
-<div class="animationContainer" bind:this={animationNode}>
-    {#if viewFlag}
+{#if viewFlag}
+    <div class="animationContainer" bind:this={animationNode}>
         <slot />
-    {/if}
-</div>
+    </div>
+{/if}
 
 <style>
     .animationContainer {

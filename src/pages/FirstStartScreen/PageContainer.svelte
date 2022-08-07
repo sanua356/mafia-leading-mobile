@@ -22,7 +22,7 @@
     :global(.pageContainer h1, h2) {
         font-size: 1.5rem;
     }
-    :global(.container span) {
+    :global(.pageContainer span) {
         display: block;
         margin-bottom: 10px;
         font-size: 1.1rem;
