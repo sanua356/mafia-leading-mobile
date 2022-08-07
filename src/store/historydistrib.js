@@ -1,4 +1,4 @@
-import { writable } from "svelte/store";
+import { get, writable } from "svelte/store";
 import { notificationStore } from "./notification";
 import { mainStore } from "./showdistrib";
 
@@ -72,9 +72,9 @@ function createStore() {
         onDeleteGame: (idx) => {
             let history = get(historyDistribStore).history;
             let deleteGameInfo =
-                createCurrentDate(history[idx].dateID) +
+                historyDistribStore.createCurrentDate(history[idx].dateID) +
                 " " +
-                createCurrentTime(history[idx].dateID);
+                historyDistribStore.createCurrentTime(history[idx].dateID);
             history.splice(idx, 1);
             localStorage.setItem("history", JSON.stringify(history));
             if (history.length === 0) {
