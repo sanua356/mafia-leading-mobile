@@ -9,8 +9,8 @@
         reloadSavedIcons,
         unknownCardIcon,
     } from "../constants/cards.js";
-    import { selectedCardsStore } from "../store/selectedCards.js";
     import Image from "../components/Image.svelte";
+    import { historyDistribStore } from "../store/historydistrib.js";
 
     //Статус показа карты (рубашка - false, название карты - true)
     let cardViewFlag = false;
@@ -48,7 +48,7 @@
                 activeCard = $mainStore.cardsHiddened[0];
                 mainStore.deleteOpenedCard();
                 mainStore.pushToHistoryDistribution(activeCard);
-                mainStore.saveDistributionInLocalStorage();
+                historyDistribStore.saveDistributionInLocalStorage();
                 cardViewFlag = true;
                 //Если в настройках установлен тип скрытия карт "по таймеру"
                 if ($settingsStore.hiddeningCardsFlag) {

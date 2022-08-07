@@ -9,78 +9,23 @@
     import ModalContainer from "../components/ModalContainer.svelte";
     import { allCardsList } from "../constants/cards";
     import { onMount } from "svelte";
-    import { notificationStore } from "../store/notification";
     import ConfirmActionModal from "../components/modals/ConfirmActionModal.svelte";
+    import { historyDistribStore } from "../store/historydistrib.js";
 
     onMount(() => {
         window.scrollTo(0, 0);
     });
 
-    //Хранилище всех (100 последних) раздач
-    let history = JSON.parse(localStorage.getItem("history")) || [];
-
-    //Преобразовать UNIX время в дату формата: ДД.ММ.ГГГГ
-    function createCurrentDate(unixDate) {
-        let today = new Date(unixDate * 1000);
-        const yyyy = today.getFullYear();
-        let mm = today.getMonth() + 1;
-        let dd = today.getDate();
-
-        if (dd < 10) dd = "0" + dd;
-        if (mm < 10) mm = "0" + mm;
-
-        today = dd + "." + mm + "." + yyyy;
-        return today;
-    }
-    //Преобразовать UNIX время в время формата: ЧЧ:ММ
-    function createCurrentTime(unixDate) {
-        let today = new Date(unixDate * 1000);
-        today =
-            String(today.getHours()).padStart(2, "0") +
-            ":" +
-            String(today.getMinutes()).padStart(2, "0");
-        return today;
-    }
-
-    //Удалить игру из истории раздач по её индексу
-    function onDeleteGame(idx) {
-        let deleteGameInfo =
-            createCurrentDate(history[idx].dateID) +
-            " " +
-            createCurrentTime(history[idx].dateID);
-        history.splice(idx, 1);
-        localStorage.setItem("history", JSON.stringify(history));
-        if (history.length === 0) {
-            localStorage.removeItem("history");
-            history = [];
-        } else {
-            history = JSON.parse(localStorage.getItem("history"));
-        }
-        notificationStore.createNotification(
-            "Оповещение",
-            `Информация о раздаче с датой и временем: '${deleteGameInfo}' успешно удалена.`
-        );
-    }
-
+    //Параметры модалки с подтверждением удаления всех раздач из истории
     let deleteAllGamesModalParams = {
         showFlag: false,
         title: "Вы точно хотите удалить все раздачи из истории?",
         confirmBtnText: "Подтвердить",
-        confirmBtnEvent: clearAllGames,
+        confirmBtnEvent: onClearAllGames,
         backBtnEvent: () => {
             deleteAllGamesModalParams.showFlag = false;
         },
     };
-
-    function clearAllGames() {
-        localStorage.removeItem("history");
-        history = [];
-        deleteAllGamesModalParams.showFlag = false;
-        notificationStore.createNotification(
-            "Оповещение",
-            "Вся история раздач очищена"
-        );
-    }
 
     //Переменная, хранящяя ID текущей игры (нужно, чтобы модалка по клику на "подробнее" знала, у какой игры брать данные)
     let selectedHistoryGameID = 0;
@@ -90,6 +35,11 @@
     function viewGameDetails(gameID) {
         selectedHistoryGameID = gameID;
         viewDetailsModalFlag = true;
+    }
+
+    function onClearAllGames(){
+        historyDistribStore.clearAllGames();
+        deleteAllGamesModalParams.showFlag = false;
     }
 </script>
 
@@ -111,18 +61,26 @@
             </div>
         </div>
 
-        {#if history.length > 0}
+        {#if $historyDistribStore.history.length > 0}
             <Table>
                 <thead>
                     <th align="left">Дата раздачи</th>
                     <th align="center">Карты (шт)</th>
                     <th align="right">Действия</th>
                 </thead>
-                {#each history as game, idx (game.dateID)}
+                {#each $historyDistribStore.history as game, idx (game.dateID)}
                     <tr transition:fly={{ y: 100, duration: 200 }}>
                         <td class="dateAndTime">
-                            <span>{createCurrentDate(game.dateID)}</span>
-                            <span>{createCurrentTime(game.dateID)}</span>
+                            <span>
+                                {historyDistribStore.createCurrentDate(
+                                    game.dateID
+                                )}
+                            </span>
+                            <span>
+                                {historyDistribStore.createCurrentTime(
+                                    game.dateID
+                                )}
+                            </span>
                         </td>
                         <td align="center">
                             {game.cardsOpened.length +
@@ -132,13 +90,16 @@
                             <button
                                 class="detailsBtn"
                                 on:click={() => viewGameDetails(idx)}
-                                >Подробнее</button
                             >
+                                Подробнее
+                            </button>
                             <button
                                 class="deleteBtn"
-                                on:click={() => onDeleteGame(idx)}
-                                >Удалить</button
+                                on:click={() =>
+                                    historyDistribStore.onDeleteGame(idx)}
                             >
+                                Удалить
+                            </button>
                         </td>
                     </tr>
                 {/each}
@@ -169,8 +130,8 @@
                     <p class="cardsListSubtitle">
                         В порядке от первой вскрытой к последующим:
                     </p>
-                    {#if history[selectedHistoryGameID].cardsOpened.length > 0}
-                        {#each history[selectedHistoryGameID].cardsOpened as card, idx}
+                    {#if $historyDistribStore.history[selectedHistoryGameID].cardsOpened.length > 0}
+                        {#each $historyDistribStore.history[selectedHistoryGameID].cardsOpened as card, idx}
                             <span>
                                 {idx + 1}. {allCardsList()[card]?.name ||
                                     "Неизвестная роль"}
@@ -188,8 +149,8 @@
                     <p class="cardsListSubtitle">
                         В порядке от первой НЕ вскрытой к последующим:
                     </p>
-                    {#if history[selectedHistoryGameID].cardsHiddened.length > 0}
-                        {#each history[selectedHistoryGameID].cardsHiddened as card, idx}
+                    {#if $historyDistribStore.history[selectedHistoryGameID].cardsHiddened.length > 0}
+                        {#each $historyDistribStore.history[selectedHistoryGameID].cardsHiddened as card, idx}
                             <span>
                                 {idx + 1}. {allCardsList()[card]?.name ||
                                     "Неизвестная роль"}

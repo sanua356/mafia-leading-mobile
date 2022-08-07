@@ -1,5 +1,6 @@
 import { get, writable } from "svelte/store";
 import { notificationStore } from "./notification";
+import { historyDistribStore } from "./historydistrib";
 
 function createStore() {
     const { set, subscribe, update } = writable({
@@ -65,7 +66,7 @@ function createStore() {
                     cardsHiddened: [returnedCard, ...hiddened],
                 };
             });
-            mainStore.saveDistributionInLocalStorage();
+            historyDistribStore.saveDistributionInLocalStorage();
             notificationStore.createNotification(
                 "Оповещение",
                 "Карта возвращена в ротацию на выдачу"
@@ -81,37 +82,6 @@ function createStore() {
                     distributionDate: seconds,
                 };
             });
-        },
-        //Сохранение текущей раздачи в хранилище
-        saveDistributionInLocalStorage: () => {
-            let history = [];
-            const store = get(mainStore);
-            if (localStorage.getItem("history") !== null) {
-                history = JSON.parse(localStorage.getItem("history"));
-                if (history[0].dateID === store.distributionDate) {
-                    history[0] = {
-                        dateID: store.distributionDate,
-                        cardsOpened: store.cardsOpened,
-                        cardsHiddened: store.cardsHiddened,
-                    };
-                } else {
-                    if (Object.keys(history).length >= 100) {
-                        history.pop();
-                    }
-                    history.unshift({
-                        dateID: store.distributionDate,
-                        cardsOpened: store.cardsOpened,
-                        cardsHiddened: store.cardsHiddened,
-                    });
-                }
-            } else {
-                history.push({
-                    dateID: store.distributionDate,
-                    cardsOpened: store.cardsOpened,
-                    cardsHiddened: store.cardsHiddened,
-                });
-            }
-            localStorage.setItem("history", JSON.stringify(history));
         },
     };
 }
