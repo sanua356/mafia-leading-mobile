@@ -184,7 +184,7 @@
                     {#each Object.entries(savedPresets[presetDetails.idxPreset].cards) as preset}
                         {#if preset[1] > 0}
                             <li>
-                                {allCardsList()[preset[0]]?.name ||
+                                {allCardsList[preset[0]]?.name ||
                                     "Неизвестная роль"} : {preset[1]} шт.
                             </li>
                         {/if}

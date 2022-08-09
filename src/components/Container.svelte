@@ -1,4 +1,8 @@
-<div class="container"><slot /></div>
+<script>
+    export let style = "";
+</script>
+
+<div class="container" {style}><slot /></div>
 
 <style>
     :global(.container) {

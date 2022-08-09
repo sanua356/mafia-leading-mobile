@@ -4,7 +4,7 @@ import { allCardsList } from "./../constants/cards";
 //Инициализация store с дефолными и пользовательскими картами
 function initStore() {
     let initialStore = {};
-    Object.keys(allCardsList()).forEach((card) => {
+    Object.keys(allCardsList).forEach((card) => {
         initialStore[card] = 0;
     });
 

@@ -37,7 +37,7 @@
         viewDetailsModalFlag = true;
     }
 
-    function onClearAllGames(){
+    function onClearAllGames() {
         historyDistribStore.clearAllGames();
         deleteAllGamesModalParams.showFlag = false;
     }
@@ -133,7 +133,7 @@
                     {#if $historyDistribStore.history[selectedHistoryGameID].cardsOpened.length > 0}
                         {#each $historyDistribStore.history[selectedHistoryGameID].cardsOpened as card, idx}
                             <span>
-                                {idx + 1}. {allCardsList()[card]?.name ||
+                                {idx + 1}. {allCardsList[card]?.name ||
                                     "Неизвестная роль"}
                             </span>
                         {/each}
@@ -152,7 +152,7 @@
                     {#if $historyDistribStore.history[selectedHistoryGameID].cardsHiddened.length > 0}
                         {#each $historyDistribStore.history[selectedHistoryGameID].cardsHiddened as card, idx}
                             <span>
-                                {idx + 1}. {allCardsList()[card]?.name ||
+                                {idx + 1}. {allCardsList[card]?.name ||
                                     "Неизвестная роль"}
                             </span>
                         {/each}

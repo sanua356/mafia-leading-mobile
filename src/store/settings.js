@@ -1,6 +1,7 @@
 import { get, writable } from "svelte/store";
 import * as idb from "../utils/indexeddb.js";
 import { notificationStore } from "./notification";
+import { allCardsList, updateAllCardsList } from "./../constants/cards";
 
 const initialStore = {
     initialSetupFlag: false, //Флаг "первоначальной настройки" приложения (нужен для показа меню первой настройки)
@@ -139,16 +140,17 @@ function createStore() {
         },
         //Сохранение кастом иконки для роли (key - название роли)
         saveCustomIcon: (key, file) => {
-            idb.convertImageToBase64(file, (fileData) => {
-                idb.setValue(
+            return idb.convertImageToBase64(file, (fileData) => {
+                return idb.setValue(
                     key,
                     fileData,
                     "roles",
                     () => {
                         notificationStore.createNotification(
                             "Оповещение",
-                            "Новая иконка для роли успешно сохранена"
+                            `Новая иконка для роли: ${allCardsList[key].name} успешно сохранена`
                         );
+                        updateAllCardsList();
                     },
                     (e) => {
                         notificationStore.createNotification(
@@ -158,6 +160,26 @@ function createStore() {
                     }
                 );
             });
+        },
+        //Удалить кастом роль из приложения
+        deleteCustomRole: (key) => {
+            if (localStorage.getItem("customRoles") === null) {
+                return;
+            }
+            let rolesList = JSON.parse(localStorage.getItem("customRoles"));
+            delete rolesList[key];
+            localStorage.setItem("customRoles", JSON.stringify(rolesList));
+        },
+        //Изменить описание кастом роли
+        changeDescriptionText: (text, key) => {
+            let roles = JSON.parse(localStorage.getItem("customRoles"));
+            if (roles[key].description !== text) {
+                roles[key].description = text;
+                localStorage.setItem("customRoles", JSON.stringify(roles));
+                return true;
+            } else {
+                return false;
+            }
         },
     };
 }

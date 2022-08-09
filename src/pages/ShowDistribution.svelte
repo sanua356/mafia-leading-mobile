@@ -6,7 +6,6 @@
     import { settingsStore } from "../store/settings.js";
     import {
         allCardsList,
-        reloadSavedIcons,
         unknownCardIcon,
     } from "../constants/cards.js";
     import Image from "../components/Image.svelte";
@@ -78,7 +77,6 @@
 
     onMount(() => {
         mainStore.saveDistributionDate();
-        reloadSavedIcons();
     });
 </script>
 
@@ -91,22 +89,22 @@
                 {#if !closeDistributionFlag && $settingsStore.viewIconsCards}
                     <Image
                         alt="Иконка роли"
-                        imgSrc={allCardsList()[activeCard]?.icon ||
+                        imgSrc={allCardsList[activeCard]?.icon ||
                             unknownCardIcon}
                         boundaryImgSrc={unknownCardIcon}
                     />
                 {/if}
                 <span class="activeRoleName"
-                    >{allCardsList().hasOwnProperty(activeCard)
-                        ? allCardsList()[activeCard]?.name
+                    >{allCardsList.hasOwnProperty(activeCard)
+                        ? allCardsList[activeCard]?.name
                         : closeDistributionFlag
                         ? activeCard
                         : "Неизвестная роль"}</span
                 >
                 {#if !closeDistributionFlag && $settingsStore.viewDescriptionCards}
                     <p class="roleDescription">
-                        {allCardsList()[activeCard]?.description?.length > 0
-                            ? allCardsList()[activeCard]?.description
+                        {allCardsList[activeCard]?.description?.length > 0
+                            ? allCardsList[activeCard]?.description
                             : "Для данной роли нет описания"}
                     </p>
                 {/if}

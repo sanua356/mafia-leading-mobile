@@ -97,16 +97,17 @@
     .swipeMenu {
         position: absolute;
         top: 0;
-        left: -100%;
+        left: 0;
         width: 60%;
         min-height: 100vh;
         background-color: #27263b;
         color: #eeeef5;
         padding: 30px 20px;
+        transform: translateX(-100%);
         transition: 0.3s ease-in-out all;
     }
     .enabled {
-        left: 0 !important;
+        transform: translateX(0) !important;
     }
     @media screen and (min-width: 481px) and (max-width: 1024px) {
         .swipeMenu {

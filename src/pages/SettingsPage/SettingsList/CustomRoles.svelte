@@ -9,6 +9,7 @@
     import { settingsStore } from "../../../store/settings.js";
     import { notificationStore } from "../../../store/notification";
     import Dropdown from "../../../components/Dropdown.svelte";
+    import { allCardsList, updateAllCardsList } from "../../../constants/cards";
 
     let customRoles = [];
     let changeDescriptionParams = {
@@ -35,16 +36,14 @@
     });
 
     function onDeleteCustomRole(key) {
-        if (localStorage.getItem("customRoles") === null) {
-            return;
-        }
-        let rolesList = JSON.parse(localStorage.getItem("customRoles"));
-        delete rolesList[key];
-        localStorage.setItem("customRoles", JSON.stringify(rolesList));
-        customRoles = Object.entries(rolesList);
+        settingsStore.deleteCustomRole(key);
+        updateAllCardsList();
+        customRoles = Object.entries(
+            JSON.parse(localStorage.getItem("customRoles")) || []
+        );
     }
 
-    function onChangeDescriptionRole(key) {
+    function onChangeDescriptionText(key) {
         changeDescriptionParams.viewFlag = true;
         if (localStorage.getItem("customRoles") !== null) {
             let roles = JSON.parse(localStorage.getItem("customRoles"));
@@ -54,23 +53,23 @@
         }
         changeDescriptionParams.key = key;
     }
-    function onSaveDescription() {
-        let roles = JSON.parse(localStorage.getItem("customRoles"));
+
+    function onSaveDescriptionText() {
         if (
-            roles[changeDescriptionParams.key].description !==
-            changeDescriptionParams.inputValue
+            settingsStore.changeDescriptionText(
+                changeDescriptionParams.inputValue,
+                changeDescriptionParams.key
+            )
         ) {
-            roles[changeDescriptionParams.key].description =
-                changeDescriptionParams.inputValue;
-            localStorage.setItem("customRoles", JSON.stringify(roles));
-            changeDescriptionParams.viewFlag = false;
             notificationStore.createNotification(
                 "Оповещение",
-                "Описание для роли успешно изменено"
+                `Описание для роли: ${
+                    allCardsList[changeDescriptionParams.key].name
+                } успешно изменено.`
             );
-        } else {
-            changeDescriptionParams.viewFlag = false;
         }
+        updateAllCardsList();
+        changeDescriptionParams.viewFlag = false;
     }
 
     function onSaveIcon() {
@@ -119,7 +118,7 @@
                     <button
                         class="customRolesChangeDescBtn"
                         on:click={() => {
-                            onChangeDescriptionRole(role[0]);
+                            onChangeDescriptionText(role[0]);
                         }}
                     >
                         Изменить описание
@@ -156,7 +155,7 @@
                     (changeDescriptionParams.inputValue = e.target.value)}
                 style="margin-bottom: 15px;"
             />
-            <Button clickEvent={onSaveDescription} style="font-size: 1rem;"
+            <Button clickEvent={onSaveDescriptionText} style="font-size: 1rem;"
                 >Сохранить</Button
             >
             <Button

@@ -4,7 +4,7 @@
     import Container from "../components/Container.svelte";
     import Layout from "../components/Layout.svelte";
     import Table from "../components/Table.svelte";
-    import { allCardsList } from "../constants/cards.js";
+    import { allCardsList, updateAllCardsList } from "../constants/cards.js";
     import { manualStore } from "../store/manualdistrib.js";
     import { selectedCardsStore } from "../store/selectedCards.js";
     import { onMount } from "svelte";
@@ -52,6 +52,7 @@
             } else {
                 modalParams.showFlag = false;
                 manualStore.clearCustomRoleField();
+                updateAllCardsList(); //Переинициализировать весь список карт (вызов функции из файла constants/cards.js)
                 selectedCardsStore.reinit();
             }
         } else {
@@ -72,7 +73,7 @@
                     <th align="left">Название карты</th>
                     <th align="right">Количество</th>
                 </thead>
-                {#each Object.entries(allCardsList()) as [cardName, role]}
+                {#each Object.entries(allCardsList) as [cardName, role]}
                     <tr>
                         <td>{role.name}</td>
                         <td align="right" class="cardCounterColumn">

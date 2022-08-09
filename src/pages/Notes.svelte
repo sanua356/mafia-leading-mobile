@@ -41,7 +41,7 @@
 </script>
 
 <Layout>
-    <Container>
+    <Container style={"overflow: hidden;"}>
         <div>
             <h1>Заметки</h1>
             <hr />

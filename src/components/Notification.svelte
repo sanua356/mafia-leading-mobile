@@ -39,7 +39,7 @@
         right: 0;
         z-index: 100;
         color: #eeeef5;
-        max-width: 100vw;
+        max-width: calc(100vw - 40px);
         margin: 20px;
         background: #3f3d5e;
         padding: 20px;

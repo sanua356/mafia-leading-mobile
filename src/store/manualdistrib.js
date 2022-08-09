@@ -1,5 +1,6 @@
 import { writable, get } from "svelte/store";
 import CyrillicToTranslit from "cyrillic-to-translit-js";
+import { updateAllCardsList } from "./../constants/cards";
 
 //Подгрузка библиотеки транслитерации (для добавления кастом ролей)
 const cyrillicToTranslit = new CyrillicToTranslit();

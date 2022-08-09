@@ -30,7 +30,7 @@
                     {#if value > 0}
                         <tr
                             ><td
-                                >{allCardsList()[key]?.name ||
+                                >{allCardsList[key]?.name ||
                                     "Неизвестная роль"}</td
                             ><td align="right">{value}</td></tr
                         >
