@@ -2568,9 +2568,9 @@ var app = (function () {
     const initialStore = {
         initialSetupFlag: false, //Флаг "первоначальной настройки" приложения (нужен для показа меню первой настройки)
         hiddeningCardsFlag: false, //Флаг скрытия карт с экрана (false - по клику, true - по таймеру)
-        hiddeningCardsFlagTimer: 5, //Количество секунд, после которых карта при выдаче автоматически скроется (только при hiddeningCardsFlag = true)
+        hiddeningCardsFlagTimer: 3, //Количество секунд, после которых карта при выдаче автоматически скроется (только при hiddeningCardsFlag = true)
         menuViewFlag: false, //Флаг показа/скрытия меню по свайпу
-        deathZoneSwipe: 25, //Мертвая зопа свайпов (в процентах ширины экрана)
+        deathZoneSwipe: 30, //Мертвая зопа свайпов (в процентах ширины экрана)
         viewIconsCards: true, //Флаг показа/скрытия иконок ролей при выдаче карт
         viewDescriptionCards: true, //Флаг показа/скрытия описания ролей при выдаче карт
         disableAnimationsFlag: false, //Флаг отключения анимаций и переходов в приложении
@@ -2702,8 +2702,8 @@ var app = (function () {
             },
             //Сохранение кастом иконки для роли (key - название роли)
             saveCustomIcon: (key, file) => {
-                return convertImageToBase64(file, (fileData) => {
-                    return setValue(
+                convertImageToBase64(file, (fileData) => {
+                    setValue(
                         key,
                         fileData,
                         "roles",
@@ -17613,28 +17613,59 @@ var app = (function () {
     	let li1;
     	let a1;
     	let t10;
-    	let h30;
+    	let li2;
+    	let a2;
     	let t12;
-    	let p2;
+    	let li3;
+    	let a3;
     	let t14;
-    	let p3;
+    	let li4;
+    	let a4;
     	let t16;
-    	let h31;
+    	let h30;
     	let t18;
-    	let p4;
-    	let t19;
-    	let br;
+    	let p2;
     	let t20;
-    	let t21;
-    	let p5;
+    	let p3;
     	let t22;
-    	let span0;
+    	let h31;
     	let t24;
+    	let p4;
     	let t25;
-    	let p6;
+    	let br;
     	let t26;
-    	let span1;
+    	let t27;
+    	let p5;
     	let t28;
+    	let span0;
+    	let t30;
+    	let t31;
+    	let p6;
+    	let t32;
+    	let span1;
+    	let t34;
+    	let t35;
+    	let h32;
+    	let t37;
+    	let p7;
+    	let t39;
+    	let p8;
+    	let t41;
+    	let h33;
+    	let t43;
+    	let p9;
+    	let t45;
+    	let p10;
+    	let t47;
+    	let h34;
+    	let t49;
+    	let p11;
+    	let t51;
+    	let p12;
+    	let t53;
+    	let p13;
+    	let t55;
+    	let p14;
 
     	const block = {
     		c: function create() {
@@ -17660,34 +17691,79 @@ var app = (function () {
     			a1 = element("a");
     			a1.textContent = "Скрытие карт во время выдачи";
     			t10 = space();
+    			li2 = element("li");
+    			a2 = element("a");
+    			a2.textContent = "Отключение анимаций";
+    			t12 = space();
+    			li3 = element("li");
+    			a3 = element("a");
+    			a3.textContent = "Отображение информации о ролях";
+    			t14 = space();
+    			li4 = element("li");
+    			a4 = element("a");
+    			a4.textContent = "Пользовательские роли";
+    			t16 = space();
     			h30 = element("h3");
     			h30.textContent = "Мертвая зона свайпов";
-    			t12 = space();
+    			t18 = space();
     			p2 = element("p");
     			p2.textContent = "\"Мертвая зона\" указывает на то, насколько далеко вы должны проводить\r\n        пальцем по экрану, чтобы вызвать\\скрыть меню (значение указывается в\r\n        процентах от ширины вашего экрана)";
-    			t14 = space();
+    			t20 = space();
     			p3 = element("p");
     			p3.textContent = "Например, если значение \"мертвой зоны\" у вас стоит как 25, это означает,\r\n        что пока вы не проведёте пальцем больше чем 25% ширины экрана, меню НЕ\r\n        будет вызвано/скрыто.";
-    			t16 = space();
+    			t22 = space();
     			h31 = element("h3");
     			h31.textContent = "Скрытие карт во время выдачи";
-    			t18 = space();
+    			t24 = space();
     			p4 = element("p");
-    			t19 = text("Существует два способа, которыми вы можете показывать карты игрокам: по\r\n        клику или по истечению таймера. ");
+    			t25 = text("Существует два способа, которыми вы можете показывать карты игрокам: по\r\n        клику или по истечению таймера. ");
     			br = element("br");
-    			t20 = text("Для выбора соответствующего режима\r\n        перейдите в настройки (вызвав меню по свайпу вправо) и выберите нужный\r\n        режим в пункте \"Скрытие карт во время выдачи\".");
-    			t21 = space();
+    			t26 = text("Для выбора соответствующего режима\r\n        перейдите в настройки (вызвав меню по свайпу вправо) и выберите нужный\r\n        режим в пункте \"Скрытие карт во время выдачи\".");
+    			t27 = space();
     			p5 = element("p");
-    			t22 = text("1. В режиме ");
+    			t28 = text("1. В режиме ");
     			span0 = element("span");
     			span0.textContent = "\"По клику на карту\"";
-    			t24 = text(" для того, чтобы скрыть карту,\r\n        которую игрок увидел, он должен кликнуть по ней ещё раз (после того, как\r\n        открыл).");
-    			t25 = space();
+    			t30 = text(" для того, чтобы скрыть карту,\r\n        которую игрок увидел, он должен кликнуть по ней ещё раз (после того, как\r\n        открыл).");
+    			t31 = space();
     			p6 = element("p");
-    			t26 = text("2. В режиме ");
+    			t32 = text("2. В режиме ");
     			span1 = element("span");
     			span1.textContent = "\"По истечению таймера\"";
-    			t28 = text(" карта скроется от игрока\r\n        автоматически через некоторое время (его можно настроить в соответствующем\r\n        пункте меню настроек).");
+    			t34 = text(" карта скроется от игрока\r\n        автоматически через некоторое время (его можно настроить в соответствующем\r\n        пункте меню настроек).");
+    			t35 = space();
+    			h32 = element("h3");
+    			h32.textContent = "Отключение анимаций";
+    			t37 = space();
+    			p7 = element("p");
+    			p7.textContent = "Эта настройка позволяет отключить отображение большинства анимаций и\r\n        переходов в приложении.";
+    			t39 = space();
+    			p8 = element("p");
+    			p8.textContent = "Если у вас слабое устройство, включение данной опции позволит получить\r\n        существенный прирост скорости работы приложения.";
+    			t41 = space();
+    			h33 = element("h3");
+    			h33.textContent = "Отображение информации о ролях";
+    			t43 = space();
+    			p9 = element("p");
+    			p9.textContent = "Эта настройка позволяет показать или скрыть информацию о ролях во время\r\n        того, как они будут выдаваться игрокам.";
+    			t45 = space();
+    			p10 = element("p");
+    			p10.textContent = "Можно скрыть описание к ролям а также их иконки, нажав на\r\n        соответствующие пункты меню.";
+    			t47 = space();
+    			h34 = element("h3");
+    			h34.textContent = "Пользовательские роли";
+    			t49 = space();
+    			p11 = element("p");
+    			p11.textContent = "В данной настройке вы можете сконфигурировать те роли, которые сами\r\n        добавили в приложение через кнопку \"Добавить свою роль\".";
+    			t51 = space();
+    			p12 = element("p");
+    			p12.textContent = "1. Вы можете удалить роль, кликнув на соответствующую кнопку. Обратите\r\n        внимание, если вы удаляете роль, раздачи для которой имеются в истории\r\n        игр, удалённые роли будут помечены названием \"Неизвестная роль\".";
+    			t53 = space();
+    			p13 = element("p");
+    			p13.textContent = "2. Можно изменить описание к роли. Оно будет показываться игрокам во\r\n        время выдачи роли.";
+    			t55 = space();
+    			p14 = element("p");
+    			p14.textContent = "3. Можно изменить иконку к роли. Изначально при создании\r\n        пользовательской роли на неё будет \"повешена\" стандартная иконка,\r\n        которую предоставляет приложение, но вы можете заменить её на любую\r\n        другую, кликнув на соответствующую кнопку.";
     			add_location(h2, file$5, 1, 4, 31);
     			add_location(hr, file$5, 2, 4, 74);
     			add_location(p0, file$5, 3, 4, 86);
@@ -17700,20 +17776,46 @@ var app = (function () {
     			attr_dev(a1, "class", "link");
     			add_location(a1, file$5, 14, 16, 582);
     			add_location(li1, file$5, 13, 12, 560);
+    			attr_dev(a2, "href", "#disableAnimations");
+    			attr_dev(a2, "class", "link");
+    			add_location(a2, file$5, 19, 16, 750);
+    			add_location(li2, file$5, 18, 12, 728);
+    			attr_dev(a3, "href", "#viewRolesInfo");
+    			attr_dev(a3, "class", "link");
+    			add_location(a3, file$5, 23, 16, 888);
+    			add_location(li3, file$5, 22, 12, 866);
+    			attr_dev(a4, "href", "#customRoles");
+    			attr_dev(a4, "class", "link");
+    			add_location(a4, file$5, 28, 16, 1055);
+    			add_location(li4, file$5, 27, 12, 1033);
     			add_location(ul, file$5, 11, 8, 461);
     			add_location(nav, file$5, 10, 4, 446);
     			attr_dev(h30, "id", "deathZone");
-    			add_location(h30, file$5, 20, 4, 747);
-    			add_location(p2, file$5, 21, 4, 797);
-    			add_location(p3, file$5, 26, 4, 1016);
+    			add_location(h30, file$5, 32, 4, 1168);
+    			add_location(p2, file$5, 33, 4, 1218);
+    			add_location(p3, file$5, 38, 4, 1437);
     			attr_dev(h31, "id", "distributionType");
-    			add_location(h31, file$5, 31, 4, 1228);
-    			add_location(br, file$5, 34, 40, 1419);
-    			add_location(p4, file$5, 32, 4, 1293);
-    			add_location(span0, file$5, 39, 20, 1636);
-    			add_location(p5, file$5, 38, 4, 1611);
-    			add_location(span1, file$5, 44, 20, 1839);
-    			add_location(p6, file$5, 43, 4, 1814);
+    			add_location(h31, file$5, 43, 4, 1649);
+    			add_location(br, file$5, 46, 40, 1840);
+    			add_location(p4, file$5, 44, 4, 1714);
+    			add_location(span0, file$5, 51, 20, 2057);
+    			add_location(p5, file$5, 50, 4, 2032);
+    			add_location(span1, file$5, 56, 20, 2260);
+    			add_location(p6, file$5, 55, 4, 2235);
+    			attr_dev(h32, "id", "disableAnimations");
+    			add_location(h32, file$5, 60, 4, 2452);
+    			add_location(p7, file$5, 61, 4, 2509);
+    			add_location(p8, file$5, 65, 4, 2639);
+    			attr_dev(h33, "id", "viewRolesInfo");
+    			add_location(h33, file$5, 69, 4, 2796);
+    			add_location(p9, file$5, 70, 4, 2860);
+    			add_location(p10, file$5, 74, 4, 3009);
+    			attr_dev(h34, "id", "customRoles");
+    			add_location(h34, file$5, 78, 4, 3133);
+    			add_location(p11, file$5, 79, 4, 3186);
+    			add_location(p12, file$5, 83, 4, 3348);
+    			add_location(p13, file$5, 88, 4, 3601);
+    			add_location(p14, file$5, 92, 4, 3726);
     			attr_dev(div, "class", "instruction svelte-ou8b2b");
     			add_location(div, file$5, 0, 0, 0);
     		},
@@ -17737,29 +17839,60 @@ var app = (function () {
     			append_dev(ul, t8);
     			append_dev(ul, li1);
     			append_dev(li1, a1);
-    			append_dev(div, t10);
-    			append_dev(div, h30);
-    			append_dev(div, t12);
-    			append_dev(div, p2);
-    			append_dev(div, t14);
-    			append_dev(div, p3);
+    			append_dev(ul, t10);
+    			append_dev(ul, li2);
+    			append_dev(li2, a2);
+    			append_dev(ul, t12);
+    			append_dev(ul, li3);
+    			append_dev(li3, a3);
+    			append_dev(ul, t14);
+    			append_dev(ul, li4);
+    			append_dev(li4, a4);
     			append_dev(div, t16);
-    			append_dev(div, h31);
+    			append_dev(div, h30);
     			append_dev(div, t18);
+    			append_dev(div, p2);
+    			append_dev(div, t20);
+    			append_dev(div, p3);
+    			append_dev(div, t22);
+    			append_dev(div, h31);
+    			append_dev(div, t24);
     			append_dev(div, p4);
-    			append_dev(p4, t19);
+    			append_dev(p4, t25);
     			append_dev(p4, br);
-    			append_dev(p4, t20);
-    			append_dev(div, t21);
+    			append_dev(p4, t26);
+    			append_dev(div, t27);
     			append_dev(div, p5);
-    			append_dev(p5, t22);
+    			append_dev(p5, t28);
     			append_dev(p5, span0);
-    			append_dev(p5, t24);
-    			append_dev(div, t25);
+    			append_dev(p5, t30);
+    			append_dev(div, t31);
     			append_dev(div, p6);
-    			append_dev(p6, t26);
+    			append_dev(p6, t32);
     			append_dev(p6, span1);
-    			append_dev(p6, t28);
+    			append_dev(p6, t34);
+    			append_dev(div, t35);
+    			append_dev(div, h32);
+    			append_dev(div, t37);
+    			append_dev(div, p7);
+    			append_dev(div, t39);
+    			append_dev(div, p8);
+    			append_dev(div, t41);
+    			append_dev(div, h33);
+    			append_dev(div, t43);
+    			append_dev(div, p9);
+    			append_dev(div, t45);
+    			append_dev(div, p10);
+    			append_dev(div, t47);
+    			append_dev(div, h34);
+    			append_dev(div, t49);
+    			append_dev(div, p11);
+    			append_dev(div, t51);
+    			append_dev(div, p12);
+    			append_dev(div, t53);
+    			append_dev(div, p13);
+    			append_dev(div, t55);
+    			append_dev(div, p14);
     		},
     		p: noop,
     		i: noop,

@@ -6,9 +6,9 @@ import { allCardsList, updateAllCardsList } from "./../constants/cards";
 const initialStore = {
     initialSetupFlag: false, //Флаг "первоначальной настройки" приложения (нужен для показа меню первой настройки)
     hiddeningCardsFlag: false, //Флаг скрытия карт с экрана (false - по клику, true - по таймеру)
-    hiddeningCardsFlagTimer: 5, //Количество секунд, после которых карта при выдаче автоматически скроется (только при hiddeningCardsFlag = true)
+    hiddeningCardsFlagTimer: 3, //Количество секунд, после которых карта при выдаче автоматически скроется (только при hiddeningCardsFlag = true)
     menuViewFlag: false, //Флаг показа/скрытия меню по свайпу
-    deathZoneSwipe: 25, //Мертвая зопа свайпов (в процентах ширины экрана)
+    deathZoneSwipe: 30, //Мертвая зопа свайпов (в процентах ширины экрана)
     viewIconsCards: true, //Флаг показа/скрытия иконок ролей при выдаче карт
     viewDescriptionCards: true, //Флаг показа/скрытия описания ролей при выдаче карт
     disableAnimationsFlag: false, //Флаг отключения анимаций и переходов в приложении
@@ -140,8 +140,8 @@ function createStore() {
         },
         //Сохранение кастом иконки для роли (key - название роли)
         saveCustomIcon: (key, file) => {
-            return idb.convertImageToBase64(file, (fileData) => {
-                return idb.setValue(
+            idb.convertImageToBase64(file, (fileData) => {
+                idb.setValue(
                     key,
                     fileData,
                     "roles",
