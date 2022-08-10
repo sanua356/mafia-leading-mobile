@@ -14,5 +14,6 @@
     :global(.table td) {
         font-size: 20px;
         padding: 15px 0;
+        word-break: break-word;
     }
 </style>

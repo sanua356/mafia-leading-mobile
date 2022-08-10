@@ -2710,14 +2710,14 @@ var app = (function () {
                         () => {
                             notificationStore.createNotification(
                                 "Оповещение",
-                                `Новая иконка для роли: ${allCardsList[key].name} успешно сохранена`
+                                `Новая иконка для роли: "${allCardsList[key].name}" успешно сохранена`
                             );
                             updateAllCardsList();
                         },
                         (e) => {
                             notificationStore.createNotification(
                                 "Внимание",
-                                "Не удалось сохранить иконку для роли из-за непредвиденной ошибки. Попробуйте перезапустить приложение."
+                                `Не удалось сохранить иконку для роли: "${allCardsList[key].name}" из-за непредвиденной ошибки. Попробуйте перезапустить приложение.`
                             );
                         }
                     );
@@ -3068,11 +3068,11 @@ var app = (function () {
     			t1 = space();
     			p = element("p");
     			t2 = text(t2_value);
-    			attr_dev(span, "class", "svelte-17fy9yp");
+    			attr_dev(span, "class", "svelte-m8mwsl");
     			add_location(span, file$H, 28, 8, 736);
-    			attr_dev(p, "class", "svelte-17fy9yp");
+    			attr_dev(p, "class", "svelte-m8mwsl");
     			add_location(p, file$H, 29, 8, 785);
-    			attr_dev(div, "class", "notification svelte-17fy9yp");
+    			attr_dev(div, "class", "notification svelte-m8mwsl");
     			add_location(div, file$H, 27, 4, 700);
     		},
     		m: function mount(target, anchor) {
@@ -14226,7 +14226,7 @@ var app = (function () {
     			span.textContent = "В приложение не добавлено ещё ни одной пользовательской роли";
     			set_style(span, "margin-top", "15px");
     			set_style(span, "margin-bottom", "10px");
-    			add_location(span, file$e, 140, 8, 4990);
+    			add_location(span, file$e, 140, 8, 4992);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -14377,12 +14377,12 @@ var app = (function () {
     			th1 = element("th");
     			th1.textContent = "Действия";
     			attr_dev(th0, "align", "left");
-    			attr_dev(th0, "class", "svelte-12j0lim");
-    			add_location(th0, file$e, 104, 16, 3615);
+    			attr_dev(th0, "class", "svelte-1nf7cmp");
+    			add_location(th0, file$e, 104, 16, 3617);
     			attr_dev(th1, "align", "right");
-    			attr_dev(th1, "class", "svelte-12j0lim");
-    			add_location(th1, file$e, 105, 16, 3669);
-    			add_location(thead, file$e, 103, 12, 3590);
+    			attr_dev(th1, "class", "svelte-1nf7cmp");
+    			add_location(th1, file$e, 105, 16, 3671);
+    			add_location(thead, file$e, 103, 12, 3592);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, thead, anchor);
@@ -14443,14 +14443,14 @@ var app = (function () {
     			button2 = element("button");
     			button2.textContent = "Изменить иконку";
     			t5 = space();
-    			attr_dev(button0, "class", "customRolesDeleteBtn svelte-12j0lim");
-    			add_location(button0, file$e, 111, 20, 3908);
-    			attr_dev(button1, "class", "customRolesChangeDescBtn svelte-12j0lim");
-    			add_location(button1, file$e, 117, 20, 4148);
-    			attr_dev(button2, "class", "customRolesChangeIconBtn svelte-12j0lim");
-    			add_location(button2, file$e, 125, 20, 4466);
-    			attr_dev(div, "class", "customRoleButtons svelte-12j0lim");
-    			add_location(div, file$e, 110, 16, 3855);
+    			attr_dev(button0, "class", "customRolesDeleteBtn svelte-1nf7cmp");
+    			add_location(button0, file$e, 111, 20, 3910);
+    			attr_dev(button1, "class", "customRolesChangeDescBtn svelte-1nf7cmp");
+    			add_location(button1, file$e, 117, 20, 4150);
+    			attr_dev(button2, "class", "customRolesChangeIconBtn svelte-1nf7cmp");
+    			add_location(button2, file$e, 125, 20, 4468);
+    			attr_dev(div, "class", "customRoleButtons svelte-1nf7cmp");
+    			add_location(div, file$e, 110, 16, 3857);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -14589,8 +14589,8 @@ var app = (function () {
     			t3 = space();
     			if_block.c();
     			if_block_anchor = empty();
-    			add_location(h2, file$e, 96, 4, 3315);
-    			add_location(p, file$e, 97, 4, 3352);
+    			add_location(h2, file$e, 96, 4, 3317);
+    			add_location(p, file$e, 97, 4, 3354);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, h2, anchor);
@@ -14773,12 +14773,12 @@ var app = (function () {
     			t4 = space();
     			span = element("span");
     			t5 = text("Описание должно иметь не менее 1 и не более 255 символов.");
-    			attr_dev(h2, "class", "settingTitle svelte-12j0lim");
-    			add_location(h2, file$e, 149, 12, 5330);
+    			attr_dev(h2, "class", "settingTitle svelte-1nf7cmp");
+    			add_location(h2, file$e, 149, 12, 5332);
     			attr_dev(div, "class", "modalArea buttons");
-    			add_location(div, file$e, 148, 8, 5285);
-    			attr_dev(span, "class", span_class_value = "modalError " + (/*changeDescriptionParams*/ ctx[1].inputValue.length === 0 && /*changeDescriptionParams*/ ctx[1].inputValue.length > 255 && 'modalShow') + " svelte-12j0lim");
-    			add_location(span, file$e, 168, 8, 6063);
+    			add_location(div, file$e, 148, 8, 5287);
+    			attr_dev(span, "class", span_class_value = "modalError " + (/*changeDescriptionParams*/ ctx[1].inputValue.length === 0 && /*changeDescriptionParams*/ ctx[1].inputValue.length > 255 && 'modalShow') + " svelte-1nf7cmp");
+    			add_location(span, file$e, 168, 8, 6065);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -14815,7 +14815,7 @@ var app = (function () {
 
     			button1.$set(button1_changes);
 
-    			if (!current || dirty & /*changeDescriptionParams*/ 2 && span_class_value !== (span_class_value = "modalError " + (/*changeDescriptionParams*/ ctx[1].inputValue.length === 0 && /*changeDescriptionParams*/ ctx[1].inputValue.length > 255 && 'modalShow') + " svelte-12j0lim")) {
+    			if (!current || dirty & /*changeDescriptionParams*/ 2 && span_class_value !== (span_class_value = "modalError " + (/*changeDescriptionParams*/ ctx[1].inputValue.length === 0 && /*changeDescriptionParams*/ ctx[1].inputValue.length > 255 && 'modalShow') + " svelte-1nf7cmp")) {
     				attr_dev(span, "class", span_class_value);
     			}
     		},
@@ -15032,27 +15032,27 @@ var app = (function () {
     			t7 = space();
     			span1 = element("span");
     			t8 = text("Картинка не выбрана или превышает размер в 3 мегабайта.");
-    			attr_dev(h2, "class", "settingTitle svelte-12j0lim");
-    			add_location(h2, file$e, 182, 12, 6574);
+    			attr_dev(h2, "class", "settingTitle svelte-1nf7cmp");
+    			add_location(h2, file$e, 182, 12, 6576);
     			set_style(input, "display", "none");
     			set_style(input, "margin", "0");
     			attr_dev(input, "type", "file");
     			attr_dev(input, "accept", "image/*");
-    			add_location(input, file$e, 185, 16, 6658);
-    			attr_dev(button0, "class", "selectIconBtn svelte-12j0lim");
-    			add_location(button0, file$e, 198, 20, 7190);
-    			attr_dev(span0, "class", "selectedIconFilename svelte-12j0lim");
-    			add_location(span0, file$e, 202, 21, 7379);
-    			attr_dev(div0, "class", "fileInputArea svelte-12j0lim");
-    			add_location(div0, file$e, 197, 16, 7141);
-    			attr_dev(div1, "class", "svelte-12j0lim");
-    			add_location(div1, file$e, 184, 12, 6635);
-    			attr_dev(div2, "class", "buttons svelte-12j0lim");
-    			add_location(div2, file$e, 207, 12, 7571);
-    			attr_dev(div3, "class", "modalArea changeIconArea svelte-12j0lim");
-    			add_location(div3, file$e, 181, 8, 6522);
-    			attr_dev(span1, "class", span1_class_value = "modalError " + (/*changeIconParams*/ ctx[2].errorFlag && 'modalShow') + " svelte-12j0lim");
-    			add_location(span1, file$e, 220, 8, 8039);
+    			add_location(input, file$e, 185, 16, 6660);
+    			attr_dev(button0, "class", "selectIconBtn svelte-1nf7cmp");
+    			add_location(button0, file$e, 198, 20, 7192);
+    			attr_dev(span0, "class", "selectedIconFilename svelte-1nf7cmp");
+    			add_location(span0, file$e, 202, 21, 7381);
+    			attr_dev(div0, "class", "fileInputArea svelte-1nf7cmp");
+    			add_location(div0, file$e, 197, 16, 7143);
+    			attr_dev(div1, "class", "svelte-1nf7cmp");
+    			add_location(div1, file$e, 184, 12, 6637);
+    			attr_dev(div2, "class", "buttons svelte-1nf7cmp");
+    			add_location(div2, file$e, 207, 12, 7573);
+    			attr_dev(div3, "class", "modalArea changeIconArea svelte-1nf7cmp");
+    			add_location(div3, file$e, 181, 8, 6524);
+    			attr_dev(span1, "class", span1_class_value = "modalError " + (/*changeIconParams*/ ctx[2].errorFlag && 'modalShow') + " svelte-1nf7cmp");
+    			add_location(span1, file$e, 220, 8, 8041);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div3, anchor);
@@ -15103,7 +15103,7 @@ var app = (function () {
 
     			button2.$set(button2_changes);
 
-    			if (!current || dirty & /*changeIconParams*/ 4 && span1_class_value !== (span1_class_value = "modalError " + (/*changeIconParams*/ ctx[2].errorFlag && 'modalShow') + " svelte-12j0lim")) {
+    			if (!current || dirty & /*changeIconParams*/ 4 && span1_class_value !== (span1_class_value = "modalError " + (/*changeIconParams*/ ctx[2].errorFlag && 'modalShow') + " svelte-1nf7cmp")) {
     				attr_dev(span1, "class", span1_class_value);
     			}
     		},
@@ -15350,7 +15350,7 @@ var app = (function () {
 
     	function onSaveDescriptionText() {
     		if (settingsStore.changeDescriptionText(changeDescriptionParams.inputValue, changeDescriptionParams.key)) {
-    			notificationStore.createNotification("Оповещение", `Описание для роли: ${allCardsList[changeDescriptionParams.key].name} успешно изменено.`);
+    			notificationStore.createNotification("Оповещение", `Описание для роли: "${allCardsList[changeDescriptionParams.key].name}" успешно изменено.`);
     		}
 
     		updateAllCardsList();
@@ -19444,7 +19444,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (162:0) {:else}
+    // (168:0) {:else}
     function create_else_block_1(ctx) {
     	let manualdistribution;
     	let current;
@@ -19484,14 +19484,14 @@ var app = (function () {
     		block,
     		id: create_else_block_1.name,
     		type: "else",
-    		source: "(162:0) {:else}",
+    		source: "(168:0) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (109:0) {#if !createPresetFlag}
+    // (115:0) {#if !createPresetFlag}
     function create_if_block_1(ctx) {
     	let layout;
     	let current;
@@ -19539,14 +19539,14 @@ var app = (function () {
     		block,
     		id: create_if_block_1.name,
     		type: "if",
-    		source: "(109:0) {#if !createPresetFlag}",
+    		source: "(115:0) {#if !createPresetFlag}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (146:20) {:else}
+    // (152:20) {:else}
     function create_else_block(ctx) {
     	let p;
 
@@ -19555,7 +19555,7 @@ var app = (function () {
     			p = element("p");
     			p.textContent = "Вы ещё не создали ни одного пресета";
     			attr_dev(p, "class", "emptyPresets svelte-e3boo3");
-    			add_location(p, file$1, 146, 24, 6154);
+    			add_location(p, file$1, 152, 24, 6368);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -19572,14 +19572,14 @@ var app = (function () {
     		block,
     		id: create_else_block.name,
     		type: "else",
-    		source: "(146:20) {:else}",
+    		source: "(152:20) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (116:20) {#if savedPresets.length > 0}
+    // (122:20) {#if savedPresets.length > 0}
     function create_if_block_2(ctx) {
     	let table;
     	let current;
@@ -19627,14 +19627,14 @@ var app = (function () {
     		block,
     		id: create_if_block_2.name,
     		type: "if",
-    		source: "(116:20) {#if savedPresets.length > 0}",
+    		source: "(122:20) {#if savedPresets.length > 0}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (122:28) {#each savedPresets as preset, idx}
+    // (128:28) {#each savedPresets as preset, idx}
     function create_each_block_1(ctx) {
     	let tr;
     	let td0;
@@ -19676,14 +19676,14 @@ var app = (function () {
     			button1 = element("button");
     			button1.textContent = "Удалить";
     			t5 = space();
-    			add_location(td0, file$1, 123, 36, 4954);
+    			add_location(td0, file$1, 129, 36, 5168);
     			attr_dev(button0, "class", "infoPresetBtn svelte-e3boo3");
-    			add_location(button0, file$1, 127, 40, 5189);
+    			add_location(button0, file$1, 133, 40, 5403);
     			attr_dev(button1, "class", "deletePresetBtn svelte-e3boo3");
-    			add_location(button1, file$1, 134, 40, 5585);
+    			add_location(button1, file$1, 140, 40, 5799);
     			attr_dev(td1, "align", "right");
-    			add_location(td1, file$1, 126, 36, 5129);
-    			add_location(tr, file$1, 122, 32, 4869);
+    			add_location(td1, file$1, 132, 36, 5343);
+    			add_location(tr, file$1, 128, 32, 5083);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, tr, anchor);
@@ -19738,14 +19738,14 @@ var app = (function () {
     		block,
     		id: create_each_block_1.name,
     		type: "each",
-    		source: "(122:28) {#each savedPresets as preset, idx}",
+    		source: "(128:28) {#each savedPresets as preset, idx}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (117:24) <Table>
+    // (123:24) <Table>
     function create_default_slot_4(ctx) {
     	let thead;
     	let th0;
@@ -19782,10 +19782,10 @@ var app = (function () {
 
     			each_1_anchor = empty();
     			attr_dev(th0, "align", "left");
-    			add_location(th0, file$1, 118, 32, 4637);
+    			add_location(th0, file$1, 124, 32, 4851);
     			attr_dev(th1, "align", "right");
-    			add_location(th1, file$1, 119, 32, 4701);
-    			add_location(thead, file$1, 117, 28, 4596);
+    			add_location(th1, file$1, 125, 32, 4915);
+    			add_location(thead, file$1, 123, 28, 4810);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, thead, anchor);
@@ -19860,14 +19860,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_4.name,
     		type: "slot",
-    		source: "(117:24) <Table>",
+    		source: "(123:24) <Table>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (111:8) <Container>
+    // (117:8) <Container>
     function create_default_slot_3(ctx) {
     	let div2;
     	let h1;
@@ -19906,13 +19906,13 @@ var app = (function () {
     			t3 = space();
     			div0 = element("div");
     			div0.textContent = "Добавить новый пресет";
-    			add_location(h1, file$1, 112, 16, 4403);
-    			add_location(hr, file$1, 113, 16, 4437);
+    			add_location(h1, file$1, 118, 16, 4617);
+    			add_location(hr, file$1, 119, 16, 4651);
     			attr_dev(div0, "class", "addPresetBtn svelte-e3boo3");
-    			add_location(div0, file$1, 150, 20, 6322);
+    			add_location(div0, file$1, 156, 20, 6536);
     			attr_dev(div1, "class", "presets svelte-e3boo3");
-    			add_location(div1, file$1, 114, 16, 4461);
-    			add_location(div2, file$1, 111, 12, 4380);
+    			add_location(div1, file$1, 120, 16, 4675);
+    			add_location(div2, file$1, 117, 12, 4594);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div2, anchor);
@@ -19979,14 +19979,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_3.name,
     		type: "slot",
-    		source: "(111:8) <Container>",
+    		source: "(117:8) <Container>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (110:4) <Layout>
+    // (116:4) <Layout>
     function create_default_slot_2$1(ctx) {
     	let container;
     	let current;
@@ -20034,14 +20034,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_2$1.name,
     		type: "slot",
-    		source: "(110:4) <Layout>",
+    		source: "(116:4) <Layout>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (185:24) {#if preset[1] > 0}
+    // (191:24) {#if preset[1] > 0}
     function create_if_block(ctx) {
     	let li;
     	let t0_value = (allCardsList[/*preset*/ ctx[18][0]]?.name || "Неизвестная роль") + "";
@@ -20059,7 +20059,7 @@ var app = (function () {
     			t2 = text(t2_value);
     			t3 = text(" шт.\r\n                            ");
     			attr_dev(li, "class", "svelte-e3boo3");
-    			add_location(li, file$1, 185, 28, 7508);
+    			add_location(li, file$1, 191, 28, 7722);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, li, anchor);
@@ -20081,14 +20081,14 @@ var app = (function () {
     		block,
     		id: create_if_block.name,
     		type: "if",
-    		source: "(185:24) {#if preset[1] > 0}",
+    		source: "(191:24) {#if preset[1] > 0}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (184:20) {#each Object.entries(savedPresets[presetDetails.idxPreset].cards) as preset}
+    // (190:20) {#each Object.entries(savedPresets[presetDetails.idxPreset].cards) as preset}
     function create_each_block(ctx) {
     	let if_block_anchor;
     	let if_block = /*preset*/ ctx[18][1] > 0 && create_if_block(ctx);
@@ -20126,14 +20126,14 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(184:20) {#each Object.entries(savedPresets[presetDetails.idxPreset].cards) as preset}",
+    		source: "(190:20) {#each Object.entries(savedPresets[presetDetails.idxPreset].cards) as preset}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (175:4) <ModalContainer customStyle="padding: 5px 30px 25px 30px;">
+    // (181:4) <ModalContainer customStyle="padding: 5px 30px 25px 30px;">
     function create_default_slot_1$1(ctx) {
     	let div;
     	let h2;
@@ -20167,14 +20167,14 @@ var app = (function () {
     			}
 
     			attr_dev(h2, "class", "svelte-e3boo3");
-    			add_location(h2, file$1, 176, 12, 7117);
+    			add_location(h2, file$1, 182, 12, 7331);
     			attr_dev(p, "class", "svelte-e3boo3");
-    			add_location(p, file$1, 177, 12, 7159);
-    			add_location(ul, file$1, 182, 16, 7330);
+    			add_location(p, file$1, 183, 12, 7373);
+    			add_location(ul, file$1, 188, 16, 7544);
     			attr_dev(nav, "class", "svelte-e3boo3");
-    			add_location(nav, file$1, 181, 12, 7307);
+    			add_location(nav, file$1, 187, 12, 7521);
     			attr_dev(div, "class", "modalArea svelte-e3boo3");
-    			add_location(div, file$1, 175, 8, 7080);
+    			add_location(div, file$1, 181, 8, 7294);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -20224,14 +20224,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_1$1.name,
     		type: "slot",
-    		source: "(175:4) <ModalContainer customStyle=\\\"padding: 5px 30px 25px 30px;\\\">",
+    		source: "(181:4) <ModalContainer customStyle=\\\"padding: 5px 30px 25px 30px;\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (171:0) <Modal      showFlag={presetDetails.showFlag}      clickEvent={() => (presetDetails.showFlag = false)}  >
+    // (177:0) <Modal      showFlag={presetDetails.showFlag}      clickEvent={() => (presetDetails.showFlag = false)}  >
     function create_default_slot$1(ctx) {
     	let modalcontainer;
     	let current;
@@ -20280,7 +20280,7 @@ var app = (function () {
     		block,
     		id: create_default_slot$1.name,
     		type: "slot",
-    		source: "(171:0) <Modal      showFlag={presetDetails.showFlag}      clickEvent={() => (presetDetails.showFlag = false)}  >",
+    		source: "(177:0) <Modal      showFlag={presetDetails.showFlag}      clickEvent={() => (presetDetails.showFlag = false)}  >",
     		ctx
     	});
 
@@ -20520,6 +20520,7 @@ var app = (function () {
     	//Удалить пресет по клику на кнопку внутри модалки
     	function onDeletePreset() {
     		presetsStore.deletePreset(modalParamsDeletePreset.idxPreset);
+    		notificationStore.createNotification("Оповещение", `Пресет: "${savedPresets[modalParamsDeletePreset.idxPreset].name}" успешно удалён`);
     		$$invalidate(3, modalParamsDeletePreset.showFlag = false, modalParamsDeletePreset);
     		$$invalidate(3, modalParamsDeletePreset.idxPreset = 0, modalParamsDeletePreset);
     		updateSavedPresets();

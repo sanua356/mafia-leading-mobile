@@ -87,6 +87,12 @@
     //Удалить пресет по клику на кнопку внутри модалки
     function onDeletePreset() {
         presetsStore.deletePreset(modalParamsDeletePreset.idxPreset);
+        notificationStore.createNotification(
+            "Оповещение",
+            `Пресет: "${
+                savedPresets[modalParamsDeletePreset.idxPreset].name
+            }" успешно удалён`
+        );
         modalParamsDeletePreset.showFlag = false;
         modalParamsDeletePreset.idxPreset = 0;
         updateSavedPresets();

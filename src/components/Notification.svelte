@@ -59,6 +59,7 @@
         text-align: left;
         line-height: 1.2rem;
         font-size: 1rem;
+        word-break: break-all;
     }
     :global(.notificationMounting) {
         opacity: 1 !important;

@@ -148,14 +148,14 @@ function createStore() {
                     () => {
                         notificationStore.createNotification(
                             "Оповещение",
-                            `Новая иконка для роли: ${allCardsList[key].name} успешно сохранена`
+                            `Новая иконка для роли: "${allCardsList[key].name}" успешно сохранена`
                         );
                         updateAllCardsList();
                     },
                     (e) => {
                         notificationStore.createNotification(
                             "Внимание",
-                            "Не удалось сохранить иконку для роли из-за непредвиденной ошибки. Попробуйте перезапустить приложение."
+                            `Не удалось сохранить иконку для роли: "${allCardsList[key].name}" из-за непредвиденной ошибки. Попробуйте перезапустить приложение.`
                         );
                     }
                 );

@@ -63,9 +63,9 @@
         ) {
             notificationStore.createNotification(
                 "Оповещение",
-                `Описание для роли: ${
+                `Описание для роли: "${
                     allCardsList[changeDescriptionParams.key].name
-                } успешно изменено.`
+                }" успешно изменено.`
             );
         }
         updateAllCardsList();
@@ -301,5 +301,7 @@
     .selectedIconFilename {
         font-size: 1rem;
         margin-top: 10px;
+        word-break: break-all;
+        text-align: center;
     }
 </style>
