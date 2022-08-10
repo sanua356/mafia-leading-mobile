@@ -3,6 +3,8 @@
 .DS_Store
 *.keystore
 
+public/build/*
+*/public/build/*
 public/build/bundle.css
 public/build/bundle.js
 public/build/bundle.js.map
