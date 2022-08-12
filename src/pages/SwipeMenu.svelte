@@ -42,9 +42,13 @@
     });
 
     let animationFlag = false;
+
+    let timer = null;
+
     $: {
         if ($settingsStore.menuViewFlag) {
-            window.setTimeout(() => {
+            clearTimeout(timer);
+            timer = setTimeout(() => {
                 animationFlag = true;
             }, 15);
         } else {
