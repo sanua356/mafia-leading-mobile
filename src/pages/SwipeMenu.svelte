@@ -19,10 +19,10 @@
             return;
         }
         let movedX = e.touches[0].clientX;
-        if (movedX - startX > deathZone) {
+        if (movedX - startX > deathZone && !$settingsStore.menuViewFlag) {
             settingsStore.changeViewFlag(true);
         }
-        if (movedX - startX < deathZone) {
+        if (movedX - startX < deathZone && $settingsStore.menuViewFlag) {
             settingsStore.changeViewFlag(false);
         }
     }
