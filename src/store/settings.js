@@ -155,7 +155,8 @@ function createStore() {
                     (e) => {
                         notificationStore.createNotification(
                             "Внимание",
-                            `Не удалось сохранить иконку для роли: "${allCardsList[key].name}" из-за непредвиденной ошибки. Попробуйте перезапустить приложение.`
+                            `Не удалось сохранить иконку для роли: "${allCardsList[key].name}" из-за непредвиденной ошибки. Попробуйте перезапустить приложение.`,
+                            notificationTypes.error
                         );
                     }
                 );

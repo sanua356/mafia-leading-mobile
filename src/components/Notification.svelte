@@ -25,9 +25,9 @@
     unmountClass={"notificationUnmounting"}
     unmountDuration={400}
 >
-    <div class="notification">
-        <span>{$notificationStore.title}</span>
-        <p>{$notificationStore.message}</p>
+    <div class={`notification ${"notification__" + $notificationStore.type}`}>
+        <span>{$notificationStore.title}афыафыафыафыафы</span>
+        <p>{$notificationStore.message}афыафыафыафыафыафыафы</p>
     </div>
 </Transition>
 
@@ -41,7 +41,6 @@
         color: #eeeef5;
         max-width: calc(100vw - 40px);
         margin: 20px;
-        background: #3f3d5e;
         padding: 20px;
         border-radius: 5px;
         transition: 0.4s ease-in-out all;
@@ -55,11 +54,19 @@
         font-size: 1.3rem;
     }
     .notification p {
-        opacity: 0.7;
         text-align: left;
         line-height: 1.2rem;
         font-size: 1rem;
         word-break: break-all;
+    }
+    .notification__warning {
+        background: #3f3d5e;
+    }
+    .notification__warning p {
+        opacity: 0.7;
+    }
+    .notification__error {
+        background: #ff002f;
     }
     :global(.notificationMounting) {
         opacity: 1 !important;

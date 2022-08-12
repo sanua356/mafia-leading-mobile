@@ -1,7 +1,10 @@
 <script>
     import Setting from "../Setting.svelte";
     import { settingsStore } from "../../../store/settings.js";
-    import { notificationStore } from "../../../store/notification";
+    import {
+        notificationStore,
+        notificationTypes,
+    } from "../../../store/notification";
     import Button from "../../../components/Button.svelte";
     import ConfirmActionModal from "../../../components/modals/ConfirmActionModal.svelte";
     import { navigateTo } from "svelte-router-spa";
@@ -21,7 +24,8 @@
         settingsStore.resetAllSettings();
         notificationStore.createNotification(
             "Оповещение",
-            "Все настройки приложения успешно сброшены"
+            "Все настройки приложения успешно сброшены",
+            notificationTypes.error
         );
         navigateTo("/");
     }
