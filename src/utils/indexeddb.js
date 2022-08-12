@@ -50,6 +50,26 @@ function setValue(key, value, objStore, successCallback, errorCallback) {
     });
 }
 
+function deleteValue(key, objStore, errorCallback) {
+    connectDB(function (db) {
+        let request = db
+            .transaction([objStore], "readwrite")
+            .objectStore(objStore)
+            .delete(key);
+        request.onerror = (e) => errorCallback(e);
+    });
+}
+
+function clearAllObjStore(objStore, errorCallback) {
+    connectDB(function (db) {
+        let request = db
+            .transaction([objStore], "readwrite")
+            .objectStore(objStore)
+            .clear();
+        request.onerror = (e) => errorCallback(e);
+    });
+}
+
 function convertImageToBase64(file, resultCallback) {
     var reader = new FileReader();
 
@@ -59,4 +79,10 @@ function convertImageToBase64(file, resultCallback) {
     reader.readAsDataURL(file);
 }
 
-export { convertImageToBase64, setValue, getValue };
+export {
+    convertImageToBase64,
+    setValue,
+    getValue,
+    deleteValue,
+    clearAllObjStore,
+};

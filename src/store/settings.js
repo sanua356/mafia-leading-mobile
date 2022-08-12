@@ -39,6 +39,14 @@ function createStore() {
             localStorage.removeItem("history");
             localStorage.removeItem("customRoles");
             localStorage.removeItem("presets");
+            idb.clearAllObjStore("roles", (e) => {
+                notificationStore.createNotification(
+                    "Ошибка",
+                    "Не удалось очистить хранилище иконок для пользовательских ролей, при этом все остальны настройки сброшены.",
+                    notificationTypes.error
+                );
+            });
+            updateAllCardsList();
         },
         //Сохранение всех настроек в хранилище
         saveSettingsInLocalStorage: () => {
@@ -170,6 +178,13 @@ function createStore() {
             let rolesList = JSON.parse(localStorage.getItem("customRoles"));
             delete rolesList[key];
             localStorage.setItem("customRoles", JSON.stringify(rolesList));
+            idb.deleteValue(key, "roles", (e) => {
+                notificationStore.createNotification(
+                    "Ошибка",
+                    "Не удалось удалить иконку для данной роли, при этом непосредственно роль удалена.",
+                    notificationTypes.error
+                );
+            });
         },
         //Изменить описание кастом роли
         changeDescriptionText: (text, key) => {

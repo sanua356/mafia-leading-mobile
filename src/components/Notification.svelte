@@ -26,8 +26,8 @@
     unmountDuration={400}
 >
     <div class={`notification ${"notification__" + $notificationStore.type}`}>
-        <span>{$notificationStore.title}афыафыафыафыафы</span>
-        <p>{$notificationStore.message}афыафыафыафыафыафыафы</p>
+        <span>{$notificationStore.title}</span>
+        <p>{$notificationStore.message}</p>
     </div>
 </Transition>
 
