@@ -1,6 +1,6 @@
 import { get, writable } from "svelte/store";
 import * as idb from "../utils/indexeddb.js";
-import { notificationStore } from "./notification";
+import { notificationStore, notificationTypes } from "./notification";
 import { allCardsList, updateAllCardsList } from "./../constants/cards";
 
 const initialStore = {

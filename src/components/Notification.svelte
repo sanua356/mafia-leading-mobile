@@ -57,7 +57,6 @@
         text-align: left;
         line-height: 1.2rem;
         font-size: 1rem;
-        word-break: break-all;
     }
     .notification__warning {
         background: #3f3d5e;

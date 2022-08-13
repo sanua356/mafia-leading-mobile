@@ -34,6 +34,9 @@
         margin-bottom: 10px;
         font-size: 1.1rem;
     }
+    .swipesGif {
+        flex: 1 1 auto;
+    }
     .swipesGif img {
         max-width: 100%;
         height: auto;

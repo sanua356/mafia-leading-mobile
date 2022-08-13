@@ -29,9 +29,6 @@
 
     $: {
         deathZone = window.screen.width * ($settingsStore.deathZoneSwipe / 100);
-        document.removeEventListener("touchstart", touchStart, false);
-        document.removeEventListener("touchmove", touchStart, false);
-        initMenu();
     }
     onMount(() => {
         initMenu();

@@ -1,5 +1,6 @@
 <script>
-    import { settingsStore } from "../../store/settings";
+    import { afterUpdate } from "svelte";
+
     import FinalPage from "./pages/FinalPage.svelte";
     import PageOne from "./pages/PageOne.svelte";
     import PageThree from "./pages/PageThree.svelte";
@@ -10,21 +11,23 @@
     function changePageEvent(page) {
         selectedPage = page;
     }
+
+    afterUpdate(() => {
+        window.scrollTo(0, 0);
+    });
 </script>
 
-{#if !$settingsStore.initialSetupFlag}
-    <div class="container">
-        {#if selectedPage === 1}
-            <PageOne {changePageEvent} />
-        {:else if selectedPage === 2}
-            <PageTwo {changePageEvent} />
-        {:else if selectedPage === 3}
-            <PageThree {changePageEvent} />
-        {:else if selectedPage === 4}
-            <FinalPage {changePageEvent} />
-        {/if}
-    </div>
-{/if}
+<div class="container">
+    {#if selectedPage === 1}
+        <PageOne {changePageEvent} />
+    {:else if selectedPage === 2}
+        <PageTwo {changePageEvent} />
+    {:else if selectedPage === 3}
+        <PageThree {changePageEvent} />
+    {:else if selectedPage === 4}
+        <FinalPage {changePageEvent} />
+    {/if}
+</div>
 
 <style>
     .container {
@@ -33,7 +36,7 @@
         right: 0;
         left: 0;
         margin: auto;
-        z-index: 999;
+        z-index: 99;
         width: 100vw;
         min-height: 100vh;
         overflow-y: auto;
