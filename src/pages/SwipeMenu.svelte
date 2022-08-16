@@ -110,13 +110,12 @@
         background-color: #27263b;
         color: #eeeef5;
         padding: 30px 20px;
-        transform: translateX(-100%);
         transition: 0.3s ease-in-out all;
-        transform: translateZ(0);
+        transform: translate3d(-100%, 0, 0);
         will-change: transform;
     }
     .enabled {
-        transform: translateX(0) !important;
+        transform: translate3d(0, 0, 0) !important;
     }
     @media screen and (min-width: 481px) and (max-width: 1024px) {
         .swipeMenu {
