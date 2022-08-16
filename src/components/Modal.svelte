@@ -35,6 +35,8 @@
         transition: all 0.3s ease-in-out;
         backdrop-filter: blur(0px);
         opacity: 0;
+        transform: translateZ(0);
+        will-change: opacity, backdrop-filter;
     }
     :global(.modalMounting) {
         backdrop-filter: blur(10px) !important;

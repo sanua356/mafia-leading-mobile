@@ -2,6 +2,7 @@
     import { onDestroy, onMount } from "svelte";
     import { navigateTo, routeIsActive } from "svelte-router-spa";
     import Modal from "../components/Modal.svelte";
+    import { historyDistribStore } from "../store/historydistrib";
     import { settingsStore } from "../store/settings.js";
     import { mainStore } from "../store/showdistrib.js";
 
@@ -52,6 +53,11 @@
             animationFlag = false;
         }
     }
+
+    function onClickReturnCard() {
+        mainStore.returnOpenedCardInRotation();
+        historyDistribStore.saveDistributionInLocalStorage();
+    }
 </script>
 
 <Modal
@@ -76,7 +82,7 @@
                 <li on:click={() => navigateTo("help")}>Помощь</li>
                 <li on:click={() => navigateTo("rules")}>Правила игры</li>
                 <li
-                    on:click={mainStore.returnOpenedCardInRotation}
+                    on:click={onClickReturnCard}
                     class={!routeIsActive("show-distribution") ||
                     $mainStore.cardsOpened.length === 0
                         ? "disabled"
@@ -106,6 +112,8 @@
         padding: 30px 20px;
         transform: translateX(-100%);
         transition: 0.3s ease-in-out all;
+        transform: translateZ(0);
+        will-change: transform;
     }
     .enabled {
         transform: translateX(0) !important;

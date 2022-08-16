@@ -1,6 +1,5 @@
 import { get, writable } from "svelte/store";
 import { notificationStore } from "./notification";
-import { historyDistribStore } from "./historydistrib";
 
 function createStore() {
     const { set, subscribe, update } = writable({
@@ -66,7 +65,6 @@ function createStore() {
                     cardsHiddened: [returnedCard, ...hiddened],
                 };
             });
-            historyDistribStore.saveDistributionInLocalStorage();
             notificationStore.createNotification(
                 "Оповещение",
                 "Карта возвращена в ротацию на выдачу"
