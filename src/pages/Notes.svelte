@@ -1,11 +1,11 @@
 <script>
-    import { notesStore } from "../store/notes.js";
-    import Layout from "../components/Layout.svelte";
-    import Container from "../components/Container.svelte";
-    import Textarea from "../components/Textarea.svelte";
-    import { notificationStore } from "../store/notification.js";
-    import ConfirmActionModal from "../components/modals/ConfirmActionModal.svelte";
-    import Transition from "../components/Transition.svelte";
+    import Container from "../components/Container.svelte"
+    import Layout from "../components/Layout.svelte"
+    import Textarea from "../components/Textarea.svelte"
+    import Transition from "../components/Transition.svelte"
+    import ConfirmActionModal from "../components/modals/ConfirmActionModal.svelte"
+    import { notesStore } from "../store/notes.js"
+    import { notificationStore } from "../store/notification.js"
 
     //Параметры модалки для подтверджения очистки всех полей ввода заметок
     let modalParams = {
@@ -30,8 +30,11 @@
     //Флаг анимации перелистывания заметок
     let showFlag = true;
 
+    //Сигнал смены номера дня
+    $: onDayChanged = $notesStore.activeNight;
+
     $: {
-        if ($notesStore.activeNight + 1) {
+        if (onDayChanged + 1) {
             showFlag = false;
             setTimeout(() => {
                 showFlag = true;

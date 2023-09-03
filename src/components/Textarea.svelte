@@ -1,8 +1,8 @@
 <script>
-    export let style,
+    export let style = '',
         value,
         onChange,
-        id,
+        id = Math.random().toString(),
         type = "text",
         placeholder = "",
         rows = 3;

@@ -10,7 +10,7 @@ function createStore() {
         update,
         subscribe,
         onChangeNote: (noteName, text) => {
-            const notes = get(notesStore).notesList;
+            const notes = [...get(notesStore).notesList];
             const activeNight = get(notesStore).activeNight;
             if (notes[activeNight] === undefined) {
                 notes[activeNight] = {};
